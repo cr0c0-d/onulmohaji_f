@@ -12,6 +12,7 @@ function Layout() {
         true ? (
           <div>
             <Navbar />
+            <br />
             <Container maxWidth="xl">
               <Outlet />
               <br />

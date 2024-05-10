@@ -7,9 +7,9 @@ export default function Navbar() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu">
+        {/* <IconButton edge="start" color="inherit" aria-label="menu">
           <MenuIcon />
-        </IconButton>
+        </IconButton> */}
         <Typography variant="h6" style={{ flexGrow: 1 }}>
           오늘뭐하지
         </Typography>

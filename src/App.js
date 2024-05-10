@@ -6,6 +6,8 @@ import { UserProvider } from "./UserContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/ko";
+import ExhibitionDetail from "./components/ExhibitionDetail";
+import PlaceDetail from "./components/PlaceDetail";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route exact path="/" element={<Main />} />
+            <Route path="/exhibition/:id" element={<PlaceDetail />} />
+            <Route path="/popup/:id" element={<PlaceDetail />} />
           </Route>
         </Routes>
       </BrowserRouter>
