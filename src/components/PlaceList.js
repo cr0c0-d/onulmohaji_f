@@ -14,6 +14,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 const PlaceList = ({ placeList, type, limit = 999 }) => {
+  const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
   return (
     <Container>
@@ -32,7 +33,13 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
             : ""}
         </Typography>
         {limit !== 999 ? (
-          <Button size="small" variant="contained">
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => {
+              setShowLimit(999);
+            }}
+          >
             전체보기
           </Button>
         ) : (
@@ -44,7 +51,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
       <Container>
         <Grid container spacing={3}>
           {placeList.map((place, index) =>
-            index < limit ? (
+            index < showLimit ? (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <Card
                   style={{ cursor: "pointer" }}
