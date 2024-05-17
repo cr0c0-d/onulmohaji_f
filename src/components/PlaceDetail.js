@@ -10,6 +10,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import FacilityList from "./FacilityList";
 
 function PlaceDetail({ placeDetail }) {
   const [detail, setDetail] = useState(null);
@@ -65,6 +66,17 @@ function PlaceDetail({ placeDetail }) {
     };
 
     var map = new kakao.maps.Map(container, options);
+
+    // 마커가 표시될 위치입니다
+    var markerPosition = new kakao.maps.LatLng(detail.gpsY, detail.gpsX);
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+      position: markerPosition,
+    });
+
+    // 마커가 지도 위에 표시되도록 설정합니다
+    marker.setMap(map);
   };
 
   return (
@@ -142,7 +154,14 @@ function PlaceDetail({ placeDetail }) {
             </Stack>
           </Grid>
           <Grid item>
-            <div id="map" style={{ width: "500px", height: "400px" }}></div>
+            <div id="map" style={{ width: "800px", height: "400px" }}></div>
+          </Grid>
+          <Grid item>
+            {facilities ? (
+              <FacilityList facilityList={facilities} type="food" limit={4} />
+            ) : (
+              ""
+            )}
           </Grid>
         </Grid>
       ) : (

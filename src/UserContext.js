@@ -98,7 +98,7 @@ export const UserProvider = ({ children }) => {
         //localStorage.removeItem("userdata");
         setUserInfo({});
         if (reloadYn) {
-          window.location.href = "/search";
+          window.location.href = "/";
         }
       }
     });
