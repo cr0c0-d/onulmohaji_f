@@ -51,6 +51,7 @@ export const UserProvider = ({ children }) => {
       newUserInfo.nickname = userdata.nickname;
       newUserInfo.id = userdata.id;
       newUserInfo.role = userdata.role;
+      newUserInfo.localcode = userdata.localcode;
       newUserInfo.accessToken = token;
       setUserInfo(newUserInfo);
     }
@@ -77,6 +78,9 @@ export const UserProvider = ({ children }) => {
       if (error.code === "ERR_NETWORK") {
         getNewAccessToken();
         return;
+      } else if (error.code === "ERR_BAD_REQUEST") {
+        // 토큰 오류인 경우
+        logoutAPI();
       }
       setAccessToken("");
     });

@@ -4,25 +4,22 @@ import { useUser } from "./UserContext";
 import Footer from "./Footer";
 import { Container } from "@mui/material";
 function Layout() {
-  //const { settingDone } = useUser();
+  const { settingDone } = useUser();
   return (
     <>
-      {
-        //settingDone
-        true ? (
-          <div>
-            <Navbar />
+      {settingDone ? (
+        <div>
+          <Navbar />
+          <br />
+          <Container maxWidth="xl">
+            <Outlet />
             <br />
-            <Container maxWidth="xl">
-              <Outlet />
-              <br />
-            </Container>
-            <Footer />
-          </div>
-        ) : (
-          ""
-        )
-      }
+          </Container>
+          <Footer />
+        </div>
+      ) : (
+        ""
+      )}
     </>
   );
 }
