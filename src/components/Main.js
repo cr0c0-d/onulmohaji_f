@@ -11,18 +11,27 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import PlaceList from "./PlaceList";
+import { useUser } from "../UserContext";
 
 function Main() {
+  /********************************************* 상태관리, 변수 선언 ***************************************************/
+  // 선택 날짜 - 기본값 오늘
   const [pickedDate, setPickedDate] = useState(dayjs(new Date()));
+  // 팝업스토어 정보
   const [popupstore, setPopupstore] = useState(null);
+  // 전시회 공연 정보
   const [exhibition, setExhibition] = useState(null);
+  // 지역코드
   const [localcodes, setLocalcodes] = useState(null);
+  // 선택 지역코드 - 대분류
   const [pickedLocal_1, setPickedLocal_1] = useState(null);
+  // 선택 지역코드 - 소분류
   const [pickedLocal_2, setPickedLocal_2] = useState(null);
 
-  const [showAllP, setShowAllP] = useState(false);
-  const [showAllE, setShowAllE] = useState(false);
+  const { userInfo } = useUser();
 
+  /********************************************* function ***************************************************/
+  // 지역코드 목록 조회 API
   const getLocalcodes = async () => {
     const axiosResponse = await axios({
       url: `${process.env.REACT_APP_API_ROOT}/api/localcode`,
@@ -38,16 +47,26 @@ function Main() {
     }
   };
 
+  // 첫 로딩시 지역코드 목록 조회
   useEffect(() => {
     getLocalcodes();
   }, []);
 
+  // 지역코드 목록 조회 후 선택 지역 기본값 지정
   useEffect(() => {
     if (localcodes !== null) {
       // 로그인 회원정보의 지역정보 불러오는 로직
-      // 로그인정보가 없거나 회원정보에 지역 정보가 없으면
-      setPickedLocal_1(11);
-      setPickedLocal_2(11680);
+      if (userInfo && userInfo.localcode) {
+        // 로그인 회원 정보가 있으면
+        setPickedLocal_1(
+          localcodes.find((obj) => obj.id === userInfo.localcode).parentId
+        );
+        setPickedLocal_2(userInfo.localcode);
+      } else {
+        // 로그인정보가 없으면 기본값 서울시 강남구
+        setPickedLocal_1(11);
+        setPickedLocal_2(11680);
+      }
     }
   }, [localcodes]);
 

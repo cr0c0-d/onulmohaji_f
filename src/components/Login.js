@@ -120,6 +120,7 @@ export default function Login() {
         nickname: json.data.nickname,
         id: json.data.id,
         role: json.data.role,
+        localcode: json.data.localcode,
         accessToken: json.data.accessToken,
       });
       history("/");
