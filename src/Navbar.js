@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -14,13 +14,18 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import RouteIcon from "@mui/icons-material/Route";
 import EditIcon from "@mui/icons-material/Edit";
+import LoginIcon from "@mui/icons-material/Login";
+import AddIcon from "@mui/icons-material/Add";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useUser } from "./UserContext";
 import { Logout } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const { userInfo, logoutAPI } = useUser();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const history = useNavigate();
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -35,7 +40,11 @@ export default function Navbar() {
         {/* <IconButton edge="start" color="inherit" aria-label="menu">
           <MenuIcon />
         </IconButton> */}
-        <Typography variant="h6" style={{ flexGrow: 1 }}>
+        <Typography
+          variant="h6"
+          style={{ flexGrow: 1, cursor: "pointer" }}
+          onClick={() => history("/")}
+        >
           오늘뭐하지
         </Typography>
         <div>
@@ -47,6 +56,7 @@ export default function Navbar() {
             </div>
           ) : (
             <IconButton
+              onClick={handleClick}
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
@@ -91,25 +101,44 @@ export default function Navbar() {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <RouteIcon />
-            </ListItemIcon>
-            나의 일정
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <ListItemIcon>
-              <EditIcon />
-            </ListItemIcon>
-            정보 수정
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={() => logoutAPI()}>
-            <ListItemIcon>
-              <Logout />
-            </ListItemIcon>
-            로그아웃
-          </MenuItem>
+          {userInfo.nickname ? (
+            <div>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <RouteIcon />
+                </ListItemIcon>
+                나의 일정
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <EditIcon />
+                </ListItemIcon>
+                정보 수정
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={() => logoutAPI()}>
+                <ListItemIcon>
+                  <Logout />
+                </ListItemIcon>
+                로그아웃
+              </MenuItem>
+            </div>
+          ) : (
+            <div>
+              <MenuItem onClick={() => history("/login")}>
+                <ListItemIcon>
+                  <LoginIcon />
+                </ListItemIcon>
+                로그인
+              </MenuItem>
+              <MenuItem onClick={() => history("/signup")}>
+                <ListItemIcon>
+                  <AddIcon />
+                </ListItemIcon>
+                회원가입
+              </MenuItem>
+            </div>
+          )}
         </Menu>
       </Toolbar>
     </AppBar>
