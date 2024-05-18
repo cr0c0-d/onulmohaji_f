@@ -10,12 +10,35 @@ import {
   Container,
   Button,
   Box,
+  IconButton,
 } from "@mui/material";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
+import { useAuthAPI } from "../AuthAPI";
 
-const PlaceList = ({ placeList, type, limit = 999 }) => {
+const PlaceList = ({ placeList, type, limit = 999, date }) => {
   const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
+  const AuthAPI = useAuthAPI();
+
+  const addRouteDetail = (placeId) => {
+    AuthAPI({
+      url: "/api/routeDetail",
+      method: "POST",
+      data: {
+        placeId: placeId,
+        placeType: type,
+        date: date,
+      },
+      success: () => {
+        alert(date + "의 일정에 추가되었습니다.");
+      },
+      fail: () => {
+        console.log("fail");
+      },
+    });
+  };
+
   return (
     <Container>
       <Box
@@ -75,6 +98,12 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                     </Typography>
                   </CardContent>
                 </Card>
+                <IconButton
+                  onClick={() => addRouteDetail(place.id)}
+                  color="inherit"
+                >
+                  <PlaylistAddIcon />
+                </IconButton>
               </Grid>
             ) : (
               ""
