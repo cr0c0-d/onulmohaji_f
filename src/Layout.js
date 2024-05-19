@@ -2,7 +2,7 @@ import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 import { useUser } from "./UserContext";
 import Footer from "./Footer";
-import { Container } from "@mui/material";
+import { Container, Toolbar } from "@mui/material";
 function Layout() {
   const { settingDone } = useUser();
   return (
@@ -12,6 +12,7 @@ function Layout() {
           <Navbar />
           <br />
           <Container maxWidth="xl">
+            <Toolbar />
             <Outlet />
             <br />
           </Container>

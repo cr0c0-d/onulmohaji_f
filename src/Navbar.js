@@ -10,6 +10,7 @@ import {
   Divider,
   ListItemIcon,
   Menu,
+  Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import RouteIcon from "@mui/icons-material/Route";
@@ -20,10 +21,12 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useUser } from "./UserContext";
 import { Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import DrawerCmp from "./DrawerCmp";
 
 export default function Navbar() {
   const { userInfo, logoutAPI } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openDrawer, setOpenDrawer] = useState(null);
   const history = useNavigate();
 
   const open = Boolean(anchorEl);
@@ -35,112 +38,123 @@ export default function Navbar() {
   };
 
   return (
-    <AppBar position="static">
-      <Toolbar>
-        {/* <IconButton edge="start" color="inherit" aria-label="menu">
-          <MenuIcon />
-        </IconButton> */}
-        <Typography
-          variant="h6"
-          style={{ flexGrow: 1, cursor: "pointer" }}
-          onClick={() => history("/")}
-        >
-          오늘뭐하지
-        </Typography>
-        <div>
-          {userInfo.nickname ? (
-            <div>
-              <Button onClick={handleClick} variant="contained">
-                {userInfo.nickname}
-              </Button>
-            </div>
-          ) : (
-            <IconButton
-              onClick={handleClick}
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          )}
-        </div>
-        <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
+    <div>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setOpenDrawer(!openDrawer)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography
+            variant="h6"
+            style={{ flexGrow: 1, cursor: "pointer" }}
+            onClick={() => history("/")}
+          >
+            오늘뭐하지
+          </Typography>
+          <div>
+            {userInfo.nickname ? (
+              <div>
+                <Button onClick={handleClick} variant="contained">
+                  {userInfo.nickname}
+                </Button>
+              </div>
+            ) : (
+              <IconButton
+                onClick={handleClick}
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+            )}
+          </div>
+          <Menu
+            anchorEl={anchorEl}
+            id="account-menu"
+            open={open}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 1.5,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&::before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
               },
-              "&::before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 14,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        >
-          {userInfo.nickname ? (
-            <div>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <RouteIcon />
-                </ListItemIcon>
-                나의 일정
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <ListItemIcon>
-                  <EditIcon />
-                </ListItemIcon>
-                정보 수정
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={() => logoutAPI()}>
-                <ListItemIcon>
-                  <Logout />
-                </ListItemIcon>
-                로그아웃
-              </MenuItem>
-            </div>
-          ) : (
-            <div>
-              <MenuItem onClick={() => history("/login")}>
-                <ListItemIcon>
-                  <LoginIcon />
-                </ListItemIcon>
-                로그인
-              </MenuItem>
-              <MenuItem onClick={() => history("/signup")}>
-                <ListItemIcon>
-                  <AddIcon />
-                </ListItemIcon>
-                회원가입
-              </MenuItem>
-            </div>
-          )}
-        </Menu>
-      </Toolbar>
-    </AppBar>
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            {userInfo.nickname ? (
+              <div>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <RouteIcon />
+                  </ListItemIcon>
+                  나의 일정
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <EditIcon />
+                  </ListItemIcon>
+                  정보 수정
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={() => logoutAPI()}>
+                  <ListItemIcon>
+                    <Logout />
+                  </ListItemIcon>
+                  로그아웃
+                </MenuItem>
+              </div>
+            ) : (
+              <div>
+                <MenuItem onClick={() => history("/login")}>
+                  <ListItemIcon>
+                    <LoginIcon />
+                  </ListItemIcon>
+                  로그인
+                </MenuItem>
+                <MenuItem onClick={() => history("/signup")}>
+                  <ListItemIcon>
+                    <AddIcon />
+                  </ListItemIcon>
+                  회원가입
+                </MenuItem>
+              </div>
+            )}
+          </Menu>
+        </Toolbar>
+      </AppBar>
+      <DrawerCmp openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+    </div>
   );
 }
