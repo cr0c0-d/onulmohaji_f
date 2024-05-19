@@ -15,11 +15,13 @@ import {
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
 import { useAuthAPI } from "../AuthAPI";
+import { useRoute } from "../RouteContext";
 
 const PlaceList = ({ placeList, type, limit = 999, date }) => {
   const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
   const AuthAPI = useAuthAPI();
+  const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
 
   const addRouteDetail = (placeId) => {
     AuthAPI({
@@ -31,7 +33,7 @@ const PlaceList = ({ placeList, type, limit = 999, date }) => {
         date: date,
       },
       success: () => {
-        alert(date + "의 일정에 추가되었습니다.");
+        getRoute();
       },
       fail: () => {
         console.log("fail");

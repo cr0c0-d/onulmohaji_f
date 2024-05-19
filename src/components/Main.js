@@ -12,11 +12,12 @@ import {
 import dayjs from "dayjs";
 import PlaceList from "./PlaceList";
 import { useUser } from "../UserContext";
+import { useRoute } from "../RouteContext";
 
 function Main() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
   // 선택 날짜 - 기본값 오늘
-  const [pickedDate, setPickedDate] = useState(dayjs(new Date()));
+  // const [pickedDate, setPickedDate] = useState(dayjs(new Date()));
   // 팝업스토어 정보
   const [popupstore, setPopupstore] = useState(null);
   // 전시회 공연 정보
@@ -29,6 +30,7 @@ function Main() {
   const [pickedLocal_2, setPickedLocal_2] = useState(null);
 
   const { userInfo } = useUser();
+  const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
 
   /********************************************* function ***************************************************/
   // 지역코드 목록 조회 API
@@ -74,7 +76,7 @@ function Main() {
     const axiosResponse = await axios({
       url: `${
         process.env.REACT_APP_API_ROOT
-      }/api/exhibition/list?date=${pickedDate.format(
+      }/api/exhibition/list?date=${routeDate.format(
         "YYYY-MM-DD"
       )}&localcodeId=${pickedLocal_2}`,
       method: "GET",
@@ -93,7 +95,7 @@ function Main() {
     const axiosResponse = await axios({
       url: `${
         process.env.REACT_APP_API_ROOT
-      }/api/popup/list?date=${pickedDate.format(
+      }/api/popup/list?date=${routeDate.format(
         "YYYY-MM-DD"
       )}&localcodeId=${pickedLocal_2}`,
       method: "GET",
@@ -108,11 +110,11 @@ function Main() {
     }
   };
   useEffect(() => {
-    if (pickedDate !== null && pickedLocal_2 !== null) {
+    if (routeDate !== null && pickedLocal_2 !== null) {
       getPopupstoreList();
       getExhibitionList();
     }
-  }, [pickedDate, pickedLocal_2]);
+  }, [routeDate, pickedLocal_2]);
 
   return (
     <Container>
@@ -121,10 +123,10 @@ function Main() {
           <DatePicker
             label="날짜"
             format="YYYY-MM-DD"
-            value={dayjs(pickedDate)}
+            value={dayjs(routeDate)}
             // minDate={today}
             minDate={dayjs(new Date())}
-            onChange={(newValue) => setPickedDate(newValue)}
+            onChange={(newValue) => setRouteDate(newValue)}
             // defaultValue={dayjs(
             //   "2022-04-17"
             //   //`${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`
@@ -194,7 +196,7 @@ function Main() {
               placeList={exhibition}
               type="exhibition"
               limit="4"
-              date={pickedDate.format("YYYY-MM-DD")}
+              date={routeDate.format("YYYY-MM-DD")}
             />
           </Grid>
         ) : (
@@ -207,7 +209,7 @@ function Main() {
               placeList={popupstore}
               type="popup"
               limit="4"
-              date={pickedDate.format("YYYY-MM-DD")}
+              date={routeDate.format("YYYY-MM-DD")}
             />
           </Grid>
         ) : (
