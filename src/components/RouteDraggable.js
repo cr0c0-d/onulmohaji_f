@@ -9,7 +9,9 @@ import {
   Stack,
   Typography,
   Chip,
-  Box,
+  Button,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -19,12 +21,16 @@ import { useAuthAPI } from "../AuthAPI";
 import { useUser } from "../UserContext";
 import { useRoute } from "../RouteContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import RemoveIcon from "@mui/icons-material/Remove";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SouthIcon from "@mui/icons-material/South";
+import MapIcon from "@mui/icons-material/Map";
 
 export default function RouteDraggable() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
   // route 정보
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
+  // route 모드 ->  editOrder : 순서 변경 / remove : 삭제 / showRoute : 경로 보기
+  const [mode, setMode] = useState("editOrder");
   const { userInfo } = useUser();
   const AuthAPI = useAuthAPI();
 
@@ -81,6 +87,34 @@ export default function RouteDraggable() {
               }
               title={`${routeDate.format("M월 D일")}의 일정`}
             />
+            <CardContent>
+              <ToggleButtonGroup
+                color="primary"
+                size="small"
+                value={mode}
+                onChange={(event, newMode) => {
+                  if (newMode !== null) {
+                    setMode(newMode);
+                  }
+                }}
+                exclusive="true"
+              >
+                <ToggleButton value="editOrder" key="editOrder">
+                  <DehazeIcon />
+                  순서 변경
+                </ToggleButton>
+                ,
+                <ToggleButton value="remove" key="remove">
+                  <DeleteIcon />
+                  삭제
+                </ToggleButton>
+                ,
+                <ToggleButton value="showRoute" key="showRoute">
+                  <MapIcon />
+                  경로 보기
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </CardContent>
             {route !== null ? (
               <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="route.routeDetailList">
@@ -135,11 +169,32 @@ export default function RouteDraggable() {
                                     justifyContent: "flex-end",
                                   }}
                                 >
-                                  <IconButton {...provided.dragHandleProps}>
-                                    <DehazeIcon />
-                                  </IconButton>
+                                  {mode === "editOrder" ? (
+                                    <IconButton {...provided.dragHandleProps}>
+                                      <DehazeIcon />
+                                    </IconButton>
+                                  ) : mode === "remove" ? (
+                                    <IconButton color="error">
+                                      <DeleteIcon />
+                                    </IconButton>
+                                  ) : (
+                                    ""
+                                  )}
                                 </CardContent>
                               </Card>
+                              {mode === "showRoute" &&
+                              index + 1 !== route.routeDetailList.length ? (
+                                <CardContent sx={{ textAlign: "center" }}>
+                                  <Button
+                                    startIcon={<SouthIcon />}
+                                    variant="contained"
+                                  >
+                                    경로 보기
+                                  </Button>
+                                </CardContent>
+                              ) : (
+                                ""
+                              )}
                             </div>
                           )}
                         </Draggable>
