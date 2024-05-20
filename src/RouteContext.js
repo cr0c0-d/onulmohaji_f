@@ -32,7 +32,7 @@ export const RouteProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (settingDone && userInfo !== null) {
+    if (settingDone && userInfo.id !== undefined) {
       getRoute();
     }
   }, [userInfo, routeDate, settingDone]);
