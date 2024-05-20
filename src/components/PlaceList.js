@@ -16,12 +16,14 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
 import { useAuthAPI } from "../AuthAPI";
 import { useRoute } from "../RouteContext";
+import { useUser } from "../UserContext";
 
-const PlaceList = ({ placeList, type, limit = 999, date }) => {
+const PlaceList = ({ placeList, type, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
   const AuthAPI = useAuthAPI();
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
+  const { userInfo } = useUser();
 
   const addRouteDetail = (placeId) => {
     AuthAPI({
@@ -30,7 +32,7 @@ const PlaceList = ({ placeList, type, limit = 999, date }) => {
       data: {
         placeId: placeId,
         placeType: type,
-        date: date,
+        date: routeDate.format("YYYY-MM-DD"),
       },
       success: () => {
         getRoute();
@@ -99,13 +101,20 @@ const PlaceList = ({ placeList, type, limit = 999, date }) => {
                       {place.startDate} ~ {place.endDate}
                     </Typography>
                   </CardContent>
+                  <IconButton
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      if (userInfo.id !== undefined) {
+                        addRouteDetail(place.id);
+                      } else {
+                        history("/login");
+                      }
+                    }}
+                    color="inherit"
+                  >
+                    <PlaylistAddIcon />
+                  </IconButton>
                 </Card>
-                <IconButton
-                  onClick={() => addRouteDetail(place.id)}
-                  color="inherit"
-                >
-                  <PlaylistAddIcon />
-                </IconButton>
               </Grid>
             ) : (
               ""

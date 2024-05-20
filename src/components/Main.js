@@ -192,12 +192,7 @@ function Main() {
 
         {exhibition != null ? (
           <Grid item>
-            <PlaceList
-              placeList={exhibition}
-              type="exhibition"
-              limit="4"
-              date={routeDate.format("YYYY-MM-DD")}
-            />
+            <PlaceList placeList={exhibition} type="exhibition" limit="4" />
           </Grid>
         ) : (
           ""
@@ -205,12 +200,7 @@ function Main() {
 
         {popupstore != null ? (
           <Grid item>
-            <PlaceList
-              placeList={popupstore}
-              type="popup"
-              limit="4"
-              date={routeDate.format("YYYY-MM-DD")}
-            />
+            <PlaceList placeList={popupstore} type="popup" limit="4" />
           </Grid>
         ) : (
           ""
