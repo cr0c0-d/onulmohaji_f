@@ -3,10 +3,12 @@ import {
   Card,
   CardContent,
   CardHeader,
+  CardMedia,
   Container,
   IconButton,
   Stack,
   Typography,
+  Chip,
 } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -44,7 +46,33 @@ export default function Route() {
             {route !== null ? (
               <CardContent>
                 {route.routeDetailList.map((routeDetail) => (
-                  <Card>{routeDetail.placeId}</Card>
+                  <div index={routeDetail.orderNo}>
+                    <Card sx={{ display: "flex" }}>
+                      <CardMedia
+                        component="img"
+                        sx={{ width: 50 }}
+                        image={routeDetail.thumbnail}
+                        alt="routeDetail.placeName"
+                      />
+                      <CardContent>
+                        <Typography
+                          gutterBottom
+                          variant="body2"
+                          component="div"
+                        >
+                          {routeDetail.placeName}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          <Chip
+                            label={routeDetail.placeTypeName}
+                            size="small"
+                            variant="outlined"
+                          />
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                    <br />
+                  </div>
                 ))}
               </CardContent>
             ) : (
