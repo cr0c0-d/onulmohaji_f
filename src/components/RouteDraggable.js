@@ -188,6 +188,9 @@ export default function RouteDraggable() {
                                   <Button
                                     startIcon={<SouthIcon />}
                                     variant="contained"
+                                    onClick={() =>
+                                      window.open(route.routeMapUrlList[index])
+                                    }
                                   >
                                     경로 보기
                                   </Button>
