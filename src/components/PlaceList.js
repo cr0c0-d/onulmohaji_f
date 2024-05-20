@@ -11,6 +11,7 @@ import {
   Button,
   Box,
   IconButton,
+  Chip,
 } from "@mui/material";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
@@ -101,19 +102,23 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                       {place.startDate} ~ {place.endDate}
                     </Typography>
                   </CardContent>
-                  <IconButton
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      if (userInfo.id !== undefined) {
-                        addRouteDetail(place.id);
-                      } else {
-                        history("/login");
-                      }
-                    }}
-                    color="inherit"
-                  >
-                    <PlaylistAddIcon />
-                  </IconButton>
+                  <CardContent>
+                    <Chip
+                      icon={<PlaylistAddIcon />}
+                      label="일정에 추가"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        if (userInfo.id !== undefined) {
+                          addRouteDetail(place.id);
+                        } else {
+                          history("/login");
+                        }
+                      }}
+                    />
+                  </CardContent>
                 </Card>
               </Grid>
             ) : (

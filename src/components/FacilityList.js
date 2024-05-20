@@ -11,13 +11,39 @@ import {
   Button,
   Box,
   Chip,
+  IconButton,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
+import { useRoute } from "../RouteContext";
+import { useAuthAPI } from "../AuthAPI";
+import { useUser } from "../UserContext";
 
 const FacilityList = ({ facilityList, type, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
+  const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
+  const AuthAPI = useAuthAPI();
+  const { userInfo } = useUser();
+
+  const addRouteDetail = (placeId) => {
+    AuthAPI({
+      url: "/api/routeDetail",
+      method: "POST",
+      data: {
+        placeId: placeId,
+        placeType: type,
+        date: routeDate.format("YYYY-MM-DD"),
+      },
+      success: () => {
+        getRoute();
+      },
+      fail: () => {
+        console.log("fail");
+      },
+    });
+  };
   return (
     <Container>
       <Box
@@ -69,6 +95,10 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
                       {facility.categoryName}
                     </Typography>
 
+                    <Typography variant="body2" color="text.secondary">
+                      {facility.distance}m
+                    </Typography>
+
                     <Chip
                       icon={<StarIcon />}
                       label={
@@ -85,9 +115,23 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
                       size="small"
                       color="warning"
                     />
-                    <Typography variant="body2" color="text.secondary">
-                      {facility.distance}m
-                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Chip
+                      icon={<PlaylistAddIcon />}
+                      label="일정에 추가"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        if (userInfo.id !== undefined) {
+                          addRouteDetail(facility.id);
+                        } else {
+                          history("/login");
+                        }
+                      }}
+                    />
                   </CardContent>
                 </Card>
               </Grid>
