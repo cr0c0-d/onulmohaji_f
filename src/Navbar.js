@@ -20,11 +20,12 @@ import { useUser } from "./UserContext";
 import { Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import DrawerCmp from "./DrawerCmp";
+import { useRoute } from "./RouteContext";
 
 export default function Navbar() {
   const { userInfo, logoutAPI } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [openDrawer, setOpenDrawer] = useState(null);
+  const { openDrawer, setOpenDrawer } = useRoute();
   const history = useNavigate();
 
   const open = Boolean(anchorEl);
