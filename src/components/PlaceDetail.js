@@ -6,20 +6,37 @@ import {
   Divider,
   Card,
   CardContent,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import FacilityList from "./FacilityList";
 
-function PlaceDetail({ placeDetail }) {
+function PlaceDetail({ placeType }) {
+  const { placeId } = useParams();
   const [detail, setDetail] = useState(null);
-  const [facilities, setFacilities] = useState(null);
+  const [facilities, setFacilities] = useState({
+    FD6: null,
+    CE7: null,
+    CT1: null,
+    AT4: null,
+    PK6: null,
+  });
   const { kakao } = window;
+
+  const facilityTypeList = [
+    { code: "FD6", name: "음식점" },
+    { code: "CE7", name: "카페" },
+    { code: "CT1", name: "문화시설" },
+    { code: "AT4", name: "관광명소" },
+    { code: "PK6", name: "주차장" },
+  ];
 
   const getPlaceDetail = async () => {
     const axiosResponse = await axios({
-      url: `${process.env.REACT_APP_API_ROOT}/api${window.location.pathname}`,
+      url: `${process.env.REACT_APP_API_ROOT}/api/${placeType}/${placeId}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -34,11 +51,18 @@ function PlaceDetail({ placeDetail }) {
 
   useEffect(() => {
     getPlaceDetail();
-  }, []);
+    setFacilities({
+      FD6: null,
+      CE7: null,
+      CT1: null,
+      AT4: null,
+      PK6: null,
+    });
+  }, [placeId]);
 
-  const getFacilities = async () => {
+  const getFacilities = async (typeCode) => {
     const axiosResponse = await axios({
-      url: `${process.env.REACT_APP_API_ROOT}/api/facility?categoryId=FD6&latitude=${detail.gpsY}&longitude=${detail.gpsX}`,
+      url: `${process.env.REACT_APP_API_ROOT}/api/facility/list?latitude=${detail.gpsY}&longitude=${detail.gpsX}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +78,7 @@ function PlaceDetail({ placeDetail }) {
   useEffect(() => {
     if (detail) {
       setKakaoMap();
+
       getFacilities();
     }
   }, [detail]);
@@ -157,7 +182,22 @@ function PlaceDetail({ placeDetail }) {
             <div id="map" style={{ width: "800px", height: "400px" }}></div>
           </Grid>
           <Grid container>
-            <FacilityList facilityList={facilities} type="food" limit={4} />
+            {/* <Select>
+              {facilityTypeList.map((facilityType) => (
+                <MenuItem key={facilityType.code} value={facilityType.code}>
+                  {facilityType.name}
+                </MenuItem>
+              ))}
+            </Select> */}
+            {facilityTypeList.map((facilityType) => (
+              <FacilityList
+                key={facilityType.code}
+                facilityList={facilities[facilityType.code]}
+                type={facilityType.code}
+                typeName={facilityType.name}
+                limit={4}
+              />
+            ))}
           </Grid>
         </Grid>
       ) : (

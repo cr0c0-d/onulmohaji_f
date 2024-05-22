@@ -21,7 +21,7 @@ import { useRoute } from "../RouteContext";
 import { useAuthAPI } from "../AuthAPI";
 import { useUser } from "../UserContext";
 
-const FacilityList = ({ facilityList, type, limit = 999 }) => {
+const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
@@ -47,6 +47,7 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
   };
   return (
     <Container>
+      <br />
       <Box
         sx={{
           display: "flex",
@@ -54,9 +55,7 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
           padding: "10px",
         }}
       >
-        <Typography variant="h5">
-          가까운 {type === "food" ? "식당" : ""} 목록
-        </Typography>
+        <Typography variant="h5">가까운 {typeName} 목록</Typography>
         {limit !== 999 ? (
           <Button
             size="small"
@@ -104,7 +103,9 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
                     <CardMedia
                       component="img"
                       height="300"
-                      image={facility.thumbnail}
+                      image={
+                        facility.thumbnail || process.env.DEFAULT_IMAGE_URL
+                      }
                       alt={facility.placeName}
                     />
                     <CardContent>
@@ -160,6 +161,7 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
               )
             )}
       </Grid>
+      <br />
     </Container>
   );
 };
