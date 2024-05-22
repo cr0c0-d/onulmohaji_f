@@ -40,7 +40,21 @@ export default function RouteDraggable() {
       method: "PUT",
       data: routeDetailList,
       success: () => {
-        console.log("success");
+        getRoute();
+      },
+      fail: () => {
+        console.log("fail");
+      },
+    });
+  };
+
+  const deleteRouteDetail = (routeDetailId) => {
+    AuthAPI({
+      url: `/api/routeDetail/${routeDetailId}`,
+      method: "DELETE",
+      data: null,
+      success: () => {
+        getRoute();
       },
       fail: () => {
         console.log("fail");
@@ -174,7 +188,12 @@ export default function RouteDraggable() {
                                       <DehazeIcon />
                                     </IconButton>
                                   ) : mode === "remove" ? (
-                                    <IconButton color="error">
+                                    <IconButton
+                                      color="error"
+                                      onClick={() =>
+                                        deleteRouteDetail(routeDetail.id)
+                                      }
+                                    >
                                       <DeleteIcon />
                                     </IconButton>
                                   ) : (
@@ -208,7 +227,9 @@ export default function RouteDraggable() {
                 </Droppable>
               </DragDropContext>
             ) : (
-              <CardContent>일정이 아직 없습니다.</CardContent>
+              <CardContent sx={{ textAlign: "center" }}>
+                일정이 없습니다.
+              </CardContent>
             )}
           </Card>
         )}
