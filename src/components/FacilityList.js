@@ -104,7 +104,8 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                       component="img"
                       height="300"
                       image={
-                        facility.thumbnail || process.env.DEFAULT_IMAGE_URL
+                        facility.thumbnail ||
+                        process.env.REACT_APP_DEFAULT_IMAGE_URL
                       }
                       alt={facility.placeName}
                     />
