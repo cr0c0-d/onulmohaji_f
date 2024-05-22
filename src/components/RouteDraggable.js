@@ -12,6 +12,11 @@ import {
   Button,
   ToggleButtonGroup,
   ToggleButton,
+  Menu,
+  ListItemIcon,
+  MenuItem,
+  ListItemText,
+  Divider,
 } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -25,6 +30,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SouthIcon from "@mui/icons-material/South";
 import MapIcon from "@mui/icons-material/Map";
 import { useNavigate } from "react-router-dom";
+import PeopleIcon from "@mui/icons-material/People";
 
 export default function RouteDraggable() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -32,6 +38,7 @@ export default function RouteDraggable() {
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
   // route 모드 ->  editOrder : 순서 변경 / remove : 삭제 / showRoute : 경로 보기
   const [mode, setMode] = useState("editOrder");
+  const [routeMenuAnchor, setRouteMenuAnchor] = useState(null);
   const { userInfo } = useUser();
   const history = useNavigate();
   const AuthAPI = useAuthAPI();
@@ -82,12 +89,26 @@ export default function RouteDraggable() {
     saveRouteDetailOrder(routeDetailList);
   };
 
+  const routeMenuOpen = (event) => {
+    setRouteMenuAnchor(event.currentTarget);
+  };
+
+  const routeMenuClose = () => {
+    setRouteMenuAnchor(null);
+  };
+
   return (
     <Container>
       <br />
       <Stack>
         {userInfo === null || userInfo.id === undefined ? (
-          <Typography>로그인 시 날짜별 계획을 관리할 수 있습니다.</Typography>
+          <div>
+            <Typography>로그인 시 날짜별 계획을 관리할 수 있습니다.</Typography>
+            <br />
+            <Button variant="contained" onClick={() => history("/login")}>
+              로그인
+            </Button>
+          </div>
         ) : (
           <Card>
             <CardHeader
@@ -97,9 +118,13 @@ export default function RouteDraggable() {
                 </Avatar>
               }
               action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
+                route ? (
+                  <IconButton onClick={routeMenuOpen}>
+                    <MoreVertIcon />
+                  </IconButton>
+                ) : (
+                  ""
+                )
               }
               title={`${routeDate.format("M월 D일")}의 일정`}
             />
@@ -168,7 +193,8 @@ export default function RouteDraggable() {
                                   sx={{ width: 50 }}
                                   image={
                                     routeDetail.thumbnail ||
-                                    process.env.DEFAULT_SMALL_IMAGE_URL
+                                    process.env
+                                      .REACT_APP_DEFAULT_SMALL_IMAGE_URL
                                   }
                                   alt="routeDetail.placeName"
                                 />
@@ -253,6 +279,56 @@ export default function RouteDraggable() {
         )}
       </Stack>
       <br />
+
+      <Menu
+        anchorEl={routeMenuAnchor}
+        id="account-menu"
+        open={routeMenuAnchor}
+        onClose={routeMenuClose}
+        onClick={routeMenuClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+            mt: 1.5,
+            "& .MuiAvatar-root": {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            "&::before": {
+              content: '""',
+              display: "block",
+              position: "absolute",
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      >
+        <MenuItem onClick={routeMenuClose}>
+          <ListItemIcon>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText>일정 함께 짜기</ListItemText>
+        </MenuItem>
+        <Divider />
+        <MenuItem color="error" onClick={routeMenuClose}>
+          <ListItemIcon>
+            <DeleteIcon />
+          </ListItemIcon>
+          <ListItemText>일정 삭제</ListItemText>
+        </MenuItem>
+      </Menu>
     </Container>
   );
 }
