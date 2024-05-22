@@ -24,6 +24,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SouthIcon from "@mui/icons-material/South";
 import MapIcon from "@mui/icons-material/Map";
+import { useNavigate } from "react-router-dom";
 
 export default function RouteDraggable() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -32,6 +33,7 @@ export default function RouteDraggable() {
   // route 모드 ->  editOrder : 순서 변경 / remove : 삭제 / showRoute : 경로 보기
   const [mode, setMode] = useState("editOrder");
   const { userInfo } = useUser();
+  const history = useNavigate();
   const AuthAPI = useAuthAPI();
 
   const saveRouteDetailOrder = (routeDetailList) => {
@@ -148,11 +150,26 @@ export default function RouteDraggable() {
                                 ...provided.draggableProps.style,
                               }}
                             >
-                              <Card sx={{ display: "flex" }}>
+                              <Card
+                                sx={{ display: "flex", cursor: "pointer" }}
+                                onClick={() => {
+                                  if (
+                                    routeDetail.placeType === "popup" ||
+                                    routeDetail.placeType === "exhibition"
+                                  ) {
+                                    history(routeDetail.placeUrl);
+                                  } else {
+                                    window.open(routeDetail.placeUrl);
+                                  }
+                                }}
+                              >
                                 <CardMedia
                                   component="img"
                                   sx={{ width: 50 }}
-                                  image={routeDetail.thumbnail}
+                                  image={
+                                    routeDetail.thumbnail ||
+                                    process.env.DEFAULT_SMALL_IMAGE_URL
+                                  }
                                   alt="routeDetail.placeName"
                                 />
                                 <CardContent style={{ width: "100%" }}>
@@ -182,6 +199,7 @@ export default function RouteDraggable() {
                                     width: 40,
                                     justifyContent: "flex-end",
                                   }}
+                                  onClick={(e) => e.stopPropagation()}
                                 >
                                   {mode === "editOrder" ? (
                                     <IconButton {...provided.dragHandleProps}>
