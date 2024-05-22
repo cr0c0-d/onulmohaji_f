@@ -186,10 +186,13 @@ export default function Login() {
         <Button fullWidth variant="contained" onClick={onSubmit}>
           로그인
         </Button>
+        <br />
         <Divider />
+        <br />
         <Button
           fullWidth
           variant="contained"
+          color="secondary"
           onClick={() => history("/signup")}
         >
           이메일로 회원가입
