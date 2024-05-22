@@ -12,6 +12,7 @@ import {
   Box,
   Chip,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
@@ -72,75 +73,93 @@ const FacilityList = ({ facilityList, type, limit = 999 }) => {
       </Box>
       <Divider variant="middle" />
       <br />
-      <Container>
-        <Grid container spacing={3}>
-          {facilityList.map((facility, index) =>
-            index < showLimit ? (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <Card
-                  style={{ cursor: "pointer" }}
-                  onClick={() => window.open(facility.placeUrl)}
-                >
-                  <CardMedia
-                    component="img"
-                    height="300"
-                    image={facility.thumbnail}
-                    alt={facility.placeName}
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="body1" component="div">
-                      {facility.placeName}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {facility.categoryName}
-                    </Typography>
 
-                    <Typography variant="body2" color="text.secondary">
-                      {facility.distance}m
-                    </Typography>
-
-                    <Chip
-                      icon={<StarIcon />}
-                      label={
-                        facility.scoresum !== 0 && facility.scorecnt !== 0
-                          ? Math.floor(
-                              (facility.scoresum / facility.scorecnt) * 10
-                            ) /
-                              10 +
-                            " (" +
-                            facility.scorecnt +
-                            ")"
-                          : "별점 정보 없음"
-                      }
-                      size="small"
-                      color="warning"
-                    />
-                  </CardContent>
+      <Grid container spacing={3}>
+        {facilityList === null
+          ? Array.from({ length: 4 }, (_, index) => index).map((_, index) => (
+              <Grid item xs={12} sm={6} md={4} lg={3}>
+                <Card>
+                  <Skeleton variant="rectangular" sx={{ height: 300 }} />
                   <CardContent>
-                    <Chip
-                      icon={<PlaylistAddIcon />}
-                      label="일정에 추가"
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        if (userInfo.id !== undefined) {
-                          addRouteDetail(facility.id);
-                        } else {
-                          history("/login");
-                        }
-                      }}
-                    />
+                    <Typography gutterBottom variant="body1">
+                      <Skeleton />
+                    </Typography>
+                    <Typography variant="body2">
+                      <Skeleton />
+                    </Typography>
+                    <Typography variant="body2">
+                      <Skeleton />
+                    </Typography>
                   </CardContent>
                 </Card>
               </Grid>
-            ) : (
-              ""
-            )
-          )}
-        </Grid>
-      </Container>
+            ))
+          : facilityList.map((facility, index) =>
+              index < showLimit ? (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                  <Card
+                    style={{ cursor: "pointer" }}
+                    onClick={() => window.open(facility.placeUrl)}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="300"
+                      image={facility.thumbnail}
+                      alt={facility.placeName}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="body1" component="div">
+                        {facility.placeName}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {facility.categoryName}
+                      </Typography>
+
+                      <Typography variant="body2" color="text.secondary">
+                        {facility.distance}m
+                      </Typography>
+
+                      <Chip
+                        icon={<StarIcon />}
+                        label={
+                          facility.scoresum !== 0 && facility.scorecnt !== 0
+                            ? Math.floor(
+                                (facility.scoresum / facility.scorecnt) * 10
+                              ) /
+                                10 +
+                              " (" +
+                              facility.scorecnt +
+                              ")"
+                            : "별점 정보 없음"
+                        }
+                        size="small"
+                        color="warning"
+                      />
+                    </CardContent>
+                    <CardContent>
+                      <Chip
+                        icon={<PlaylistAddIcon />}
+                        label="일정에 추가"
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          if (userInfo.id !== undefined) {
+                            addRouteDetail(facility.id);
+                          } else {
+                            history("/login");
+                          }
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ) : (
+                ""
+              )
+            )}
+      </Grid>
     </Container>
   );
 };

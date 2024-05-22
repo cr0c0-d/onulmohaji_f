@@ -156,12 +156,8 @@ function PlaceDetail({ placeDetail }) {
           <Grid item>
             <div id="map" style={{ width: "800px", height: "400px" }}></div>
           </Grid>
-          <Grid item>
-            {facilities ? (
-              <FacilityList facilityList={facilities} type="food" limit={4} />
-            ) : (
-              ""
-            )}
+          <Grid container>
+            <FacilityList facilityList={facilities} type="food" limit={4} />
           </Grid>
         </Grid>
       ) : (
