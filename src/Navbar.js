@@ -6,11 +6,9 @@ import {
   Button,
   IconButton,
   MenuItem,
-  Avatar,
   Divider,
   ListItemIcon,
   Menu,
-  Container,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import RouteIcon from "@mui/icons-material/Route";
@@ -128,7 +126,7 @@ export default function Navbar() {
                   정보 수정
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={() => logoutAPI()}>
+                <MenuItem onClick={() => logoutAPI(true)}>
                   <ListItemIcon>
                     <Logout />
                   </ListItemIcon>
@@ -154,7 +152,8 @@ export default function Navbar() {
           </Menu>
         </Toolbar>
       </AppBar>
-      <DrawerCmp openDrawer={openDrawer} setOpenDrawer={setOpenDrawer} />
+
+      <DrawerCmp />
     </div>
   );
 }

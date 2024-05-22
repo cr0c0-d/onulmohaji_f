@@ -12,6 +12,7 @@ export const useRoute = () => useContext(RouteContext);
 export const RouteProvider = ({ children }) => {
   const [route, setRoute] = useState(null);
   const [routeDate, setRouteDate] = useState(dayjs(new Date()));
+  const [openDrawer, setOpenDrawer] = useState(false);
   const { userInfo, settingDone } = useUser();
   const AuthAPI = useAuthAPI();
 
@@ -39,7 +40,15 @@ export const RouteProvider = ({ children }) => {
 
   return (
     <RouteContext.Provider
-      value={{ route, setRoute, routeDate, setRouteDate, getRoute }}
+      value={{
+        route,
+        setRoute,
+        routeDate,
+        setRouteDate,
+        getRoute,
+        openDrawer,
+        setOpenDrawer,
+      }}
     >
       {children}
     </RouteContext.Provider>

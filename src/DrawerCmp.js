@@ -12,8 +12,10 @@ import {
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Route from "./components/Route";
 import RouteDraggable from "./components/RouteDraggable";
+import { useRoute } from "./RouteContext";
 
-export default function DrawerCmp({ openDrawer, setOpenDrawer }) {
+export default function DrawerCmp() {
+  const { openDrawer, setOpenDrawer } = useRoute();
   const handleDrawerClose = () => {
     setOpenDrawer(false);
   };
