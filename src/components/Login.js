@@ -6,6 +6,7 @@ import {
   Divider,
   FormControl,
   Grid,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -15,6 +16,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../UserContext";
+import NaverLoginButton from "../img/btn_naver_login.png";
+import GoogleLoginButton from "../img/btn_google_login.png";
+import KakaoLoginButton from "../img/btn_kakao_login.png";
 
 export default function Login() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -127,6 +131,21 @@ export default function Login() {
     }
   };
 
+  const getNaverLoginRequestUrl = async () => {
+    const json = await axios({
+      url: `${process.env.REACT_APP_API_ROOT}/login/auth/naver`,
+      method: "GET",
+    }).catch((error) => {
+      console.log(error);
+      return;
+    });
+    if (json !== undefined && json.status === 200) {
+      console.log(json);
+      sessionStorage.setItem("state", json.data.state);
+      window.open(json.data.url);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -182,21 +201,54 @@ export default function Login() {
           </FormControl>
         </Box>
         <br />
-        <Divider />
-        <Button fullWidth variant="contained" onClick={onSubmit}>
-          로그인
-        </Button>
-        <br />
-        <Divider />
-        <br />
-        <Button
-          fullWidth
-          variant="contained"
-          color="secondary"
-          onClick={() => history("/signup")}
-        >
-          이메일로 회원가입
-        </Button>
+        <Container>
+          <Stack spacing={2}>
+            <Divider />
+            <Button fullWidth variant="contained" onClick={onSubmit}>
+              로그인
+            </Button>
+            <Divider />
+
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              onClick={() => history("/signup")}
+            >
+              이메일로 회원가입
+            </Button>
+            <Divider />
+          </Stack>
+          <Grid
+            container
+            rowSpacing={1}
+            columnSpacing={{ xs: 1 }}
+            sx={{ padding: "1em" }}
+          >
+            <Grid item sx={{ width: "50%" }}>
+              <img
+                style={{ maxWidth: "100%", cursor: "pointer" }}
+                src={NaverLoginButton}
+                alt="naverLogin"
+                onClick={getNaverLoginRequestUrl}
+              />
+            </Grid>
+            <Grid item sx={{ width: "50%" }}>
+              <img
+                style={{ maxWidth: "100%", cursor: "pointer" }}
+                src={KakaoLoginButton}
+                alt="kakaoLogin"
+              />
+            </Grid>
+            <Grid item sx={{ width: "50%" }}>
+              <img
+                style={{ maxWidth: "100%", cursor: "pointer" }}
+                src={GoogleLoginButton}
+                alt="googleLogin"
+              />
+            </Grid>
+          </Grid>
+        </Container>
       </Box>
     </Container>
   );
