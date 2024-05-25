@@ -15,7 +15,7 @@ export const SearchProvider = ({ children }) => {
   const [searchInfo, setSearchInfo] = useState({
     date: dayjs(new Date()),
     localcode: null,
-    keyword: null,
+    keyword: "",
   });
 
   // 선택 지역코드 - 대분류
@@ -30,7 +30,7 @@ export const SearchProvider = ({ children }) => {
   const [popupstore, setPopupstore] = useState(null);
 
   // 시설 정보
-  const [facilities, setFacilities] = useState(null);
+  const [facility, setFacility] = useState(null);
 
   // 지역코드
   const [localcodes, setLocalcodes] = useState(null);
@@ -70,7 +70,7 @@ export const SearchProvider = ({ children }) => {
         setSearchInfo({ ...searchInfo, localcode: 11680 });
       }
     }
-  }, [localcodes]);
+  }, [localcodes, userInfo]);
 
   // 첫 로딩시 지역코드 목록 조회
   useEffect(() => {
@@ -83,7 +83,9 @@ export const SearchProvider = ({ children }) => {
         process.env.REACT_APP_API_ROOT
       }/api/exhibition/list?date=${searchInfo.date.format(
         "YYYY-MM-DD"
-      )}&localcodeId=${searchInfo.localcode}`,
+      )}&localcodeId=${searchInfo.localcode}${
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+      }`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -102,7 +104,9 @@ export const SearchProvider = ({ children }) => {
         process.env.REACT_APP_API_ROOT
       }/api/popup/list?date=${searchInfo.date.format(
         "YYYY-MM-DD"
-      )}&localcodeId=${searchInfo.localcode}`,
+      )}&localcodeId=${searchInfo.localcode}${
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+      }`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -114,10 +118,32 @@ export const SearchProvider = ({ children }) => {
       setPopupstore(axiosResponse.data);
     }
   };
+
+  const getFacilityList = async () => {
+    const axiosResponse = await axios({
+      url: `${process.env.REACT_APP_API_ROOT}/api/facility/list?localcodeId=${
+        searchInfo.localcode
+      }${
+        searchInfo.keyword !== ""
+          ? "&keyword=" + searchInfo.keyword
+          : "&keyword=이색데이트"
+      }`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((error) => {
+      console.log(error);
+    });
+    if (axiosResponse) {
+      setFacility(axiosResponse.data);
+    }
+  };
   useEffect(() => {
     if (searchInfo.date !== null && searchInfo.localcode !== null) {
       getPopupstoreList();
       getExhibitionList();
+      getFacilityList();
     }
   }, [searchInfo]);
 
@@ -131,6 +157,7 @@ export const SearchProvider = ({ children }) => {
         setPickedLocal_1,
         exhibition,
         popupstore,
+        facility,
       }}
     >
       {children}
