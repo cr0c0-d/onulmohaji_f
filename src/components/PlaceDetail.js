@@ -17,22 +17,8 @@ import FacilityList from "./FacilityList";
 function PlaceDetail({ placeType }) {
   const { placeId } = useParams();
   const [detail, setDetail] = useState(null);
-  const [facilities, setFacilities] = useState({
-    FD6: null,
-    CE7: null,
-    CT1: null,
-    AT4: null,
-    PK6: null,
-  });
+  const [facilities, setFacilities] = useState(null);
   const { kakao } = window;
-
-  const facilityTypeList = [
-    { code: "FD6", name: "음식점" },
-    { code: "CE7", name: "카페" },
-    { code: "CT1", name: "문화시설" },
-    { code: "AT4", name: "관광명소" },
-    { code: "PK6", name: "주차장" },
-  ];
 
   const getPlaceDetail = async () => {
     const axiosResponse = await axios({
@@ -51,18 +37,12 @@ function PlaceDetail({ placeType }) {
 
   useEffect(() => {
     getPlaceDetail();
-    setFacilities({
-      FD6: null,
-      CE7: null,
-      CT1: null,
-      AT4: null,
-      PK6: null,
-    });
+    setFacilities(null);
   }, [placeId]);
 
   const getFacilities = async (typeCode) => {
     const axiosResponse = await axios({
-      url: `${process.env.REACT_APP_API_ROOT}/api/facility/list?latitude=${detail.gpsY}&longitude=${detail.gpsX}`,
+      url: `${process.env.REACT_APP_API_ROOT}/api/facility/place/list?latitude=${detail.gpsY}&longitude=${detail.gpsX}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +58,6 @@ function PlaceDetail({ placeType }) {
   useEffect(() => {
     if (detail) {
       setKakaoMap();
-
       getFacilities();
     }
   }, [detail]);
@@ -189,15 +168,12 @@ function PlaceDetail({ placeType }) {
                 </MenuItem>
               ))}
             </Select> */}
-            {facilityTypeList.map((facilityType) => (
-              <FacilityList
-                key={facilityType.code}
-                facilityList={facilities[facilityType.code]}
-                type={facilityType.code}
-                typeName={facilityType.name}
-                limit={4}
-              />
-            ))}
+            <FacilityList
+              facilityList={facilities}
+              type="food"
+              typeName="음식점"
+              limit={4}
+            />
           </Grid>
         </Grid>
       ) : (
