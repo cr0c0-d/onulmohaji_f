@@ -10,31 +10,34 @@ import PlaceDetail from "./components/PlaceDetail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { RouteProvider } from "./RouteContext";
+import { SearchProvider } from "./SearchContext";
 
 function App() {
   return (
     <UserProvider>
-      <RouteProvider>
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route exact path="/" element={<Main />} />
-                <Route
-                  path="/exhibition/:placeId"
-                  element={<PlaceDetail placeType="exhibition" />}
-                />
-                <Route
-                  path="/popup/:placeId"
-                  element={<PlaceDetail placeType="popup" />}
-                />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </LocalizationProvider>
-      </RouteProvider>
+      <SearchProvider>
+        <RouteProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route exact path="/" element={<Main />} />
+                  <Route
+                    path="/exhibition/:placeId"
+                    element={<PlaceDetail placeType="exhibition" />}
+                  />
+                  <Route
+                    path="/popup/:placeId"
+                    element={<PlaceDetail placeType="popup" />}
+                  />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </LocalizationProvider>
+        </RouteProvider>
+      </SearchProvider>
     </UserProvider>
   );
 }

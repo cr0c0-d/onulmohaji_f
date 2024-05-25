@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { useUser } from "./UserContext";
 import { getPickersOutlinedInputUtilityClass } from "@mui/x-date-pickers";
 import { useAuthAPI } from "./AuthAPI";
+import { useSearchContext } from "./SearchContext";
 
 const RouteContext = createContext();
 
@@ -14,6 +15,7 @@ export const RouteProvider = ({ children }) => {
   const [routeDate, setRouteDate] = useState(dayjs(new Date()));
   const [openDrawer, setOpenDrawer] = useState(false);
   const { userInfo, settingDone } = useUser();
+  const { searchInfo } = useSearchContext();
   const AuthAPI = useAuthAPI();
 
   const getRoute = () => {
@@ -37,6 +39,12 @@ export const RouteProvider = ({ children }) => {
       getRoute();
     }
   }, [userInfo, routeDate, settingDone]);
+
+  useEffect(() => {
+    if (searchInfo.date != null && searchInfo.date != routeDate) {
+      setRouteDate(searchInfo.date);
+    }
+  }, [searchInfo]);
 
   return (
     <RouteContext.Provider
