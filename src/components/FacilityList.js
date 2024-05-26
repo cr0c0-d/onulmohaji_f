@@ -118,7 +118,11 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                       </Typography>
 
                       <Typography variant="body2" color="text.secondary">
-                        {facility.distance}m
+                        {facility.distance > 999
+                          ? (facility.distance / 1000)
+                              .toString()
+                              .substring(0, 3) + "km"
+                          : facility.distance + "m"}
                       </Typography>
 
                       <Chip
