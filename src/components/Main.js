@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import PlaceList from "./PlaceList";
 import { useSearchContext } from "../SearchContext";
 import { CheckBox } from "@mui/icons-material";
+import FacilityList from "./FacilityList";
 
 function Main() {
   const {
@@ -155,7 +156,12 @@ function Main() {
 
             {facility !== null && facility.length !== 0 ? (
               <div>
-                <PlaceList placeList={facility} type="facility" limit="4" />
+                <FacilityList
+                  facilityList={facility}
+                  type="facility"
+                  typeName="시설"
+                  limit={4}
+                />
               </div>
             ) : (
               ""
