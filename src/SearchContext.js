@@ -121,9 +121,9 @@ export const SearchProvider = ({ children }) => {
 
   const getFacilityList = async () => {
     const axiosResponse = await axios({
-      url: `${process.env.REACT_APP_API_ROOT}/api/facility/list?localcodeId=${
-        searchInfo.localcode
-      }${
+      url: `${
+        process.env.REACT_APP_API_ROOT
+      }/api/facility/local/list?localcodeId=${searchInfo.localcode}${
         searchInfo.keyword !== ""
           ? "&keyword=" + searchInfo.keyword
           : "&keyword=이색데이트"
