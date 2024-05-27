@@ -12,43 +12,63 @@ import Login from "./components/Login";
 import { RouteProvider } from "./RouteContext";
 import { SearchProvider } from "./SearchContext";
 import { useState } from "react";
+import "./App.css";
+import { ThemeProvider, createTheme } from "@mui/material";
+
+const theme = createTheme({
+  typography: {
+    // 전역 폰트 설정
+    fontFamily: [
+      "NanumSquareRound",
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+    ].join(","),
+  },
+});
 
 function App() {
   const [settingDone, setSettingDone] = useState();
   return (
-    <UserProvider settingDone={settingDone} setSettingDone={setSettingDone}>
-      {settingDone === true ? (
-        <SearchProvider>
-          <RouteProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Layout />}>
-                    <Route exact path="/" element={<Main />} />
-                    <Route
-                      path="/festival/:placeId"
-                      element={<PlaceDetail placeType="festival" />}
-                    />
-                    <Route
-                      path="/exhibition/:placeId"
-                      element={<PlaceDetail placeType="exhibition" />}
-                    />
-                    <Route
-                      path="/popup/:placeId"
-                      element={<PlaceDetail placeType="popup" />}
-                    />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/login" element={<Login />} />
-                  </Route>
-                </Routes>
-              </BrowserRouter>
-            </LocalizationProvider>
-          </RouteProvider>
-        </SearchProvider>
-      ) : (
-        ""
-      )}
-    </UserProvider>
+    <ThemeProvider theme={theme}>
+      <UserProvider settingDone={settingDone} setSettingDone={setSettingDone}>
+        {settingDone === true ? (
+          <SearchProvider>
+            <RouteProvider>
+              <LocalizationProvider
+                dateAdapter={AdapterDayjs}
+                adapterLocale="ko"
+              >
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<Layout />}>
+                      <Route exact path="/" element={<Main />} />
+                      <Route
+                        path="/festival/:placeId"
+                        element={<PlaceDetail placeType="festival" />}
+                      />
+                      <Route
+                        path="/exhibition/:placeId"
+                        element={<PlaceDetail placeType="exhibition" />}
+                      />
+                      <Route
+                        path="/popup/:placeId"
+                        element={<PlaceDetail placeType="popup" />}
+                      />
+                      <Route path="/signup" element={<Signup />} />
+                      <Route path="/login" element={<Login />} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
+              </LocalizationProvider>
+            </RouteProvider>
+          </SearchProvider>
+        ) : (
+          ""
+        )}
+      </UserProvider>
+    </ThemeProvider>
   );
 }
 
