@@ -23,6 +23,9 @@ export const SearchProvider = ({ children }) => {
   // 선택 지역코드 - 소분류
   const [pickedLocal_2, setPickedLocal_2] = useState(null);
 
+  // 축제 정보
+  const [festival, setFestival] = useState(null);
+
   // 전시회 공연 정보
   const [exhibition, setExhibition] = useState(null);
 
@@ -76,6 +79,27 @@ export const SearchProvider = ({ children }) => {
   useEffect(() => {
     getLocalcodes();
   }, []);
+
+  const getFestivalList = async () => {
+    const axiosResponse = await axios({
+      url: `${
+        process.env.REACT_APP_API_ROOT
+      }/api/festival/list?date=${searchInfo.date.format(
+        "YYYY-MM-DD"
+      )}&localcodeId=${searchInfo.localcode}${
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+      }`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((error) => {
+      console.log(error);
+    });
+    if (axiosResponse) {
+      setFestival(axiosResponse.data);
+    }
+  };
 
   const getExhibitionList = async () => {
     const axiosResponse = await axios({
@@ -143,6 +167,7 @@ export const SearchProvider = ({ children }) => {
     if (searchInfo.date !== null && searchInfo.localcode !== null) {
       getPopupstoreList();
       getExhibitionList();
+      getFestivalList();
       getFacilityList();
     }
   }, [searchInfo]);
@@ -157,6 +182,7 @@ export const SearchProvider = ({ children }) => {
         setPickedLocal_1,
         exhibition,
         popupstore,
+        festival,
         facility,
       }}
     >

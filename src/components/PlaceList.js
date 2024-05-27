@@ -51,10 +51,13 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
           display: "flex",
           justifyContent: "space-between",
           padding: "10px",
+          width: "100%",
         }}
       >
         <Typography variant="h5">
-          {type === "exhibition"
+          {type === "festival"
+            ? "축제"
+            : type === "exhibition"
             ? "전시회 / 공연"
             : type === "popup"
             ? "팝업스토어"
@@ -77,6 +80,9 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
       <Divider variant="middle" />
       <br />
       <Container>
+        {/* {placeList.length === 0 ? (
+          <Typography sx={{ width: "100%" }}>검색 결과가 없습니다.</Typography>
+        ) : ( */}
         <Grid container spacing={3}>
           {placeList.map((place, index) =>
             index < showLimit ? (
@@ -126,6 +132,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
             )
           )}
         </Grid>
+        {/* )} */}
       </Container>
     </Container>
   );

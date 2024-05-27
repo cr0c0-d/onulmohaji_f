@@ -89,6 +89,7 @@ function PlaceDetail({ placeType }) {
         <Grid container spacing={2}>
           <Grid item>
             <img
+              id="img_big"
               src={detail.imageList[0]}
               style={{ width: 300 }}
               alt={detail.title}
@@ -99,8 +100,13 @@ function PlaceDetail({ placeType }) {
                   <img
                     key={index}
                     src={image}
-                    style={{ width: 80 }}
+                    style={{ width: 80, cursor: "pointer" }}
                     alt={index}
+                    onClick={() => {
+                      document
+                        .getElementById("img_big")
+                        .setAttribute("src", image);
+                    }}
                   />
                 ))}
               </div>
@@ -124,15 +130,23 @@ function PlaceDetail({ placeType }) {
             </Typography>
             <Typography gutterBottom variant="body1" component="div">
               장소 : {detail.place} ({detail.address}){" "}
-              <Link to={detail.placeUrl}>홈페이지</Link>
+              {detail.placeUrl !== undefined && detail.placeUrl !== "" ? (
+                <Link to={detail.placeUrl}>홈페이지</Link>
+              ) : (
+                ""
+              )}
             </Typography>
-            <Typography gutterBottom variant="body1" component="div">
-              <Link to={detail.url}>링크2</Link>
-            </Typography>
+            {detail.url !== "" ? (
+              <Typography gutterBottom variant="body1" component="div">
+                <Link to={detail.url}>링크2</Link>
+              </Typography>
+            ) : (
+              ""
+            )}
           </Grid>
           <Grid item>
-            <Stack>
-              {detail.contents1.length > 0 ? (
+            <Stack spacing={3}>
+              {detail.contents1 !== null ? (
                 <Card>
                   <CardContent>
                     <div
@@ -144,7 +158,7 @@ function PlaceDetail({ placeType }) {
                 ""
               )}
               <br />
-              {detail.contents2.length > 0 ? (
+              {detail.contents2 !== null ? (
                 <Card>
                   <CardContent>
                     <div
@@ -155,25 +169,20 @@ function PlaceDetail({ placeType }) {
               ) : (
                 ""
               )}
+
+              <Grid item>
+                <div id="map" style={{ width: "100%", height: "400px" }}></div>
+              </Grid>
+
+              <Grid container>
+                <FacilityList
+                  facilityList={facilities}
+                  type="food"
+                  typeName="음식점"
+                  limit={4}
+                />
+              </Grid>
             </Stack>
-          </Grid>
-          <Grid item>
-            <div id="map" style={{ width: "800px", height: "400px" }}></div>
-          </Grid>
-          <Grid container>
-            {/* <Select>
-              {facilityTypeList.map((facilityType) => (
-                <MenuItem key={facilityType.code} value={facilityType.code}>
-                  {facilityType.name}
-                </MenuItem>
-              ))}
-            </Select> */}
-            <FacilityList
-              facilityList={facilities}
-              type="food"
-              typeName="음식점"
-              limit={4}
-            />
           </Grid>
         </Grid>
       ) : (

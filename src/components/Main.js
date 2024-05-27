@@ -27,6 +27,7 @@ function Main() {
     localcodes,
     pickedLocal_1,
     setPickedLocal_1,
+    festival,
     exhibition,
     popupstore,
     facility,
@@ -137,6 +138,14 @@ function Main() {
                 </Button>
               </Grid>
             </Grid>
+
+            {festival !== null && festival.length !== 0 ? (
+              <div>
+                <PlaceList placeList={festival} type="festival" limit="4" />
+              </div>
+            ) : (
+              ""
+            )}
 
             {exhibition !== null && exhibition.length !== 0 ? (
               <div>
