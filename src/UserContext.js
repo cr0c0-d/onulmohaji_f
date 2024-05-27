@@ -5,10 +5,10 @@ const UserContext = createContext();
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ settingDone, setSettingDone, children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [accessToken, setAccessToken] = useState(false);
-  const [settingDone, setSettingDone] = useState(false);
+  //const [settingDone, setSettingDone] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
