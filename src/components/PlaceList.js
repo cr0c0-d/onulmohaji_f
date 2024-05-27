@@ -68,7 +68,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
             size="small"
             variant="contained"
             onClick={() => {
-              setShowLimit(999);
+              history(`/${type}/list`);
             }}
           >
             전체보기
@@ -98,10 +98,19 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                     alt={place.title}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="body1" component="div">
+                    <Typography
+                      gutterBottom
+                      variant="body1"
+                      sx={{ fontWeight: "bold" }}
+                      component="div"
+                    >
                       {place.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
+                    <Typography
+                      variant="body2"
+                      gutterBottom
+                      color="text.secondary"
+                    >
                       {place.address_short}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">

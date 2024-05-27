@@ -14,6 +14,7 @@ import { SearchProvider } from "./SearchContext";
 import { useState } from "react";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
+import PlaceListByType from "./components/PlaceListByType";
 
 const theme = createTheme({
   typography: {
@@ -55,6 +56,18 @@ function App() {
                       <Route
                         path="/popup/:placeId"
                         element={<PlaceDetail placeType="popup" />}
+                      />
+                      <Route
+                        path="/festival/list"
+                        element={<PlaceListByType type="festival" />}
+                      />
+                      <Route
+                        path="/exhibition/list"
+                        element={<PlaceListByType type="exhibition" />}
+                      />
+                      <Route
+                        path="/popup/list"
+                        element={<PlaceListByType type="popup" />}
                       />
                       <Route path="/signup" element={<Signup />} />
                       <Route path="/login" element={<Login />} />
