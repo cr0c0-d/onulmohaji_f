@@ -148,9 +148,7 @@ export const SearchProvider = ({ children }) => {
       url: `${
         process.env.REACT_APP_API_ROOT
       }/api/facility/local/list?localcodeId=${searchInfo.localcode}${
-        searchInfo.keyword !== ""
-          ? "&keyword=" + searchInfo.keyword
-          : "&keyword=이색데이트"
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
       }`,
       method: "GET",
       headers: {
