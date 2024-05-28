@@ -13,6 +13,8 @@ import {
   FormControlLabel,
   Checkbox,
   Stack,
+  Slider,
+  Box,
 } from "@mui/material";
 import dayjs from "dayjs";
 import PlaceList from "./PlaceList";
@@ -35,10 +37,10 @@ function Main() {
 
   return (
     <Container>
-      <Stack spacing={3}>
+      <Stack spacing={5}>
         {searchInfo !== undefined ? (
           <div>
-            <Grid container spacing={2}>
+            <Grid container spacing={5}>
               <Grid item>
                 <DatePicker
                   label="날짜"
@@ -120,7 +122,19 @@ function Main() {
               <Grid item>
                 <FormControl>
                   <InputLabel>검색어</InputLabel>
-                  <Input type="text" id="input_keyword" />
+                  <Input
+                    type="text"
+                    id="input_keyword"
+                    onKeyDownCapture={(e) => {
+                      if (e.code === "Enter") {
+                        setSearchInfo({
+                          ...searchInfo,
+                          keyword:
+                            document.getElementById("input_keyword").value,
+                        });
+                      }
+                    }}
+                  />
                 </FormControl>
               </Grid>
               <Grid item>
