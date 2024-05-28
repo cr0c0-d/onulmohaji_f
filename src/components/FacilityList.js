@@ -13,6 +13,7 @@ import {
   Chip,
   IconButton,
   Skeleton,
+  Slider,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
@@ -27,6 +28,23 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
   const AuthAPI = useAuthAPI();
   const { userInfo } = useUser();
+
+  // 거리 범위
+  const [distance, setDistance] = useState(1000);
+  const distanceRange = [
+    {
+      value: 1,
+      label: "1km",
+    },
+    {
+      value: 2,
+      label: "2km",
+    },
+    {
+      value: 3,
+      label: "3km",
+    },
+  ];
 
   const addRouteDetail = (placeId) => {
     AuthAPI({
@@ -56,6 +74,18 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
         }}
       >
         <Typography variant="h5">가까운 {typeName} 목록</Typography>
+        <Grid item>
+          <Box sx={{ width: "200px" }}>
+            <Slider
+              value={distance}
+              step={1}
+              marks={distanceRange}
+              max={3}
+              min={1}
+              onChange={(e) => setDistance(e.target.value)}
+            />
+          </Box>
+        </Grid>
         {limit !== 999 ? (
           <Button
             size="small"
@@ -93,78 +123,87 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                 </Card>
               </Grid>
             ))
-          : facilityList.map((facility, index) =>
-              index < showLimit ? (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                  <Card
-                    style={{ cursor: "pointer" }}
-                    onClick={() => window.open(facility.placeUrl)}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="300"
-                      image={
-                        facility.thumbnail ||
-                        process.env.REACT_APP_DEFAULT_IMAGE_URL
-                      }
-                      alt={facility.placeName}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="body1" component="div">
-                        {facility.placeName}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {facility.categoryName}
-                      </Typography>
-
-                      <Typography variant="body2" color="text.secondary">
-                        {facility.distance > 999
-                          ? (facility.distance / 1000)
-                              .toString()
-                              .substring(0, 3) + "km"
-                          : facility.distance + "m"}
-                      </Typography>
-
-                      <Chip
-                        icon={<StarIcon />}
-                        label={
-                          facility.scoresum !== 0 && facility.scorecnt !== 0
-                            ? Math.floor(
-                                (facility.scoresum / facility.scorecnt) * 10
-                              ) /
-                                10 +
-                              " (" +
-                              facility.scorecnt +
-                              ")"
-                            : "별점 정보 없음"
+          : facilityList
+              .filter((facility) => facility.distance <= distance * 1000)
+              .map((facility, index) =>
+                index < showLimit && facility.distance <= distance * 1000 ? (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                    <Card
+                      style={{ cursor: "pointer" }}
+                      onClick={() => window.open(facility.placeUrl)}
+                    >
+                      <CardMedia
+                        component="img"
+                        height="300"
+                        image={
+                          facility.thumbnail ||
+                          process.env.REACT_APP_DEFAULT_IMAGE_URL
                         }
-                        size="small"
-                        color="warning"
+                        alt={facility.placeName}
                       />
-                    </CardContent>
-                    <CardContent>
-                      <Chip
-                        icon={<PlaylistAddIcon />}
-                        label="일정에 추가"
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          if (userInfo.id !== undefined) {
-                            addRouteDetail(facility.id);
-                          } else {
-                            history("/login");
+                      <CardContent>
+                        <Typography
+                          gutterBottom
+                          variant="body1"
+                          component="div"
+                        >
+                          {facility.placeName}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {facility.categoryName}
+                        </Typography>
+
+                        <Typography variant="body2" color="text.secondary">
+                          {facility.distance > 999
+                            ? (facility.distance / 1000)
+                                .toString()
+                                .substring(0, 3) + "km"
+                            : facility.distance + "m"}
+                        </Typography>
+
+                        <Chip
+                          icon={<StarIcon />}
+                          label={
+                            facility.scoresum != null &&
+                            facility.scorecnt != null &&
+                            facility.scoresum !== 0 &&
+                            facility.scorecnt !== 0
+                              ? Math.floor(
+                                  (facility.scoresum / facility.scorecnt) * 10
+                                ) /
+                                  10 +
+                                " (" +
+                                facility.scorecnt +
+                                ")"
+                              : "별점 정보 없음"
                           }
-                        }}
-                      />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ) : (
-                ""
-              )
-            )}
+                          size="small"
+                          color="warning"
+                        />
+                      </CardContent>
+                      <CardContent>
+                        <Chip
+                          icon={<PlaylistAddIcon />}
+                          label="일정에 추가"
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            if (userInfo.id !== undefined) {
+                              addRouteDetail(facility.id);
+                            } else {
+                              history("/login");
+                            }
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ) : (
+                  ""
+                )
+              )}
       </Grid>
       <br />
     </Container>
