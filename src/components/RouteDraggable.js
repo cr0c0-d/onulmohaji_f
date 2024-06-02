@@ -17,6 +17,7 @@ import {
   MenuItem,
   ListItemText,
   Divider,
+  Modal,
 } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -31,6 +32,7 @@ import SouthIcon from "@mui/icons-material/South";
 import MapIcon from "@mui/icons-material/Map";
 import { useNavigate } from "react-router-dom";
 import PeopleIcon from "@mui/icons-material/People";
+import RouteShare from "./RouteShare";
 
 export default function RouteDraggable() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -38,6 +40,7 @@ export default function RouteDraggable() {
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
   // route 모드 ->  editOrder : 순서 변경 / remove : 삭제 / showRoute : 경로 보기
   const [mode, setMode] = useState("editOrder");
+  const [openShareModal, setOpenShareModal] = useState(false);
   const [routeMenuAnchor, setRouteMenuAnchor] = useState(null);
   const { userInfo } = useUser();
   const history = useNavigate();
@@ -138,7 +141,7 @@ export default function RouteDraggable() {
                     setMode(newMode);
                   }
                 }}
-                exclusive="true"
+                exclusive={true}
               >
                 <ToggleButton value="editOrder" key="editOrder">
                   <DehazeIcon />
@@ -283,7 +286,7 @@ export default function RouteDraggable() {
       <Menu
         anchorEl={routeMenuAnchor}
         id="account-menu"
-        open={routeMenuAnchor}
+        open={routeMenuAnchor !== null}
         onClose={routeMenuClose}
         onClick={routeMenuClose}
         PaperProps={{
@@ -315,7 +318,12 @@ export default function RouteDraggable() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={routeMenuClose}>
+        <MenuItem
+          onClick={() => {
+            routeMenuClose();
+            setOpenShareModal(true);
+          }}
+        >
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
@@ -329,6 +337,18 @@ export default function RouteDraggable() {
           <ListItemText>일정 삭제</ListItemText>
         </MenuItem>
       </Menu>
+      {route !== null && route !== undefined ? (
+        <Modal
+          open={openShareModal}
+          onClose={() => {
+            setOpenShareModal(false);
+          }}
+        >
+          <RouteShare />
+        </Modal>
+      ) : (
+        ""
+      )}
     </Container>
   );
 }
