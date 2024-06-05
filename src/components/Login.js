@@ -142,7 +142,8 @@ export default function Login() {
     if (json !== undefined && json.status === 200) {
       console.log(json);
       sessionStorage.setItem("state", json.data.state);
-      window.open(json.data.url);
+      //window.open(json.data.url);
+      window.location.href = json.data.url;
     }
   };
 
@@ -230,7 +231,12 @@ export default function Login() {
                 style={{ maxWidth: "100%", cursor: "pointer" }}
                 src={NaverLoginButton}
                 alt="naverLogin"
-                onClick={getNaverLoginRequestUrl}
+                onClick={
+                  //getNaverLoginRequestUrl
+                  () => {
+                    window.location.href = `${process.env.REACT_APP_API_ROOT}/oauth2/authorization/naver`;
+                  }
+                }
               />
             </Grid>
             <Grid item sx={{ width: "50%" }}>
@@ -238,6 +244,9 @@ export default function Login() {
                 style={{ maxWidth: "100%", cursor: "pointer" }}
                 src={KakaoLoginButton}
                 alt="kakaoLogin"
+                onClick={() => {
+                  window.location.href = `${process.env.REACT_APP_API_ROOT}/oauth2/authorization/kakao`;
+                }}
               />
             </Grid>
             <Grid item sx={{ width: "50%" }}>
@@ -245,6 +254,9 @@ export default function Login() {
                 style={{ maxWidth: "100%", cursor: "pointer" }}
                 src={GoogleLoginButton}
                 alt="googleLogin"
+                onClick={() => {
+                  window.location.href = `${process.env.REACT_APP_API_ROOT}/oauth2/authorization/google`;
+                }}
               />
             </Grid>
           </Grid>
