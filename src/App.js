@@ -15,7 +15,7 @@ import { useState } from "react";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import PlaceListByType from "./components/PlaceListByType";
-import AddRoutePermission from "./components/AddRoutePermission";
+import RoutePermission from "./components/RoutePermission";
 
 const theme = createTheme({
   typography: {
@@ -74,7 +74,7 @@ function App() {
                       <Route path="/login" element={<Login />} />
                       <Route
                         path="/route/permission/:shareCode"
-                        element={<AddRoutePermission />}
+                        element={<RoutePermission />}
                       />
                     </Route>
                   </Routes>
