@@ -23,9 +23,9 @@ import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DehazeIcon from "@mui/icons-material/Dehaze";
 import { useEffect, useState } from "react";
-import { useAuthAPI } from "../AuthAPI";
-import { useUser } from "../UserContext";
-import { useRoute } from "../RouteContext";
+import { useAuthAPI } from "../../AuthAPI";
+import { useUser } from "../../UserContext";
+import { useRoute } from "../../RouteContext";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SouthIcon from "@mui/icons-material/South";
@@ -34,7 +34,7 @@ import { useNavigate } from "react-router-dom";
 import PeopleIcon from "@mui/icons-material/People";
 import RouteShare from "./RouteShare";
 
-export default function RouteDraggable() {
+export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
   // route 정보
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
@@ -139,6 +139,13 @@ export default function RouteDraggable() {
                 onChange={(event, newMode) => {
                   if (newMode !== null) {
                     setMode(newMode);
+                    switch (newMode) {
+                      case "showRoute":
+                        setDrawerWidth("100%");
+                        break;
+                      default:
+                        setDrawerWidth(350);
+                    }
                   }
                 }}
                 exclusive={true}

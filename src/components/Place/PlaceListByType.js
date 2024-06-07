@@ -1,6 +1,6 @@
 import { Button, Container } from "@mui/material";
 import PlaceList from "./PlaceList";
-import { useSearchContext } from "../SearchContext";
+import { useSearchContext } from "../../SearchContext";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useNavigate } from "react-router-dom";
 

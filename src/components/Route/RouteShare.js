@@ -1,6 +1,6 @@
 import { Box, Button, Input, Modal, Typography } from "@mui/material";
-import { useRoute } from "../RouteContext";
-import { useAuthAPI } from "../AuthAPI";
+import { useRoute } from "../../RouteContext";
+import { useAuthAPI } from "../../AuthAPI";
 import { useEffect, useRef, useState } from "react";
 
 export default function RouteShare() {

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../UserContext";
-import { useAuthAPI } from "../AuthAPI";
+import { useUser } from "../../UserContext";
+import { useAuthAPI } from "../../AuthAPI";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import {
@@ -12,7 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
-import { useSearchContext } from "../SearchContext";
+import { useSearchContext } from "../../SearchContext";
+import dayjs from "dayjs";
 
 export default function RoutePermission() {
   const { userInfo } = useUser();
@@ -29,11 +30,9 @@ export default function RoutePermission() {
       method: "GET",
     }).catch((error) => {
       console.log("route 조회 실패");
-      console.log(error);
     });
 
     if (response && response.status === 200) {
-      console.log(response.data);
       setTargetRoute(response.data);
     }
   };
@@ -63,7 +62,7 @@ export default function RoutePermission() {
       data: { routeId: targetRoute.routeId, userId: userInfo.id },
       success: (result) => {
         if (result.status === 201) {
-          setSearchInfo({ ...searchInfo, date: result.data.routeDate });
+          setSearchInfo({ ...searchInfo, date: dayjs(result.data.routeDate) });
           history("/");
         }
       },
@@ -99,7 +98,7 @@ export default function RoutePermission() {
             targetRoute.memberList.find((obj) => obj === userInfo.id) !==
             undefined ? (
               <Stack spacing={3}>
-                <Typography component="body1" variant="body1">
+                <Typography variant="body1">
                   이미 참여중인 일정입니다.
                 </Typography>
                 <Button
@@ -112,10 +111,10 @@ export default function RoutePermission() {
               </Stack>
             ) : (
               <Stack spacing={3}>
-                <Typography component="body1" variant="body1">
+                <Typography variant="body1">
                   {`${targetRoute.ownerName}님의 ${targetRoute.routeDate} 일정에 참가하시겠습니까?`}
                 </Typography>
-                <Typography component="body1" variant="body1">
+                <Typography variant="body1">
                   해당 날짜에 이미 일정이 존재하는 경우 덮어씌워집니다.
                 </Typography>
                 <Button

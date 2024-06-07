@@ -13,9 +13,9 @@ import {
 import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
-import { useAuthAPI } from "../AuthAPI";
-import { useUser } from "../UserContext";
-import { useRoute } from "../RouteContext";
+import { useAuthAPI } from "../../AuthAPI";
+import { useUser } from "../../UserContext";
+import { useRoute } from "../../RouteContext";
 
 export default function Route() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/

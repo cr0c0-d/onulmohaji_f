@@ -43,13 +43,13 @@ export default function Login() {
     if (
       location.state &&
       location.state.beforeUrl &&
-      location.state.beforeUrl !== "/search"
+      location.state.beforeUrl !== "/"
     ) {
       // 이전 페이지 기록이 있으면
       history(location.state.beforeUrl, { state: { ...location.state } });
     } else {
       // 기록이 없으면
-      history("/search");
+      history("/");
     }
   };
 
@@ -127,7 +127,15 @@ export default function Login() {
         localcode: json.data.localcode,
         accessToken: json.data.accessToken,
       });
-      history("/");
+      if (
+        location.state &&
+        location.state.beforeUrl &&
+        location.state.beforeUrl !== "/"
+      ) {
+        history(location.state.beforeUrl);
+      } else {
+        history("/");
+      }
     }
   };
 

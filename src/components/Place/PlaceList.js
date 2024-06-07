@@ -15,9 +15,9 @@ import {
 } from "@mui/material";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
-import { useAuthAPI } from "../AuthAPI";
-import { useRoute } from "../RouteContext";
-import { useUser } from "../UserContext";
+import { useAuthAPI } from "../../AuthAPI";
+import { useRoute } from "../../RouteContext";
+import { useUser } from "../../UserContext";
 
 const PlaceList = ({ placeList, type, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);

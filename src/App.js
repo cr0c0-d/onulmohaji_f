@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Layout from "./Layout";
-import Main from "./components/Main";
+import PlaceSearchMain from "./components/Place/PlaceSearchMain";
 import { UserProvider, useUser } from "./UserContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/ko";
-import PlaceDetail from "./components/PlaceDetail";
+import PlaceDetail from "./components/Place/PlaceDetail";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import { RouteProvider } from "./RouteContext";
@@ -14,8 +14,8 @@ import { SearchProvider } from "./SearchContext";
 import { useState } from "react";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
-import PlaceListByType from "./components/PlaceListByType";
-import RoutePermission from "./components/RoutePermission";
+import PlaceListByType from "./components/Place/PlaceListByType";
+import RoutePermission from "./components/Route/RoutePermission";
 
 const theme = createTheme({
   typography: {
@@ -45,7 +45,7 @@ function App() {
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<Layout />}>
-                      <Route exact path="/" element={<Main />} />
+                      <Route exact path="/" element={<PlaceSearchMain />} />
                       <Route
                         path="/festival/:placeId"
                         element={<PlaceDetail placeType="festival" />}

@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import PlaceList from "./PlaceList";
-import { useSearchContext } from "../SearchContext";
+import { useSearchContext } from "../../SearchContext";
 import { CheckBox } from "@mui/icons-material";
 import FacilityList from "./FacilityList";
 
@@ -39,7 +39,7 @@ function Main() {
     <Container>
       <Stack spacing={5}>
         {searchInfo !== undefined ? (
-          <div>
+          <Box>
             <Grid container spacing={5}>
               <Grid item>
                 <DatePicker
@@ -154,42 +154,42 @@ function Main() {
             </Grid>
 
             {festival !== null && festival.length !== 0 ? (
-              <div>
+              <Box>
                 <PlaceList placeList={festival} type="festival" limit="4" />
-              </div>
+              </Box>
             ) : (
               ""
             )}
 
             {exhibition !== null && exhibition.length !== 0 ? (
-              <div>
+              <Box>
                 <PlaceList placeList={exhibition} type="exhibition" limit="4" />
-              </div>
+              </Box>
             ) : (
               ""
             )}
 
             {popupstore !== null && popupstore.length !== 0 ? (
-              <div>
+              <Box>
                 <PlaceList placeList={popupstore} type="popup" limit="4" />
-              </div>
+              </Box>
             ) : (
               ""
             )}
 
             {facility !== null && facility.length !== 0 ? (
-              <div>
+              <Box>
                 <FacilityList
                   facilityList={facility}
                   type="facility"
                   typeName="시설"
                   limit={4}
                 />
-              </div>
+              </Box>
             ) : (
               ""
             )}
-          </div>
+          </Box>
         ) : (
           ""
         )}

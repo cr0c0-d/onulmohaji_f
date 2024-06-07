@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Card,
@@ -18,9 +18,9 @@ import {
 import StarIcon from "@mui/icons-material/Star";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
-import { useRoute } from "../RouteContext";
-import { useAuthAPI } from "../AuthAPI";
-import { useUser } from "../UserContext";
+import { useRoute } from "../../RouteContext";
+import { useAuthAPI } from "../../AuthAPI";
+import { useUser } from "../../UserContext";
 
 const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
@@ -33,15 +33,15 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const [distance, setDistance] = useState(1000);
   const distanceRange = [
     {
-      value: 1,
+      value: 1000,
       label: "1km",
     },
     {
-      value: 2,
+      value: 2000,
       label: "2km",
     },
     {
-      value: 3,
+      value: 3000,
       label: "3km",
     },
   ];
@@ -63,6 +63,12 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
       },
     });
   };
+
+  useEffect(() => {
+    if (type === "facility") {
+      setDistance(10000);
+    }
+  }, []);
   return (
     <Container>
       <br />
@@ -74,18 +80,23 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
         }}
       >
         <Typography variant="h5">가까운 {typeName} 목록</Typography>
-        <Grid item>
-          <Box sx={{ width: "200px" }}>
-            <Slider
-              value={distance}
-              step={1}
-              marks={distanceRange}
-              max={3}
-              min={1}
-              onChange={(e) => setDistance(e.target.value)}
-            />
-          </Box>
-        </Grid>
+        {type === "facility" ? (
+          ""
+        ) : (
+          <Grid item>
+            <Box sx={{ width: "200px" }}>
+              <Slider
+                value={distance}
+                step={1000}
+                marks={distanceRange}
+                max={3000}
+                min={1000}
+                onChange={(e) => setDistance(e.target.value)}
+              />
+            </Box>
+          </Grid>
+        )}
+
         {limit !== 999 ? (
           <Button
             size="small"
@@ -124,9 +135,9 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
               </Grid>
             ))
           : facilityList
-              .filter((facility) => facility.distance <= distance * 1000)
+              .filter((facility) => facility.distance <= distance)
               .map((facility, index) =>
-                index < showLimit && facility.distance <= distance * 1000 ? (
+                index < showLimit && facility.distance <= distance ? (
                   <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                     <Card
                       style={{ cursor: "pointer" }}
@@ -153,13 +164,17 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                           {facility.categoryName}
                         </Typography>
 
-                        <Typography variant="body2" color="text.secondary">
-                          {facility.distance > 999
-                            ? (facility.distance / 1000)
-                                .toString()
-                                .substring(0, 3) + "km"
-                            : facility.distance + "m"}
-                        </Typography>
+                        {type === "facility" ? (
+                          ""
+                        ) : (
+                          <Typography variant="body2" color="text.secondary">
+                            {facility.distance > 999
+                              ? (facility.distance / 1000)
+                                  .toString()
+                                  .substring(0, 3) + "km"
+                              : facility.distance + "m"}
+                          </Typography>
+                        )}
 
                         <Chip
                           icon={<StarIcon />}
