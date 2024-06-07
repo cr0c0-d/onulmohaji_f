@@ -18,6 +18,7 @@ import {
   ListItemText,
   Divider,
   Modal,
+  Box,
 } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -33,6 +34,7 @@ import MapIcon from "@mui/icons-material/Map";
 import { useNavigate } from "react-router-dom";
 import PeopleIcon from "@mui/icons-material/People";
 import RouteShare from "./RouteShare";
+import RouteMap from "./RouteMap";
 
 export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -103,191 +105,201 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
   return (
     <Container>
       <br />
-      <Stack>
-        {userInfo === null || userInfo.id === undefined ? (
-          <div>
-            <Typography>로그인 시 날짜별 계획을 관리할 수 있습니다.</Typography>
-            <br />
-            <Button variant="contained" onClick={() => history("/login")}>
-              로그인
-            </Button>
-          </div>
-        ) : (
-          <Card>
-            <CardHeader
-              avatar={
-                <Avatar>
-                  <RouteIcon />
-                </Avatar>
-              }
-              action={
-                route ? (
-                  <IconButton onClick={routeMenuOpen}>
-                    <MoreVertIcon />
-                  </IconButton>
-                ) : (
-                  ""
-                )
-              }
-              title={`${routeDate.format("M월 D일")}의 일정`}
-            />
-            <CardContent>
-              <ToggleButtonGroup
-                color="primary"
-                size="small"
-                value={mode}
-                onChange={(event, newMode) => {
-                  if (newMode !== null) {
-                    setMode(newMode);
-                    switch (newMode) {
-                      case "showRoute":
-                        setDrawerWidth("100%");
-                        break;
-                      default:
-                        setDrawerWidth(350);
+      <Box>
+        <Stack>
+          {userInfo === null || userInfo.id === undefined ? (
+            <div>
+              <Typography>
+                로그인 시 날짜별 계획을 관리할 수 있습니다.
+              </Typography>
+              <br />
+              <Button variant="contained" onClick={() => history("/login")}>
+                로그인
+              </Button>
+            </div>
+          ) : (
+            <Card>
+              <CardHeader
+                avatar={
+                  <Avatar>
+                    <RouteIcon />
+                  </Avatar>
+                }
+                action={
+                  route ? (
+                    <IconButton onClick={routeMenuOpen}>
+                      <MoreVertIcon />
+                    </IconButton>
+                  ) : (
+                    ""
+                  )
+                }
+                title={`${routeDate.format("M월 D일")}의 일정`}
+              />
+              <CardContent>
+                <ToggleButtonGroup
+                  color="primary"
+                  size="small"
+                  value={mode}
+                  onChange={(event, newMode) => {
+                    if (newMode !== null) {
+                      setMode(newMode);
+                      switch (newMode) {
+                        case "showRoute":
+                          setDrawerWidth("100%");
+                          break;
+                        default:
+                          setDrawerWidth(350);
+                      }
                     }
-                  }
-                }}
-                exclusive={true}
-              >
-                <ToggleButton value="editOrder" key="editOrder">
-                  <DehazeIcon />
-                  순서 변경
-                </ToggleButton>
-                ,
-                <ToggleButton value="remove" key="remove">
-                  <DeleteIcon />
-                  삭제
-                </ToggleButton>
-                ,
-                <ToggleButton value="showRoute" key="showRoute">
-                  <MapIcon />
-                  경로 보기
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </CardContent>
-            {route !== null ? (
-              <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId="route.routeDetailList">
-                  {(provided) => (
-                    <div {...provided.droppableProps} ref={provided.innerRef}>
-                      {route.routeDetailList.map((routeDetail, index) => (
-                        <Draggable
-                          key={routeDetail.orderNo}
-                          draggableId={routeDetail.orderNo.toString()}
-                          index={index + 1}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              style={{
-                                ...provided.draggableProps.style,
-                              }}
-                            >
-                              <Card
-                                sx={{ display: "flex", cursor: "pointer" }}
-                                onClick={() => {
-                                  if (
-                                    routeDetail.placeType === "popup" ||
-                                    routeDetail.placeType === "exhibition"
-                                  ) {
-                                    history(routeDetail.placeUrl);
-                                  } else {
-                                    window.open(routeDetail.placeUrl);
-                                  }
+                  }}
+                  exclusive={true}
+                >
+                  <ToggleButton value="editOrder" key="editOrder">
+                    <DehazeIcon />
+                    순서 변경
+                  </ToggleButton>
+                  ,
+                  <ToggleButton value="remove" key="remove">
+                    <DeleteIcon />
+                    삭제
+                  </ToggleButton>
+                  ,
+                  <ToggleButton value="showRoute" key="showRoute">
+                    <MapIcon />
+                    경로 보기
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </CardContent>
+              <Box>
+                {route !== null && mode === "showRoute" ? <RouteMap /> : ""}
+              </Box>
+              {route !== null ? (
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                  <Droppable droppableId="route.routeDetailList">
+                    {(provided) => (
+                      <div {...provided.droppableProps} ref={provided.innerRef}>
+                        {route.routeDetailList.map((routeDetail, index) => (
+                          <Draggable
+                            key={routeDetail.orderNo}
+                            draggableId={routeDetail.orderNo.toString()}
+                            index={index + 1}
+                          >
+                            {(provided) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                style={{
+                                  ...provided.draggableProps.style,
                                 }}
                               >
-                                <CardMedia
-                                  component="img"
-                                  sx={{ width: 50 }}
-                                  image={
-                                    routeDetail.thumbnail ||
-                                    process.env
-                                      .REACT_APP_DEFAULT_SMALL_IMAGE_URL
-                                  }
-                                  alt="routeDetail.placeName"
-                                />
-                                <CardContent style={{ width: "100%" }}>
-                                  <Stack>
-                                    <Typography
-                                      gutterBottom
-                                      variant="body2"
-                                      component="div"
-                                    >
-                                      {routeDetail.placeName}
-                                    </Typography>
-                                    <Typography
-                                      variant="body2"
-                                      color="text.secondary"
-                                    >
-                                      <Chip
-                                        label={routeDetail.placeTypeName}
-                                        size="small"
-                                        variant="outlined"
-                                      />
-                                    </Typography>
-                                  </Stack>
-                                </CardContent>
-                                <CardContent
-                                  style={{
-                                    display: "flex",
-                                    width: 40,
-                                    justifyContent: "flex-end",
+                                <Card
+                                  sx={{ display: "flex", cursor: "pointer" }}
+                                  onClick={() => {
+                                    if (
+                                      routeDetail.placeType === "popup" ||
+                                      routeDetail.placeType === "exhibition"
+                                    ) {
+                                      history(routeDetail.placeUrl);
+                                    } else {
+                                      window.open(routeDetail.placeUrl);
+                                    }
                                   }}
-                                  onClick={(e) => e.stopPropagation()}
                                 >
-                                  {mode === "editOrder" ? (
-                                    <IconButton {...provided.dragHandleProps}>
-                                      <DehazeIcon />
-                                    </IconButton>
-                                  ) : mode === "remove" ? (
-                                    <IconButton
-                                      color="error"
+                                  <CardMedia
+                                    component="img"
+                                    sx={{ width: 50 }}
+                                    image={
+                                      routeDetail.thumbnail ||
+                                      process.env
+                                        .REACT_APP_DEFAULT_SMALL_IMAGE_URL
+                                    }
+                                    alt="routeDetail.placeName"
+                                  />
+                                  <CardContent style={{ width: "100%" }}>
+                                    <Stack>
+                                      <Typography
+                                        gutterBottom
+                                        variant="body2"
+                                        component="div"
+                                      >
+                                        {routeDetail.placeName}
+                                      </Typography>
+                                      <Typography
+                                        variant="body2"
+                                        color="text.secondary"
+                                      >
+                                        <Chip
+                                          label={routeDetail.placeTypeName}
+                                          size="small"
+                                          variant="outlined"
+                                        />
+                                      </Typography>
+                                    </Stack>
+                                  </CardContent>
+                                  <CardContent
+                                    style={{
+                                      display: "flex",
+                                      width: 40,
+                                      justifyContent: "flex-end",
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {mode === "editOrder" ? (
+                                      <IconButton {...provided.dragHandleProps}>
+                                        <DehazeIcon />
+                                      </IconButton>
+                                    ) : mode === "remove" ? (
+                                      <IconButton
+                                        color="error"
+                                        onClick={() =>
+                                          deleteRouteDetail(routeDetail.id)
+                                        }
+                                      >
+                                        <DeleteIcon />
+                                      </IconButton>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </CardContent>
+                                </Card>
+                                {mode === "showRoute" &&
+                                index + 1 !== route.routeDetailList.length ? (
+                                  <CardContent sx={{ textAlign: "center" }}>
+                                    <Button
+                                      startIcon={<SouthIcon />}
+                                      variant="contained"
                                       onClick={() =>
-                                        deleteRouteDetail(routeDetail.id)
+                                        window.open(
+                                          route.routeMapUrlList[index]
+                                        )
                                       }
                                     >
-                                      <DeleteIcon />
-                                    </IconButton>
-                                  ) : (
-                                    ""
-                                  )}
-                                </CardContent>
-                              </Card>
-                              {mode === "showRoute" &&
-                              index + 1 !== route.routeDetailList.length ? (
-                                <CardContent sx={{ textAlign: "center" }}>
-                                  <Button
-                                    startIcon={<SouthIcon />}
-                                    variant="contained"
-                                    onClick={() =>
-                                      window.open(route.routeMapUrlList[index])
-                                    }
-                                  >
-                                    경로 보기
-                                  </Button>
-                                </CardContent>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            ) : (
-              <CardContent sx={{ textAlign: "center" }}>
-                일정이 없습니다.
-              </CardContent>
-            )}
-          </Card>
-        )}
-      </Stack>
+                                      경로 보기
+                                    </Button>
+                                  </CardContent>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+              ) : (
+                <CardContent sx={{ textAlign: "center" }}>
+                  일정이 없습니다.
+                </CardContent>
+              )}
+            </Card>
+          )}
+        </Stack>
+      </Box>
+
       <br />
 
       <Menu

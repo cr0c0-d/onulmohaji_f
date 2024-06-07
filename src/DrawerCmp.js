@@ -10,12 +10,13 @@ import {
   styled,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import Route from "./components/Route";
-import RouteDraggable from "./components/RouteDraggable";
+import RouteDraggable from "./components/Route/RouteDraggable";
 import { useRoute } from "./RouteContext";
+import { useState } from "react";
 
 export default function DrawerCmp() {
   const { openDrawer, setOpenDrawer } = useRoute();
+  const [drawerWidth, setDrawerWidth] = useState(350);
   const handleDrawerClose = () => {
     setOpenDrawer(false);
   };
@@ -24,10 +25,10 @@ export default function DrawerCmp() {
     <Container maxWidth="xs" sx={{ zIndex: (theme) => theme.zIndex.drawer }}>
       <Drawer
         sx={{
-          width: "350px",
+          width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": {
-            width: "350px",
+            width: drawerWidth,
             boxSizing: "border-box",
           },
         }}
@@ -46,7 +47,11 @@ export default function DrawerCmp() {
         </div>
         <Divider />
         {/* <Route /> */}
-        <RouteDraggable />
+        <RouteDraggable
+          drawerWidth={drawerWidth}
+          setDrawerWidth={setDrawerWidth}
+        />
+
         {/* <Divider />
       <List>
         {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
