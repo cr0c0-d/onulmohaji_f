@@ -157,40 +157,188 @@ export default function RouteMap() {
       return content;
     }
 
-    const setPoints = () => {
-      const positionList = [];
+    const setCenterPoint = () => {
+      let sumLatitude = 0;
+      let sumLongitude = 0;
+
       route.routeDetailList.map((routeDetail) => {
-        positionList.push(
-          new kakao.maps.LatLng(routeDetail.latitude, routeDetail.longitude)
+        sumLatitude += routeDetail.latitude;
+        sumLongitude += routeDetail.longitude;
+      });
+
+      const avgLatitude = sumLatitude / route.routeDetailList.length;
+      const avgLongtidue = sumLongitude / route.routeDetailList.length;
+
+      map.setCenter(new kakao.maps.LatLng(avgLatitude, avgLongtidue));
+    };
+    setCenterPoint();
+
+    const setPoints = () => {
+      const positionList = []; // 직전 장소, 현재 장소가 저장되는 배열
+      let lastPointName = "";
+
+      route.routeDetailList.map((routeDetail, index) => {
+        const thisPosition = new kakao.maps.LatLng(
+          routeDetail.latitude,
+          routeDetail.longitude
         );
+
+        if (positionList.length == 2) {
+          // [A, B]
+          positionList.shift(); // [B]
+        }
+        positionList.push(thisPosition); // [B, C]
 
         // 인포윈도우를 생성하고 지도에 표시합니다
         var infowindow = new kakao.maps.InfoWindow({
           map: map, // 인포윈도우가 표시될 지도
-          position: new kakao.maps.LatLng(
-            routeDetail.latitude,
-            routeDetail.longitude
-          ),
-          content: `<div style="padding:5px;">${routeDetail.placeName}</div>`,
+          position: thisPosition,
+          content: `<div style="padding:5px;">${index + 1}. ${
+            routeDetail.placeName
+          }</div>`,
+          // content:
+          //   `<div style="width:230px; height: 80px; display:block; padding: 5px;">` +
+          //   `<div class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-vn7o6b-MuiPaper-root-MuiCard-root">` +
+          //   `<img class="MuiCardMedia-root MuiCardMedia-media MuiCardMedia-img css-vf01qm-MuiCardMedia-root" src=${
+          //     routeDetail.thumbnail ||
+          //     process.env.REACT_APP_DEFAULT_SMALL_IMAGE_URL
+          //   } alt="${routeDetail.placeName}">` +
+          //   `<div class="MuiCardContent-root css-46bh2p-MuiCardContent-root" style="width: 100%;">` +
+          //   `<div class="MuiStack-root css-nen11g-MuiStack-root">` +
+          //   `<div class="MuiTypography-root MuiTypography-body2 MuiTypography-gutterBottom css-151rudg-MuiTypography-root">${routeDetail.placeName}</div>` +
+          //   `<div class="MuiChip-root MuiChip-outlined MuiChip-sizeSmall MuiChip-colorDefault MuiChip-outlinedDefault css-162q9x6-MuiChip-root" style="display:inline-flex;">` +
+          //   `<span class="MuiChip-label MuiChip-labelSmall css-rrn746-MuiChip-label">${routeDetail.placeTypeName}</span>` +
+          //   `</div></div></div></div></div>`,
+
           removable: false,
         });
         infowindow.setMap(map);
-      });
 
-      //   // 클릭한 위치를 기준으로 선을 생성하고 지도위에 표시합니다
-      clickLine = new kakao.maps.Polyline({
-        map: map, // 선을 표시할 지도입니다
-        path: positionList, // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
-        strokeWeight: 3, // 선의 두께입니다
-        strokeColor: "#db4040", // 선의 색깔입니다
-        strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
-        strokeStyle: "solid", // 선의 스타일입니다
+        if (positionList.length != 2) {
+          lastPointName = routeDetail.placeName;
+          return;
+        }
+        //   // 클릭한 위치를 기준으로 선을 생성하고 지도위에 표시합니다
+        clickLine = new kakao.maps.Polyline({
+          map: map, // 선을 표시할 지도입니다
+          path: positionList, // 선을 구성하는 좌표 배열입니다 클릭한 위치를 넣어줍니다
+          strokeWeight: 3, // 선의 두께입니다
+          strokeColor: "#db4040", // 선의 색깔입니다
+          strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+          strokeStyle: "solid", // 선의 스타일입니다
+        });
+        clickLine.setMap(map);
+        // // 클릭한 지점에 대한 정보를 지도에 표시합니다
+        // displayCircleDot(clickPosition, 0);
+
+        const setLineMouseOver = (clickLine, lastPointName, thisPointName) => {
+          const pathList = clickLine.getPath();
+          const infowindowLat =
+            (pathList[0].getLat() + pathList[1].getLat()) / 2;
+          const infowindowLng =
+            (pathList[0].getLng() + pathList[1].getLng()) / 2;
+
+          var routeOverlay = new kakao.maps.CustomOverlay({
+            map: map, // 커스텀오버레이를 표시할 지도입니다
+            content: `<div style="padding:5px; border:1px solid black; background-color:white;">${lastPointName} → ${thisPointName}</div>`, // 커스텀오버레이에 표시할 내용입니다
+            position: new kakao.maps.LatLng(infowindowLat, infowindowLng), // 커스텀오버레이를 표시할 위치입니다.
+            xAnchor: -0.1,
+            yAnchor: -0.1,
+            zIndex: 3,
+          });
+
+          // var infowindow = new kakao.maps.InfoWindow({
+          //   map: map, // 인포윈도우가 표시될 지도
+          //   position: new kakao.maps.LatLng(infowindowLat, infowindowLng),
+          //   content: `<div style="padding:5px;">${lastPointName} → ${thisPointName}</div>`,
+          //   removable: false,
+          // });
+          routeOverlay.setMap(null);
+
+          kakao.maps.event.addListener(
+            clickLine,
+            "mouseover",
+            function (mouseEvent) {
+              clickLine.setOptions({
+                strokeWeight: 5, // 선의 두께입니다
+                strokeColor: "#db4040", // 선의 색깔입니다
+                strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+                strokeStyle: "solid", // 선의 스타일입니다
+              });
+              routeOverlay.setPosition(mouseEvent.latLng);
+              //infowindow.setPosition(mouseEvent.latLng);
+              // line에 mouseover시 [시작지점명->도착지점명] 표기
+              routeOverlay.setMap(map);
+            }
+          );
+
+          kakao.maps.event.addListener(
+            clickLine,
+            "mousemove",
+            function (mouseEvent) {
+              routeOverlay.setPosition(mouseEvent.latLng);
+              //infowindow.setPosition(mouseEvent.latLng);
+              // line에 mouseover시 [시작지점명->도착지점명] 표기
+              routeOverlay.setMap(map);
+            }
+          );
+
+          kakao.maps.event.addListener(clickLine, "mouseout", function () {
+            clickLine.setOptions({
+              strokeWeight: 3, // 선의 두께입니다
+              strokeColor: "#db4040", // 선의 색깔입니다
+              strokeOpacity: 1, // 선의 불투명도입니다 0에서 1 사이값이며 0에 가까울수록 투명합니다
+              strokeStyle: "solid", // 선의 스타일입니다
+            });
+            // line에 mouseover시 [시작지점명->도착지점명] 표기
+            routeOverlay.setMap(null);
+          });
+
+          kakao.maps.event.addListener(clickLine, "click", function () {
+            window.open(route.routeMapUrlList[index - 1]);
+          });
+        };
+
+        setLineMouseOver(clickLine, lastPointName, routeDetail.placeName);
+        lastPointName = routeDetail.placeName;
       });
-      clickLine.setMap(map);
-      // // 클릭한 지점에 대한 정보를 지도에 표시합니다
-      // displayCircleDot(clickPosition, 0);
     };
     setPoints();
+
+    const setMapBounds = () => {
+      while (true) {
+        let bounds = map.getBounds();
+        console.log("bounds");
+        console.log(bounds);
+
+        let isOk = true;
+
+        route.routeDetailList.map((routeDetail) => {
+          if (
+            bounds.ha < routeDetail.longitude &&
+            routeDetail.longitude < bounds.oa &&
+            bounds.qa < routeDetail.latitude &&
+            routeDetail.latitude < bounds.pa
+          ) {
+            console.log(
+              `${bounds.ha} < ${routeDetail.longitude} < ${bounds.oa}`
+            );
+            console.log(
+              `${bounds.qa} < ${routeDetail.latitude} < ${bounds.pa}`
+            );
+          } else {
+            isOk = false;
+          }
+        });
+
+        if (isOk) {
+          break;
+        } else {
+          map.setLevel(map.getLevel() + 1);
+        }
+      }
+    };
+    setMapBounds();
   };
 
   useEffect(() => {
