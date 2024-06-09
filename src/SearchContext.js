@@ -163,6 +163,11 @@ export const SearchProvider = ({ children }) => {
   };
   useEffect(() => {
     if (searchInfo.date !== null && searchInfo.localcode !== null) {
+      setPopupstore(null);
+      setExhibition(null);
+      setFestival(null);
+      setFacility(null);
+
       getPopupstoreList();
       getExhibitionList();
       getFestivalList();
