@@ -136,41 +136,46 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                 }
                 title={`${routeDate.format("M월 D일")}의 일정`}
               />
-              <CardContent>
-                <ToggleButtonGroup
-                  color="primary"
-                  size="small"
-                  value={mode}
-                  onChange={(event, newMode) => {
-                    if (newMode !== null) {
-                      setMode(newMode);
-                      switch (newMode) {
-                        case "showRoute":
-                          setDrawerWidth("100%");
-                          break;
-                        default:
-                          setDrawerWidth(350);
+              {route !== null ? (
+                <CardContent>
+                  <ToggleButtonGroup
+                    color="primary"
+                    size="small"
+                    value={mode}
+                    onChange={(event, newMode) => {
+                      if (newMode !== null) {
+                        setMode(newMode);
+                        switch (newMode) {
+                          case "showRoute":
+                            setDrawerWidth("100%");
+                            break;
+                          default:
+                            setDrawerWidth(350);
+                        }
                       }
-                    }
-                  }}
-                  exclusive={true}
-                >
-                  <ToggleButton value="editOrder" key="editOrder">
-                    <DehazeIcon />
-                    순서 변경
-                  </ToggleButton>
-                  ,
-                  <ToggleButton value="remove" key="remove">
-                    <DeleteIcon />
-                    삭제
-                  </ToggleButton>
-                  ,
-                  <ToggleButton value="showRoute" key="showRoute">
-                    <MapIcon />
-                    경로 보기
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </CardContent>
+                    }}
+                    exclusive={true}
+                  >
+                    <ToggleButton value="editOrder" key="editOrder">
+                      <DehazeIcon />
+                      순서 변경
+                    </ToggleButton>
+                    ,
+                    <ToggleButton value="remove" key="remove">
+                      <DeleteIcon />
+                      삭제
+                    </ToggleButton>
+                    ,
+                    <ToggleButton value="showRoute" key="showRoute">
+                      <MapIcon />
+                      경로 보기
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </CardContent>
+              ) : (
+                ""
+              )}
+
               <Box>
                 {route !== null && mode === "showRoute" ? <RouteMap /> : ""}
               </Box>
@@ -214,7 +219,7 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                                       process.env
                                         .REACT_APP_DEFAULT_SMALL_IMAGE_URL
                                     }
-                                    alt="routeDetail.placeName"
+                                    alt={routeDetail.placeName}
                                   />
                                   <CardContent style={{ width: "100%" }}>
                                     <Stack>
