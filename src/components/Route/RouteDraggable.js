@@ -35,6 +35,7 @@ import { useNavigate } from "react-router-dom";
 import PeopleIcon from "@mui/icons-material/People";
 import RouteShare from "./RouteShare";
 import RouteMap from "./RouteMap";
+import PlaceInfoSmall from "../Place/PlaceInfoSmall";
 
 export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -198,59 +199,10 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                                   ...provided.draggableProps.style,
                                 }}
                               >
-                                <Card
-                                  sx={{ display: "flex", cursor: "pointer" }}
-                                  onClick={() => {
-                                    if (
-                                      routeDetail.placeType === "popup" ||
-                                      routeDetail.placeType === "exhibition"
-                                    ) {
-                                      history(routeDetail.placeUrl);
-                                    } else {
-                                      window.open(routeDetail.placeUrl);
-                                    }
-                                  }}
-                                >
-                                  <CardMedia
-                                    component="img"
-                                    sx={{ width: 50 }}
-                                    image={
-                                      routeDetail.thumbnail ||
-                                      process.env
-                                        .REACT_APP_DEFAULT_SMALL_IMAGE_URL
-                                    }
-                                    alt={routeDetail.placeName}
-                                  />
-                                  <CardContent style={{ width: "100%" }}>
-                                    <Stack>
-                                      <Typography
-                                        gutterBottom
-                                        variant="body2"
-                                        component="div"
-                                      >
-                                        {routeDetail.placeName}
-                                      </Typography>
-                                      <Typography
-                                        variant="body2"
-                                        color="text.secondary"
-                                      >
-                                        <Chip
-                                          label={routeDetail.placeTypeName}
-                                          size="small"
-                                          variant="outlined"
-                                        />
-                                      </Typography>
-                                    </Stack>
-                                  </CardContent>
-                                  <CardContent
-                                    style={{
-                                      display: "flex",
-                                      width: 40,
-                                      justifyContent: "flex-end",
-                                    }}
-                                    onClick={(e) => e.stopPropagation()}
-                                  >
-                                    {mode === "editOrder" ? (
+                                <PlaceInfoSmall
+                                  placeDetail={routeDetail}
+                                  rightButton={
+                                    mode === "editOrder" ? (
                                       <IconButton {...provided.dragHandleProps}>
                                         <DehazeIcon />
                                       </IconButton>
@@ -265,9 +217,9 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                                       </IconButton>
                                     ) : (
                                       ""
-                                    )}
-                                  </CardContent>
-                                </Card>
+                                    )
+                                  }
+                                />
                                 {mode === "showRoute" &&
                                 index + 1 !== route.routeDetailList.length ? (
                                   <CardContent sx={{ textAlign: "center" }}>
