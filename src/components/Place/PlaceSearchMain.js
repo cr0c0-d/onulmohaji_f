@@ -15,14 +15,17 @@ import {
   Stack,
   Slider,
   Box,
+  IconButton,
 } from "@mui/material";
 import dayjs from "dayjs";
 import PlaceList from "./PlaceList";
 import { useSearchContext } from "../../SearchContext";
 import { CheckBox } from "@mui/icons-material";
 import FacilityList from "./FacilityList";
+import PlaceInfoSmall from "./PlaceInfoSmall";
+import ClearIcon from "@mui/icons-material/Clear";
 
-function Main() {
+function PlaceSearchMain() {
   const {
     searchInfo,
     setSearchInfo,
@@ -57,8 +60,22 @@ function Main() {
                   // )}
                 />
               </Grid>
-
-              {localcodes && pickedLocal_1 ? (
+              {searchInfo.criteriaPlace !== null ? (
+                <Grid item>
+                  <PlaceInfoSmall
+                    placeDetail={searchInfo.criteriaPlace}
+                    rightButton={
+                      <IconButton
+                        onClick={() =>
+                          setSearchInfo({ ...searchInfo, criteriaPlace: null })
+                        }
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    }
+                  />
+                </Grid>
+              ) : localcodes && pickedLocal_1 ? (
                 <Grid item>
                   <FormControl>
                     <InputLabel id="label_pickedLocal_1">
@@ -198,4 +215,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default PlaceSearchMain;

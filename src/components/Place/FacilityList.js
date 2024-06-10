@@ -117,7 +117,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
       <Grid container spacing={3}>
         {facilityList === null
           ? Array.from({ length: 4 }, (_, index) => index).map((_, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3}>
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <Card>
                   <Skeleton variant="rectangular" sx={{ height: 300 }} />
                   <CardContent>

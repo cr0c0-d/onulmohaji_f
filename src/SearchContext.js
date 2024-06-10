@@ -16,6 +16,7 @@ export const SearchProvider = ({ children }) => {
     date: dayjs(new Date()),
     localcode: null,
     keyword: "",
+    criteriaPlace: null,
   });
 
   // 선택 지역코드 - 대분류
@@ -86,9 +87,17 @@ export const SearchProvider = ({ children }) => {
         process.env.REACT_APP_API_ROOT
       }/api/festival/list?date=${searchInfo.date.format(
         "YYYY-MM-DD"
-      )}&localcodeId=${searchInfo.localcode}${
-        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }`,
+      )}&latitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.latitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+      }
+      &longitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.longitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
+      }
+      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -107,9 +116,17 @@ export const SearchProvider = ({ children }) => {
         process.env.REACT_APP_API_ROOT
       }/api/exhibition/list?date=${searchInfo.date.format(
         "YYYY-MM-DD"
-      )}&localcodeId=${searchInfo.localcode}${
-        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }`,
+      )}&latitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.latitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+      }
+      &longitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.longitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
+      }
+      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -126,11 +143,17 @@ export const SearchProvider = ({ children }) => {
     const axiosResponse = await axios({
       url: `${
         process.env.REACT_APP_API_ROOT
-      }/api/popup/list?date=${searchInfo.date.format(
-        "YYYY-MM-DD"
-      )}&localcodeId=${searchInfo.localcode}${
-        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }`,
+      }/api/popup/list?date=${searchInfo.date.format("YYYY-MM-DD")}&latitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.latitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+      }
+      &longitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.longitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
+      }
+      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -147,9 +170,17 @@ export const SearchProvider = ({ children }) => {
     const axiosResponse = await axios({
       url: `${
         process.env.REACT_APP_API_ROOT
-      }/api/facility/local/list?localcodeId=${searchInfo.localcode}${
-        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }`,
+      }/api/facility/local/list?latitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.latitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+      }
+      &longitude=${
+        searchInfo.criteriaPlace !== null
+          ? searchInfo.criteriaPlace.longitude
+          : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
+      }
+      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",

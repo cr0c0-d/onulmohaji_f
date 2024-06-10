@@ -13,11 +13,13 @@ import {
   IconButton,
   Chip,
 } from "@mui/material";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useNavigate } from "react-router-dom";
 import { useAuthAPI } from "../../AuthAPI";
 import { useRoute } from "../../RouteContext";
 import { useUser } from "../../UserContext";
+import { useSearchContext } from "../../SearchContext";
 
 const PlaceList = ({ placeList, type, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
@@ -25,6 +27,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
   const AuthAPI = useAuthAPI();
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
   const { userInfo } = useUser();
+  const { searchInfo, setSearchInfo } = useSearchContext();
 
   const addRouteDetail = (placeId) => {
     AuthAPI({
@@ -89,13 +92,13 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <Card
                   style={{ cursor: "pointer" }}
-                  onClick={() => history(`/${type}/${place.id}`)}
+                  onClick={() => history(`/${type}/${place.placeId}`)}
                 >
                   <CardMedia
                     component="img"
                     height="300"
-                    image={place.thumbnails}
-                    alt={place.title}
+                    image={place.thumbnail}
+                    alt={place.placeName}
                   />
                   <CardContent>
                     <Typography
@@ -104,7 +107,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                       sx={{ fontWeight: "bold" }}
                       component="div"
                     >
-                      {place.title}
+                      {place.placeName}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -127,10 +130,21 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                       onClick={(event) => {
                         event.stopPropagation();
                         if (userInfo.id !== undefined) {
-                          addRouteDetail(place.id);
+                          addRouteDetail(place.placeId);
                         } else {
                           history("/login");
                         }
+                      }}
+                    />{" "}
+                    <Chip
+                      icon={<LocationSearchingIcon />}
+                      label="주변 검색"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSearchInfo({ ...searchInfo, criteriaPlace: place });
                       }}
                     />
                   </CardContent>
