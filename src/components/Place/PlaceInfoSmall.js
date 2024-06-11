@@ -1,6 +1,7 @@
 import {
   Card,
   CardContent,
+  CardHeader,
   CardMedia,
   Chip,
   Stack,
@@ -12,7 +13,10 @@ export default function PlaceInfoSmall({ placeDetail, rightButton }) {
   const history = useNavigate();
   return (
     <Card
-      sx={{ display: "flex", cursor: "pointer" }}
+      sx={{
+        display: "flex",
+        cursor: "pointer",
+      }}
       onClick={() => {
         if (
           placeDetail.placeType === "popup" ||
