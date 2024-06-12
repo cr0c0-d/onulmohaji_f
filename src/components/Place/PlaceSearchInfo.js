@@ -10,12 +10,15 @@ import {
   IconButton,
   Stack,
   FormLabel,
+  InputAdornment,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useSearchContext } from "../../SearchContext";
 import PlaceInfoSmall from "./PlaceInfoSmall";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useState } from "react";
 export default function PlaceSearchInfo() {
+  const [inputKeyword, setInputKeyword] = useState("");
   const {
     searchInfo,
     setSearchInfo,
@@ -109,14 +112,33 @@ export default function PlaceSearchInfo() {
             <Input
               type="text"
               id="input_keyword"
+              value={inputKeyword}
+              onChange={(e) => {
+                setInputKeyword(e.target.value);
+              }}
               onKeyDownCapture={(e) => {
                 if (e.code === "Enter") {
                   setSearchInfo({
                     ...searchInfo,
-                    keyword: document.getElementById("input_keyword").value,
+                    keyword: inputKeyword,
                   });
                 }
               }}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => {
+                      setInputKeyword("");
+                      setSearchInfo({ ...searchInfo, keyword: "" });
+                    }}
+                    onMouseDown={(event) => {
+                      event.stopPropagation();
+                    }}
+                  >
+                    <ClearIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
             />
           </FormControl>
         </Grid>
@@ -127,7 +149,7 @@ export default function PlaceSearchInfo() {
             onClick={() => {
               setSearchInfo({
                 ...searchInfo,
-                keyword: document.getElementById("input_keyword").value,
+                keyword: inputKeyword,
               });
             }}
           >
