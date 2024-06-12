@@ -125,19 +125,23 @@ export default function PlaceSearchInfo() {
                 }
               }}
               endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => {
-                      setInputKeyword("");
-                      setSearchInfo({ ...searchInfo, keyword: "" });
-                    }}
-                    onMouseDown={(event) => {
-                      event.stopPropagation();
-                    }}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                </InputAdornment>
+                searchInfo.keyword !== "" || inputKeyword !== "" ? (
+                  <InputAdornment position="end">
+                    <IconButton
+                      onClick={() => {
+                        setInputKeyword("");
+                        setSearchInfo({ ...searchInfo, keyword: "" });
+                      }}
+                      onMouseDown={(event) => {
+                        event.stopPropagation();
+                      }}
+                    >
+                      <ClearIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ) : (
+                  ""
+                )
               }
             />
           </FormControl>
