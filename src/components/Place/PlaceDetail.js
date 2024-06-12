@@ -13,6 +13,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import FacilityList from "./FacilityList";
+import PopupstoreDetail from "./PopupstoreDetail";
 
 function PlaceDetail({ placeType }) {
   const { placeId } = useParams();
@@ -42,7 +43,7 @@ function PlaceDetail({ placeType }) {
 
   const getFacilities = async (typeCode) => {
     const axiosResponse = await axios({
-      url: `${process.env.REACT_APP_API_ROOT}/api/facility/place/list?latitude=${detail.gpsY}&longitude=${detail.gpsX}`,
+      url: `${process.env.REACT_APP_API_ROOT}/api/facility/place/list?latitude=${detail.latitude}&longitude=${detail.longitude}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -65,7 +66,7 @@ function PlaceDetail({ placeType }) {
   const setKakaoMap = () => {
     var container = document.getElementById("map");
     var options = {
-      center: new kakao.maps.LatLng(detail.gpsY, detail.gpsX),
+      center: new kakao.maps.LatLng(detail.latitude, detail.longitude),
       level: 3,
     };
 
@@ -85,7 +86,11 @@ function PlaceDetail({ placeType }) {
 
   return (
     <Container sx={{ width: "100%" }}>
-      {detail !== null ? (
+      {detail === null ? (
+        ""
+      ) : placeType == "popup" ? (
+        <PopupstoreDetail detail={detail} />
+      ) : (
         <Stack>
           <Grid container spacing={2} sx={{ display: "flex" }}>
             <Grid item>
@@ -175,23 +180,23 @@ function PlaceDetail({ placeType }) {
               ) : (
                 ""
               )}
-
-              <Grid item>
-                <div
-                  id="map"
-                  style={{ minWidth: "100%", height: "400px" }}
-                ></div>
-              </Grid>
-
-              <Grid container>
-                <FacilityList
-                  facilityList={facilities}
-                  type="food"
-                  typeName="음식점"
-                  limit={4}
-                />
-              </Grid>
             </Stack>
+          </Grid>
+        </Stack>
+      )}
+      {detail !== null ? (
+        <Stack spacing={3}>
+          <Grid item>
+            <div id="map" style={{ minWidth: "100%", height: "400px" }}></div>
+          </Grid>
+
+          <Grid container>
+            <FacilityList
+              facilityList={facilities}
+              type="food"
+              typeName="음식점"
+              limit={4}
+            />
           </Grid>
         </Stack>
       ) : (
