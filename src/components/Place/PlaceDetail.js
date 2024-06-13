@@ -14,12 +14,12 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import FacilityList from "./FacilityList";
 import PopupstoreDetail from "./PopupstoreDetail";
+import PlaceDetailMap from "./PlaceDetailMap";
 
 function PlaceDetail({ placeType }) {
   const { placeId } = useParams();
   const [detail, setDetail] = useState(null);
   const [facilities, setFacilities] = useState(null);
-  const { kakao } = window;
 
   const getPlaceDetail = async () => {
     const axiosResponse = await axios({
@@ -58,31 +58,10 @@ function PlaceDetail({ placeType }) {
 
   useEffect(() => {
     if (detail) {
-      setKakaoMap();
+      //setKakaoMap();
       getFacilities();
     }
   }, [detail]);
-
-  const setKakaoMap = () => {
-    var container = document.getElementById("map");
-    var options = {
-      center: new kakao.maps.LatLng(detail.latitude, detail.longitude),
-      level: 3,
-    };
-
-    var map = new kakao.maps.Map(container, options);
-
-    // 마커가 표시될 위치입니다
-    var markerPosition = new kakao.maps.LatLng(detail.gpsY, detail.gpsX);
-
-    // 마커를 생성합니다
-    var marker = new kakao.maps.Marker({
-      position: markerPosition,
-    });
-
-    // 마커가 지도 위에 표시되도록 설정합니다
-    marker.setMap(map);
-  };
 
   return (
     <Container sx={{ width: "100%" }}>
@@ -184,10 +163,12 @@ function PlaceDetail({ placeType }) {
           </Grid>
         </Stack>
       )}
+      <br />
+      <br />
       {detail !== null ? (
-        <Stack spacing={3}>
-          <Grid item>
-            <div id="map" style={{ minWidth: "100%", height: "400px" }}></div>
+        <Stack spacing={5}>
+          <Grid container>
+            <PlaceDetailMap detail={detail} />
           </Grid>
 
           <Grid container>
