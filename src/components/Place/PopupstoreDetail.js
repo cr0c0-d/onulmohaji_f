@@ -5,7 +5,10 @@ import {
   Stack,
   Card,
   CardContent,
+  Box,
+  Button,
 } from "@mui/material";
+import { useState } from "react";
 
 function PopupstoreDetail({ detail }) {
   return (
@@ -42,7 +45,7 @@ function PopupstoreDetail({ detail }) {
             </Grid>
             <Grid item>
               <Typography gutterBottom variant="h3" component="div">
-                {detail.title}
+                {detail.placeName}
               </Typography>
               {detail.subTitle ? (
                 <Typography gutterBottom variant="body1" component="div">
@@ -100,12 +103,66 @@ function PopupstoreDetail({ detail }) {
               ) : (
                 ""
               )}
+              {detail.imageList !== null && detail.imageList.length > 0
+                ? ShowImageList(detail)
+                : ""}
             </Stack>
           </Grid>
         </Stack>
       ) : (
         ""
       )}
+    </Container>
+  );
+}
+
+function ShowImageList(detail) {
+  const [showAll, setShowAll] = useState(false);
+  return (
+    <Container>
+      <div>
+        <Box
+          id="imageBox"
+          sx={{
+            height: showAll ? "auto" : "600px",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          {showAll ? (
+            ""
+          ) : (
+            <div
+              id="gradientBox"
+              style={{
+                top: 0,
+                left: 0,
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                zIndex: 0,
+                background:
+                  "linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
+                pointerEvents: "none",
+              }}
+            ></div>
+          )}
+
+          <Stack>
+            {detail.imageList.map((image, index) => (
+              <img src={image} style={{ width: "auto" }} key={index} />
+            ))}
+          </Stack>
+        </Box>
+      </div>
+      <Button
+        sx={{ width: "100%" }}
+        variant="outlined"
+        onClick={() => setShowAll(!showAll)}
+        size="large"
+      >
+        이미지 {showAll ? "접기" : "전체 보기"}
+      </Button>
     </Container>
   );
 }
