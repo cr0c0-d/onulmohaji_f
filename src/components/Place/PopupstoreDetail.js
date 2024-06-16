@@ -7,7 +7,19 @@ import {
   CardContent,
   Box,
   Button,
+  Avatar,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
 } from "@mui/material";
+import ChildCareIcon from "@mui/icons-material/ChildCare";
+import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
+import PaymentsIcon from "@mui/icons-material/Payments";
+import FastfoodIcon from "@mui/icons-material/Fastfood";
+import PetsIcon from "@mui/icons-material/Pets";
+import FaceIcon from "@mui/icons-material/Face";
+import WifiIcon from "@mui/icons-material/Wifi";
 import { useState } from "react";
 
 function PopupstoreDetail({ detail }) {
@@ -16,7 +28,16 @@ function PopupstoreDetail({ detail }) {
       {detail !== null ? (
         <Stack>
           <Grid container spacing={2} sx={{ display: "flex" }}>
-            <Grid item>
+            <Grid item xs={3}>
+              <img
+                src={detail.thumbnail}
+                style={{ width: "100%" }}
+                alt={detail.placeName}
+              />
+            </Grid>
+
+            {/* 이미지 클릭하여 크게 보는 부분(contents 하단으로 옮김 - 주석처리)*/}
+            {/* <Grid item>
               <img
                 id="img_big"
                 src={detail.imageList[0]}
@@ -42,18 +63,12 @@ function PopupstoreDetail({ detail }) {
               ) : (
                 ""
               )}
-            </Grid>
-            <Grid item>
+            </Grid> */}
+            <Grid item xs={9}>
               <Typography gutterBottom variant="h3" component="div">
                 {detail.placeName}
               </Typography>
-              {detail.subTitle ? (
-                <Typography gutterBottom variant="body1" component="div">
-                  {detail.startDate} ~ {detail.endDate}
-                </Typography>
-              ) : (
-                ""
-              )}
+
               <Typography gutterBottom variant="body1" component="div">
                 {detail.startDate} ~ {detail.endDate}
               </Typography>
@@ -80,6 +95,8 @@ function PopupstoreDetail({ detail }) {
           </Grid>
           <Grid item>
             <Stack spacing={3}>
+              <br />
+              {detail !== null ? <PopupInfo detail={detail} /> : ""}
               {detail.contents1 !== null && detail.contents1.length > 0 ? (
                 <Card>
                   <CardContent>
@@ -91,7 +108,6 @@ function PopupstoreDetail({ detail }) {
               ) : (
                 ""
               )}
-              <br />
               {detail.contents2 !== null && detail.contents2.length > 0 ? (
                 <Card>
                   <CardContent>
@@ -164,6 +180,111 @@ function ShowImageList(detail) {
         이미지 {showAll ? "접기" : "전체 보기"}
       </Button>
     </Container>
+  );
+}
+
+function PopupInfo(detail) {
+  return (
+    <List
+      sx={{
+        width: "100%",
+        maxWidth: 360,
+        bgcolor: "background.paper",
+      }}
+    >
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            <TimeToLeaveIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={detail.parking === 0 ? "주차불가" : "주차가능"}
+        />
+      </ListItem>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            <PaymentsIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={`입장료 ${detail.free === 0 ? "유료" : "무료"}`}
+        />
+      </ListItem>
+      {detail.noKids === 1 ? (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <ChildCareIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="노키즈존" />
+        </ListItem>
+      ) : (
+        ""
+      )}
+      {detail.food === 1 ? (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <FastfoodIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="음식물 반입금지" />
+        </ListItem>
+      ) : (
+        ""
+      )}
+      {detail.pet === 1 ? (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <PetsIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="반려동물 불가" />
+        </ListItem>
+      ) : (
+        ""
+      )}
+      {detail.adult === 1 ? (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <FaceIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="성인만 가능" />
+        </ListItem>
+      ) : (
+        ""
+      )}
+      {detail.wifi === 1 ? (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <WifiIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="와이파이 지원" />
+        </ListItem>
+      ) : (
+        ""
+      )}
+      {detail.wifi === 1 ? (
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar>
+              <WifiIcon />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary="와이파이 지원" />
+        </ListItem>
+      ) : (
+        ""
+      )}
+    </List>
   );
 }
 
