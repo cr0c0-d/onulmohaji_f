@@ -46,6 +46,24 @@ export const RouteProvider = ({ children }) => {
     }
   }, [searchInfo]);
 
+  const addRouteDetail = (placeId, type) => {
+    AuthAPI({
+      url: "/api/routeDetail",
+      method: "POST",
+      data: {
+        placeId: placeId,
+        placeType: type,
+        date: routeDate.format("YYYY-MM-DD"),
+      },
+      success: () => {
+        getRoute();
+      },
+      fail: () => {
+        console.log("fail");
+      },
+    });
+  };
+
   return (
     <RouteContext.Provider
       value={{
@@ -56,6 +74,7 @@ export const RouteProvider = ({ children }) => {
         getRoute,
         openDrawer,
         setOpenDrawer,
+        addRouteDetail,
       }}
     >
       {children}

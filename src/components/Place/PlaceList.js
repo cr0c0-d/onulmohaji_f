@@ -25,27 +25,10 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
   const history = useNavigate();
   const AuthAPI = useAuthAPI();
-  const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
+  const { route, setRoute, routeDate, setRouteDate, getRoute, addRouteDetail } =
+    useRoute();
   const { userInfo } = useUser();
   const { searchInfo, setSearchInfo } = useSearchContext();
-
-  const addRouteDetail = (placeId) => {
-    AuthAPI({
-      url: "/api/routeDetail",
-      method: "POST",
-      data: {
-        placeId: placeId,
-        placeType: type,
-        date: routeDate.format("YYYY-MM-DD"),
-      },
-      success: () => {
-        getRoute();
-      },
-      fail: () => {
-        console.log("fail");
-      },
-    });
-  };
 
   return (
     <Container>
@@ -131,7 +114,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                           onClick={(event) => {
                             event.stopPropagation();
                             if (userInfo.id !== undefined) {
-                              addRouteDetail(place.placeId);
+                              addRouteDetail(place.placeId, type);
                             } else {
                               history("/login");
                             }
