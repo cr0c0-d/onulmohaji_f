@@ -12,6 +12,7 @@ import {
   ListItem,
   ListItemText,
   ListItemAvatar,
+  Chip,
 } from "@mui/material";
 import ChildCareIcon from "@mui/icons-material/ChildCare";
 import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
@@ -20,15 +21,34 @@ import FastfoodIcon from "@mui/icons-material/Fastfood";
 import PetsIcon from "@mui/icons-material/Pets";
 import FaceIcon from "@mui/icons-material/Face";
 import WifiIcon from "@mui/icons-material/Wifi";
-import { useState } from "react";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import BookOnlineIcon from "@mui/icons-material/BookOnline";
+import LinkIcon from "@mui/icons-material/Link";
+
+import { useEffect, useState } from "react";
 
 function PopupstoreDetail({ detail }) {
+  const getWorkingTime = () => {
+    let returnStr = "";
+    const workingTimeArr = JSON.parse(detail.workingTime);
+
+    workingTimeArr.map((time) => {
+      returnStr += time.day
+        ? `<Typography>${time.day} : ${
+            time.holiday ? "휴무" : time.startDate + " ~ " + time.endDate
+          }</Typography>`
+        : "";
+    });
+    return returnStr;
+  };
+
   return (
     <Container sx={{ width: "100%" }}>
+      <br />
       {detail !== null ? (
         <Stack>
           <Grid container spacing={2} sx={{ display: "flex" }}>
-            <Grid item xs={3}>
+            <Grid item xl={4}>
               <img
                 src={detail.thumbnail}
                 style={{ width: "100%" }}
@@ -64,39 +84,75 @@ function PopupstoreDetail({ detail }) {
                 ""
               )}
             </Grid> */}
-            <Grid item xs={9}>
-              <Typography gutterBottom variant="h3" component="div">
+            <Grid item xl={8}>
+              <Typography gutterBottom variant="h4" component="div">
                 {detail.placeName}
               </Typography>
-
               <Typography gutterBottom variant="body1" component="div">
                 {detail.startDate} ~ {detail.endDate}
               </Typography>
               <Typography gutterBottom variant="body1" component="div">
-                장소 : {detail.place} ({detail.address}){" "}
-                {detail.placeUrl !== undefined && detail.placeUrl !== "" ? (
-                  <a href={detail.placeUrl} target="_blank">
-                    홈페이지
-                  </a>
-                ) : (
-                  ""
-                )}
+                {detail.address}
               </Typography>
-              {detail.url !== "" ? (
-                <Typography gutterBottom variant="body1" component="div">
-                  <a href={detail.url} target="_blank">
-                    링크2
-                  </a>
-                </Typography>
+              {detail.brandUrl ? (
+                <Chip
+                  icon={<LinkIcon />}
+                  label="브랜드 홈페이지"
+                  variant="outlined"
+                  onClick={() => {
+                    window.open(detail.brandUrl);
+                  }}
+                />
+              ) : (
+                ""
+              )}{" "}
+              {detail.instaUrl ? (
+                <Chip
+                  icon={<InstagramIcon />}
+                  label="인스타그램"
+                  variant="outlined"
+                  onClick={() => {
+                    window.open(detail.instaUrl);
+                  }}
+                />
+              ) : (
+                ""
+              )}{" "}
+              {detail.preRegisterInfo ? (
+                <Chip
+                  icon={<BookOnlineIcon />}
+                  label="온라인 예약"
+                  variant="outlined"
+                  onClick={() => {
+                    window.open(detail.preRegisterInfo.link);
+                  }}
+                />
               ) : (
                 ""
               )}
+              {/* 운영시간 */}
+              <Card>
+                <CardContent>
+                  <Stack
+                    dangerouslySetInnerHTML={{ __html: getWorkingTime() }}
+                  ></Stack>
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
+
           <Grid item>
+            <br />
             <Stack spacing={3}>
-              <br />
-              {detail !== null ? <PopupInfo detail={detail} /> : ""}
+              {detail !== null ? (
+                <Card>
+                  <CardContent>
+                    <PopupInfo detail={detail} />
+                  </CardContent>
+                </Card>
+              ) : (
+                ""
+              )}
               {detail.contents1 !== null && detail.contents1.length > 0 ? (
                 <Card>
                   <CardContent>
@@ -177,7 +233,7 @@ function ShowImageList(detail) {
         onClick={() => setShowAll(!showAll)}
         size="large"
       >
-        이미지 {showAll ? "접기" : "전체 보기"}
+        이미지 {showAll ? "접기" : "펼치기"}
       </Button>
     </Container>
   );
@@ -185,13 +241,7 @@ function ShowImageList(detail) {
 
 function PopupInfo(detail) {
   return (
-    <List
-      sx={{
-        width: "100%",
-        maxWidth: 360,
-        bgcolor: "background.paper",
-      }}
-    >
+    <List sx={{ display: "inline-list-item" }}>
       <ListItem>
         <ListItemAvatar>
           <Avatar>
@@ -256,18 +306,6 @@ function PopupInfo(detail) {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary="성인만 가능" />
-        </ListItem>
-      ) : (
-        ""
-      )}
-      {detail.wifi === 1 ? (
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <WifiIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="와이파이 지원" />
         </ListItem>
       ) : (
         ""
