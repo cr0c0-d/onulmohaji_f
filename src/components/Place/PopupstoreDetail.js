@@ -23,11 +23,19 @@ import FaceIcon from "@mui/icons-material/Face";
 import WifiIcon from "@mui/icons-material/Wifi";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import LinkIcon from "@mui/icons-material/Link";
 
 import { useEffect, useState } from "react";
+import { useUser } from "../../UserContext";
+import { useRoute } from "../../RouteContext";
+import { useNavigate } from "react-router-dom";
 
 function PopupstoreDetail({ detail }) {
+  const { userInfo } = useUser();
+  const { addRouteDetail } = useRoute();
+  const history = useNavigate();
+
   const getWorkingTime = () => {
     let returnStr = "";
     const workingTimeArr = JSON.parse(detail.workingTime);
@@ -85,59 +93,78 @@ function PopupstoreDetail({ detail }) {
               )}
             </Grid> */}
             <Grid item xl={8}>
-              <Typography gutterBottom variant="h4" component="div">
-                {detail.placeName}
-              </Typography>
-              <Typography gutterBottom variant="body1" component="div">
-                {detail.startDate} ~ {detail.endDate}
-              </Typography>
-              <Typography gutterBottom variant="body1" component="div">
-                {detail.address}
-              </Typography>
-              {detail.brandUrl ? (
-                <Chip
-                  icon={<LinkIcon />}
-                  label="브랜드 홈페이지"
-                  variant="outlined"
-                  onClick={() => {
-                    window.open(detail.brandUrl);
-                  }}
-                />
-              ) : (
-                ""
-              )}{" "}
-              {detail.instaUrl ? (
-                <Chip
-                  icon={<InstagramIcon />}
-                  label="인스타그램"
-                  variant="outlined"
-                  onClick={() => {
-                    window.open(detail.instaUrl);
-                  }}
-                />
-              ) : (
-                ""
-              )}{" "}
-              {detail.preRegisterInfo ? (
-                <Chip
-                  icon={<BookOnlineIcon />}
-                  label="온라인 예약"
-                  variant="outlined"
-                  onClick={() => {
-                    window.open(detail.preRegisterInfo.link);
-                  }}
-                />
-              ) : (
-                ""
-              )}
-              {/* 운영시간 */}
-              <Card>
-                <CardContent>
-                  <Stack
-                    dangerouslySetInnerHTML={{ __html: getWorkingTime() }}
-                  ></Stack>
-                </CardContent>
-              </Card>
+              <Stack spacing={2}>
+                <Typography gutterBottom variant="h4" component="div">
+                  {detail.placeName}{" "}
+                  <Chip
+                    icon={<PlaylistAddIcon />}
+                    label="일정에 추가"
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      if (userInfo.id !== undefined) {
+                        addRouteDetail(detail.placeId, "popup");
+                      } else {
+                        history("/login");
+                      }
+                    }}
+                  />
+                </Typography>
+                <Typography gutterBottom variant="body1" component="div">
+                  {detail.startDate} ~ {detail.endDate}
+                </Typography>
+                <Typography gutterBottom variant="body1" component="div">
+                  {detail.address}
+                </Typography>
+                <Grid item>
+                  {detail.brandUrl ? (
+                    <Chip
+                      icon={<LinkIcon />}
+                      label="브랜드 홈페이지"
+                      variant="outlined"
+                      onClick={() => {
+                        window.open(detail.brandUrl);
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}{" "}
+                  {detail.instaUrl ? (
+                    <Chip
+                      icon={<InstagramIcon />}
+                      label="인스타그램"
+                      variant="outlined"
+                      onClick={() => {
+                        window.open(detail.instaUrl);
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}{" "}
+                  {detail.preRegisterInfo ? (
+                    <Chip
+                      icon={<BookOnlineIcon />}
+                      label="온라인 예약"
+                      variant="outlined"
+                      onClick={() => {
+                        window.open(detail.preRegisterInfo.link);
+                      }}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+                {/* 운영시간 */}
+                <Card>
+                  <CardContent>
+                    <Stack
+                      dangerouslySetInnerHTML={{ __html: getWorkingTime() }}
+                    ></Stack>
+                  </CardContent>
+                </Card>
+              </Stack>
             </Grid>
           </Grid>
 
