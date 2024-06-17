@@ -1,4 +1,12 @@
-import { Box, Container, Divider, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { useEffect } from "react";
 
 export default function PlaceDetailMap({ detail }) {
@@ -39,7 +47,22 @@ export default function PlaceDetailMap({ detail }) {
           위치
         </Typography>
         <Divider variant="middle" />
-        <div id="map" style={{ minWidth: "100%", height: "400px" }}></div>
+        <Card>
+          <CardContent>
+            <div id="map" style={{ minWidth: "100%", height: "400px" }}></div>
+            <br />
+            <Typography
+              sx={{ cursor: "pointer" }}
+              onClick={() => {
+                window.open(
+                  `https://map.kakao.com/link/search/${detail.address}`
+                );
+              }}
+            >
+              {detail.address}
+            </Typography>
+          </CardContent>
+        </Card>
       </Stack>
     </Container>
   );
