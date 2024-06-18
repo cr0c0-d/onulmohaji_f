@@ -15,6 +15,7 @@ import { Link, useParams } from "react-router-dom";
 import FacilityList from "./FacilityList";
 import PopupstoreDetail from "./PopupstoreDetail";
 import PlaceDetailMap from "./PlaceDetailMap";
+import FestivalDetail from "./FestivalDetail";
 
 function PlaceDetail({ placeType }) {
   const { placeId } = useParams();
@@ -69,6 +70,8 @@ function PlaceDetail({ placeType }) {
         ""
       ) : placeType == "popup" ? (
         <PopupstoreDetail detail={detail} />
+      ) : placeType == "festival" ? (
+        <FestivalDetail detail={detail} />
       ) : (
         <Stack>
           <Grid container spacing={2} sx={{ display: "flex" }}>
