@@ -55,6 +55,21 @@ function PopupstoreDetail({ detail }) {
       <br />
       {detail !== null ? (
         <Stack>
+          <Typography gutterBottom>
+            정보 출처 :{" "}
+            <Button
+              color="success"
+              component="label"
+              variant="outlined"
+              size="small"
+              onClick={() =>
+                window.open(`https://www.popply.co.kr/popup/${detail.placeId}`)
+              }
+            >
+              팝플리
+            </Button>
+          </Typography>
+          <br />
           <Grid container spacing={2} sx={{ display: "flex" }}>
             <Grid item xl={4}>
               <img
