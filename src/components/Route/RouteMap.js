@@ -61,7 +61,7 @@ export default function RouteMap() {
   const setKakaoMap = () => {
     const mapCenter = getMapCenter();
 
-    const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+    const mapContainer = document.getElementById("routeMap"); // 지도를 표시할 div
     let mapOption = {
       center: mapCenter, // 지도의 중심좌표
       level: 7, // 지도의 확대 레벨
@@ -213,7 +213,7 @@ export default function RouteMap() {
 
   return (
     <Container>
-      <div id="map" style={{ minWidth: "100%", height: "600px" }}></div>
+      <div id="routeMap" style={{ minWidth: "100%", height: "600px" }}></div>
     </Container>
   );
 }
