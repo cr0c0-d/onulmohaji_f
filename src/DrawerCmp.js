@@ -8,15 +8,19 @@ import {
   Toolbar,
   Typography,
   styled,
+  Tab,
+  Tabs,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import RouteDraggable from "./components/Route/RouteDraggable";
 import { useRoute } from "./RouteContext";
 import { useState } from "react";
+import CustomPlaceList from "./components/Place/CustomPlaceList";
 
 export default function DrawerCmp() {
   const { openDrawer, setOpenDrawer } = useRoute();
   const [drawerWidth, setDrawerWidth] = useState(350);
+  const [panelMode, setPanelMode] = useState("route");
   const handleDrawerClose = () => {
     setOpenDrawer(false);
   };
@@ -46,38 +50,26 @@ export default function DrawerCmp() {
           </IconButton>
         </div>
         <Divider />
-        {/* <Route /> */}
-        <RouteDraggable
-          drawerWidth={drawerWidth}
-          setDrawerWidth={setDrawerWidth}
-        />
+        <Tabs
+          value={panelMode}
+          onChange={(event, newValue) => {
+            setPanelMode(newValue);
+          }}
+        >
+          <Tab value="route" label="일정 관리" />
 
-        {/* <Divider />
-      <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider /> */}
-        {/* <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
+          <Tab value="customPlace" label="나만의 장소 관리" />
+        </Tabs>
+        {panelMode === "route" ? (
+          <RouteDraggable
+            drawerWidth={drawerWidth}
+            setDrawerWidth={setDrawerWidth}
+          />
+        ) : panelMode === "customPlace" ? (
+          <CustomPlaceList />
+        ) : (
+          ""
+        )}
       </Drawer>
     </Container>
   );
