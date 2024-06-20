@@ -17,11 +17,12 @@ export default function CustomPlaceList() {
 
       <Dialog
         fullWidth={true}
+        maxWidth="xl"
         onClose={() => setOpenAddDialog(false)}
         open={openAddDialog}
       >
         <DialogTitle>나만의 장소 추가</DialogTitle>
-        <CustomPlaceAdd />
+        {openAddDialog ? <CustomPlaceAdd open={openAddDialog} /> : ""}
       </Dialog>
     </Container>
   );
