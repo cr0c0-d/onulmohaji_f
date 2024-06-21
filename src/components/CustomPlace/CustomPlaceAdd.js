@@ -3,55 +3,45 @@ import { Box, Container, Grid, Stack, TextField } from "@mui/material";
 import CustomPlaceAddMap from "./CustomPlaceAddMap";
 import DaumPostCode from "react-daum-postcode";
 
-export default function CustomPlaceAdd({ open }) {
-  const { kakao, daum } = window;
+export default function CustomPlaceAdd({
+  newCustomPlace,
+  setNewCustomPlace,
+  newCustomPlaceName,
+  setNewCustomPlaceName,
+}) {
   const [searchKeyword, setSearchKeyword] = useState("");
-  //const [name, setName] = useState("새로운 나만의 장소");
-  const [newCustomPlace, setNewCustomPlace] = useState({
-    name: "",
-    address_road: "",
-    address: "",
-    latitude: 0,
-    longitude: 0,
-  });
+
+  useEffect(() => {
+    console.log(newCustomPlace);
+  }, [newCustomPlace]);
 
   const selectAddress = (data) => {
-    console.log(data);
-    setSearchKeyword(data.roadAddress || data.autoRoadAddress);
-    setNewCustomPlace({
-      ...newCustomPlace,
-      address_road: data.roadAddress || data.autoRoadAddress,
-      address: data.jibunAddress || data.autoJibunAddress,
-    });
+    setSearchKeyword(data.jibunAddress || data.autoJibunAddress);
+    // setNewCustomPlace({
+    //   ...newCustomPlace,
+    //   addressRoad: data.roadAddress || data.autoRoadAddress,
+    //   address: data.jibunAddress || data.autoJibunAddress,
+    // });
   };
   return (
     <Box sx={{ padding: "10px" }}>
       <Stack spacing={3}>
         <TextField
           label="장소명"
-          value={newCustomPlace.name}
+          value={newCustomPlaceName}
           onChange={(e) => {
-            setNewCustomPlace({ ...newCustomPlace, name: e.target.value });
+            setNewCustomPlaceName(e.target.value);
           }}
         />
         <TextField
           label="도로명주소"
-          value={newCustomPlace.address_road}
+          value={newCustomPlace.addressRoad}
           disabled={true}
-          onChange={(e) => {
-            setNewCustomPlace({
-              ...newCustomPlace,
-              address_road: e.target.value,
-            });
-          }}
         />
         <TextField
           label="지번주소"
           value={newCustomPlace.address}
           disabled={true}
-          onChange={(e) => {
-            setNewCustomPlace({ ...newCustomPlace, address: e.target.value });
-          }}
         />
         <Grid Container sx={{ width: "100%", display: "flex" }}>
           <Grid item sx={{ position: "relative", width: "50%" }}>
@@ -60,7 +50,7 @@ export default function CustomPlaceAdd({ open }) {
               style={{
                 width: "100%",
                 height: "600px",
-                display: open ? "block" : "none",
+                display: "block",
               }}
             >
               <DaumPostCode
@@ -75,7 +65,8 @@ export default function CustomPlaceAdd({ open }) {
             <CustomPlaceAddMap
               newCustomPlace={newCustomPlace}
               setNewCustomPlace={setNewCustomPlace}
-              address={searchKeyword}
+              searchKeyword={searchKeyword}
+              setSearchKeyword={setSearchKeyword}
             />
           </Grid>
         </Grid>

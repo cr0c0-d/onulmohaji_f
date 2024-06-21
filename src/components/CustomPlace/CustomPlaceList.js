@@ -1,7 +1,15 @@
-import { Button, Container, Dialog, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import CustomPlaceAdd from "./CustomPlaceAdd";
 import { useState } from "react";
-import PlaceInfoSmall from "./PlaceInfoSmall";
+import PlaceInfoSmall from "../Place/PlaceInfoSmall";
+import CustomPlaceAddDialog from "./CustomPlaceAddDialog";
 
 export default function CustomPlaceList() {
   const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -15,15 +23,10 @@ export default function CustomPlaceList() {
           ))
         : ""}
 
-      <Dialog
-        fullWidth={true}
-        maxWidth="xl"
-        onClose={() => setOpenAddDialog(false)}
-        open={openAddDialog}
-      >
-        <DialogTitle>나만의 장소 추가</DialogTitle>
-        {openAddDialog ? <CustomPlaceAdd open={openAddDialog} /> : ""}
-      </Dialog>
+      <CustomPlaceAddDialog
+        openAddDialog={openAddDialog}
+        setOpenAddDialog={setOpenAddDialog}
+      />
     </Container>
   );
 }

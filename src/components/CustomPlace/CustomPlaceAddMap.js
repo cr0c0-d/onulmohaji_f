@@ -4,7 +4,8 @@ import { Box, Container, Stack, TextField } from "@mui/material";
 export default function CustomPlaceAddMap({
   newCustomPlace,
   setNewCustomPlace,
-  address,
+  searchKeyword,
+  setSearchKeyword,
 }) {
   const { kakao } = window;
 
@@ -19,8 +20,16 @@ export default function CustomPlaceAddMap({
     let center;
     let mapOption;
 
-    center = new kakao.maps.LatLng(37.4970572543978, 127.028180714381);
-
+    center = new kakao.maps.LatLng(
+      newCustomPlace.latitude === 0
+        ? 37.4970572543978
+        : newCustomPlace.latitude,
+      newCustomPlace.longitude === 0
+        ? 127.028180714381
+        : newCustomPlace.longitude
+    );
+    console.log(newCustomPlace);
+    console.log(center);
     mapOption = {
       center: center, // 지도의 중심좌표
       level: 3, // 지도의 확대 레벨
@@ -28,29 +37,23 @@ export default function CustomPlaceAddMap({
     // 지도를 생성합니다
     map = new kakao.maps.Map(mapContainer, mapOption);
 
-    marker.setPosition(center);
-    marker.setMap(map);
-
     const setInfoWindow = (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
-        console.log("result ::");
-        console.log(result);
-
-        const address_road = !!result[0].road_address
+        const addressRoad = !!result[0].road_address
           ? result[0].road_address.address_name
           : "";
         const address = result[0].address.address_name;
-        console.log("address_road : " + address_road);
-        console.log("address : " + address);
 
         setNewCustomPlace({
           ...newCustomPlace,
+          latitude: marker.getPosition().getLat(),
+          longitude: marker.getPosition().getLng(),
           address: address,
-          address_road: address_road,
+          addressRoad: addressRoad,
         });
 
-        let detailAddr = address_road
-          ? "<div>도로명주소 : " + address_road + "</div>"
+        let detailAddr = addressRoad
+          ? "<div>도로명주소 : " + addressRoad + "</div>"
           : "";
         detailAddr += "<div>지번 주소 : " + address + "</div>";
 
@@ -65,18 +68,17 @@ export default function CustomPlaceAddMap({
       }
     };
 
-    if (newCustomPlace.address !== "") {
+    if (searchKeyword !== "") {
       // 주소로 좌표를 검색합니다
-      geocoder.addressSearch(newCustomPlace.address, function (result, status) {
+      geocoder.addressSearch(searchKeyword, function (result, status) {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          console.log("result");
           console.log(result);
-          setNewCustomPlace({
-            ...newCustomPlace,
-            latitude: result[0].y,
-            longitude: result[0].x,
-          });
+          // setNewCustomPlace({
+          //   ...newCustomPlace,
+          //   latitude: result[0].y,
+          //   longitude: result[0].x,
+          // });
 
           center = new kakao.maps.LatLng(result[0].y, result[0].x);
           map.setCenter(center);
@@ -85,9 +87,11 @@ export default function CustomPlaceAddMap({
           searchDetailAddrFromCoords(center, setInfoWindow);
         }
       });
+    } else {
+      marker.setPosition(center);
+      marker.setMap(map);
+      searchDetailAddrFromCoords(center, setInfoWindow);
     }
-
-    searchDetailAddrFromCoords(center, setInfoWindow);
 
     function searchDetailAddrFromCoords(coords, callback) {
       // 좌표로 법정동 상세 주소 정보를 요청합니다
@@ -101,15 +105,15 @@ export default function CustomPlaceAddMap({
         latitude: mouseEvent.latLng.getLat(),
         longitude: mouseEvent.latLng.getLng(),
       });
+      console.log(newCustomPlace);
       marker.setPosition(mouseEvent.latLng);
-      marker.setMap(map);
       searchDetailAddrFromCoords(mouseEvent.latLng, setInfoWindow);
     });
   };
 
   useEffect(() => {
     setMap();
-  }, [address]);
+  }, [searchKeyword]);
 
   return (
     <Box sx={{ padding: "10px" }}>
