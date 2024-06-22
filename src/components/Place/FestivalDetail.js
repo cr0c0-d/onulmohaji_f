@@ -132,7 +132,7 @@ export default function FestivalDetail({ detail }) {
           <Grid item>
             <br />
             <Stack spacing={3}>
-              {detail !== null ? (
+              {detail && (detail.fare || detail.contact) ? (
                 <Card>
                   <CardContent>
                     <InfoList detail={detail} />
@@ -174,6 +174,7 @@ export default function FestivalDetail({ detail }) {
 }
 
 function InfoList({ detail }) {
+  const fare = detail.fare.replace("<br>", " / ");
   return (
     <List sx={{ display: "inline-list-item" }}>
       {detail.fare ? (
@@ -183,7 +184,7 @@ function InfoList({ detail }) {
               <PaymentsIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary={detail.fare} />
+          <ListItemText primary={fare} />
         </ListItem>
       ) : (
         ""

@@ -148,7 +148,7 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                         setMode(newMode);
                         switch (newMode) {
                           case "showRoute":
-                            setDrawerWidth("100%");
+                            setDrawerWidth("50%");
                             break;
                           default:
                             setDrawerWidth(350);
@@ -179,6 +179,7 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
 
               <Box>
                 {route !== null && mode === "showRoute" ? <RouteMap /> : ""}
+                <br />
               </Box>
               {route !== null ? (
                 <DragDropContext onDragEnd={handleOnDragEnd}>

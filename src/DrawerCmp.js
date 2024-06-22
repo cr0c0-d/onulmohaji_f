@@ -15,7 +15,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import RouteDraggable from "./components/Route/RouteDraggable";
 import { useRoute } from "./RouteContext";
 import { useState } from "react";
-import CustomPlaceList from "./components/Place/CustomPlaceList";
+import CustomPlaceList from "./components/CustomPlace/CustomPlaceList";
 
 export default function DrawerCmp() {
   const { openDrawer, setOpenDrawer } = useRoute();

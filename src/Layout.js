@@ -13,7 +13,6 @@ function Layout() {
     <>
       <div>
         <Navbar />
-        <br />
         <Container maxWidth="xl">
           <Toolbar />
           <Fab
