@@ -18,36 +18,58 @@ export default function PlaceInfoSmall({ placeDetail, rightButton }) {
         cursor: "pointer",
       }}
       onClick={() => {
-        if (
-          placeDetail.placeType === "popup" ||
-          placeDetail.placeType === "exhibition" ||
-          placeDetail.placeType === "festival"
-        ) {
-          history(placeDetail.placeUrl);
-        } else {
-          window.open(placeDetail.placeUrl);
+        switch (placeDetail.placeType) {
+          case "popup":
+          case "exhibition":
+          case "festival":
+            history(placeDetail.placeUrl);
+            break;
+
+          case "custom":
+            break;
+          default:
+            window.open(placeDetail.placeUrl);
         }
+        // if (
+        //   placeDetail.placeType === "popup" ||
+        //   placeDetail.placeType === "exhibition" ||
+        //   placeDetail.placeType === "festival"
+        // ) {
+        //   history(placeDetail.placeUrl);
+        // } else {
+        //   window.open(placeDetail.placeUrl);
+        // }
       }}
     >
-      <CardMedia
-        component="img"
-        sx={{ width: 50 }}
-        image={
-          placeDetail.thumbnail || process.env.REACT_APP_DEFAULT_SMALL_IMAGE_URL
-        }
-        alt={placeDetail.placeName}
-      />
+      {placeDetail.placeType === "custom" ? (
+        ""
+      ) : (
+        <CardMedia
+          component="img"
+          sx={{ width: 50 }}
+          image={
+            placeDetail.thumbnail ||
+            process.env.REACT_APP_DEFAULT_SMALL_IMAGE_URL
+          }
+          alt={placeDetail.placeName}
+        />
+      )}
+
       <CardContent style={{ width: "100%" }}>
         <Stack>
           <Typography gutterBottom variant="body2" component="div">
             {placeDetail.placeName}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            <Chip
-              label={placeDetail.placeTypeName}
-              size="small"
-              variant="outlined"
-            />
+            {placeDetail.placeType === "custom" ? (
+              placeDetail.address || placeDetail.addressRoad
+            ) : (
+              <Chip
+                label={placeDetail.placeTypeName}
+                size="small"
+                variant="outlined"
+              />
+            )}
           </Typography>
         </Stack>
       </CardContent>
