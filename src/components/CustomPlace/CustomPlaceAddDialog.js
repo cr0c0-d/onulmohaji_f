@@ -14,6 +14,7 @@ import { useAuthAPI } from "../../AuthAPI";
 export default function CustomPlaceAddDialog({
   openAddDialog,
   setOpenAddDialog,
+  reload,
 }) {
   const [newCustomPlaceName, setNewCustomPlaceName] = useState("");
   const [newCustomPlace, setNewCustomPlace] = useState({
@@ -33,9 +34,9 @@ export default function CustomPlaceAddDialog({
       method: "POST",
       data: { ...newCustomPlace, name: newCustomPlaceName },
       success: () => {
-        console.log("success");
         setOpenAddDialog(false);
         setOpenSnackbar(true);
+        reload();
       },
       fail: () => {
         console.log("fail");
