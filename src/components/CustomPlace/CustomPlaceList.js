@@ -11,10 +11,12 @@ import { useEffect, useState } from "react";
 import PlaceInfoSmall from "../Place/PlaceInfoSmall";
 import CustomPlaceAddDialog from "./CustomPlaceAddDialog";
 import { useAuthAPI } from "../../AuthAPI";
+import CustomPlaceDialog from "./CustomPlaceDialog";
 
 export default function CustomPlaceList() {
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [customPlaceList, setCustomPlaceList] = useState(null);
+  const [dialogCustomPlace, setDialogCustomPlace] = useState(null);
 
   const AuthAPI = useAuthAPI();
 
@@ -24,7 +26,6 @@ export default function CustomPlaceList() {
       method: "GET",
       data: null,
       success: (result) => {
-        console.log(result);
         setCustomPlaceList(result.data);
       },
       fail: () => {
@@ -33,24 +34,44 @@ export default function CustomPlaceList() {
     });
   };
 
+  const openDialog = (customPlaceInfo) => {
+    setDialogCustomPlace(customPlaceInfo);
+    setOpenAddDialog(true);
+  };
   useEffect(() => {
     findCustomPlaceList();
   }, []);
 
   return (
     <Container>
-      <Button onClick={() => setOpenAddDialog(true)}>추가</Button>
+      <Button onClick={() => openDialog(null)}>추가</Button>
       {customPlaceList && customPlaceList.length > 0
         ? customPlaceList.map((customPlace) => (
-            <PlaceInfoSmall placeDetail={customPlace} rightButton={null} />
+            <PlaceInfoSmall
+              placeDetail={customPlace}
+              rightButton={null}
+              key={customPlace.placeId}
+              openDialog={openDialog}
+            />
           ))
         : ""}
 
-      <CustomPlaceAddDialog
+      {/* <CustomPlaceAddDialog
         openAddDialog={openAddDialog}
         setOpenAddDialog={setOpenAddDialog}
         reload={findCustomPlaceList}
-      />
+        
+      /> */}
+      {openAddDialog ? (
+        <CustomPlaceDialog
+          openAddDialog={openAddDialog}
+          setOpenAddDialog={setOpenAddDialog}
+          reload={findCustomPlaceList}
+          customPlaceInfo={dialogCustomPlace}
+        />
+      ) : (
+        ""
+      )}
     </Container>
   );
 }

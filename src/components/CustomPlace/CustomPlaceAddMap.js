@@ -73,13 +73,6 @@ export default function CustomPlaceAddMap({
       geocoder.addressSearch(searchKeyword, function (result, status) {
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
-          console.log(result);
-          // setNewCustomPlace({
-          //   ...newCustomPlace,
-          //   latitude: result[0].y,
-          //   longitude: result[0].x,
-          // });
-
           center = new kakao.maps.LatLng(result[0].y, result[0].x);
           map.setCenter(center);
           marker.setPosition(center);
