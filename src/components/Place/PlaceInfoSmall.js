@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -8,9 +9,21 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useRoute } from "../../RouteContext";
+import { useUser } from "../../UserContext";
+import { useSearchContext } from "../../SearchContext";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 
-export default function PlaceInfoSmall({ placeDetail, rightButton }) {
+export default function PlaceInfoSmall({
+  placeDetail,
+  rightButton,
+  openDialog,
+}) {
   const history = useNavigate();
+  const { addRouteDetail } = useRoute();
+  const { searchInfo, setSearchInfo } = useSearchContext();
+  const { userInfo } = useUser();
   return (
     <Card
       sx={{
@@ -26,6 +39,7 @@ export default function PlaceInfoSmall({ placeDetail, rightButton }) {
             break;
 
           case "custom":
+            openDialog(placeDetail);
             break;
           default:
             window.open(placeDetail.placeUrl);
@@ -71,6 +85,34 @@ export default function PlaceInfoSmall({ placeDetail, rightButton }) {
               />
             )}
           </Typography>
+          <Box sx={{ display: "inline" }}>
+            <Chip
+              icon={<PlaylistAddIcon />}
+              label="일정에 추가"
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={(event) => {
+                event.stopPropagation();
+
+                addRouteDetail(placeDetail.placeId, placeDetail.placeType);
+              }}
+            />{" "}
+            <Chip
+              icon={<LocationSearchingIcon />}
+              label="주변 검색"
+              variant="outlined"
+              color="primary"
+              size="small"
+              onClick={(event) => {
+                event.stopPropagation();
+                setSearchInfo({
+                  ...searchInfo,
+                  criteriaPlace: placeDetail,
+                });
+              }}
+            />
+          </Box>
         </Stack>
       </CardContent>
       <CardContent
