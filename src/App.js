@@ -16,6 +16,7 @@ import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import PlaceListByType from "./components/Place/PlaceListByType";
 import RoutePermission from "./components/Route/RoutePermission";
+import CustomPlaceList from "./components/CustomPlace/CustomPlaceList";
 
 const theme = createTheme({
   typography: {
@@ -75,6 +76,10 @@ function App() {
                       <Route
                         path="/route/permission/:shareCode"
                         element={<RoutePermission />}
+                      />
+                      <Route
+                        path="/customPlace/list"
+                        element={<CustomPlaceList />}
                       />
                     </Route>
                   </Routes>

@@ -9,6 +9,7 @@ import {
   Divider,
   ListItemIcon,
   Menu,
+  Box,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import RouteIcon from "@mui/icons-material/Route";
@@ -53,11 +54,26 @@ export default function Navbar() {
           </IconButton>
           <Typography
             variant="h6"
-            style={{ flexGrow: 1, cursor: "pointer" }}
+            sx={{ cursor: "pointer" }}
             onClick={() => history("/")}
           >
             오늘뭐하지
           </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Button
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={() => history("/")}
+            >
+              검색
+            </Button>
+            <Button
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={() => history("/customPlace/list")}
+            >
+              나만의 장소 관리
+            </Button>
+          </Box>
+
           <div>
             {userInfo.nickname ? (
               <div>
