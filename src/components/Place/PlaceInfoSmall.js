@@ -39,7 +39,9 @@ export default function PlaceInfoSmall({
             break;
 
           case "custom":
-            openDialog(placeDetail);
+            if (openDialog !== undefined) {
+              openDialog(placeDetail);
+            }
             break;
           default:
             window.open(placeDetail.placeUrl);
@@ -85,34 +87,39 @@ export default function PlaceInfoSmall({
               />
             )}
           </Typography>
-          <Box sx={{ display: "inline" }}>
-            <Chip
-              icon={<PlaylistAddIcon />}
-              label="일정에 추가"
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={(event) => {
-                event.stopPropagation();
+          {openDialog !== undefined ? (
+            <Box sx={{ display: "inline" }}>
+              <Chip
+                icon={<PlaylistAddIcon />}
+                label="일정에 추가"
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={(event) => {
+                  event.stopPropagation();
 
-                addRouteDetail(placeDetail.placeId, placeDetail.placeType);
-              }}
-            />{" "}
-            <Chip
-              icon={<LocationSearchingIcon />}
-              label="주변 검색"
-              variant="outlined"
-              color="primary"
-              size="small"
-              onClick={(event) => {
-                event.stopPropagation();
-                setSearchInfo({
-                  ...searchInfo,
-                  criteriaPlace: placeDetail,
-                });
-              }}
-            />
-          </Box>
+                  addRouteDetail(placeDetail.placeId, placeDetail.placeType);
+                }}
+              />
+
+              <Chip
+                icon={<LocationSearchingIcon />}
+                label="주변 검색"
+                variant="outlined"
+                color="primary"
+                size="small"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setSearchInfo({
+                    ...searchInfo,
+                    criteriaPlace: placeDetail,
+                  });
+                }}
+              />
+            </Box>
+          ) : (
+            ""
+          )}
         </Stack>
       </CardContent>
       <CardContent
