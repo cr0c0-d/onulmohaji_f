@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Box,
 } from "@mui/material";
 import CustomPlaceAdd from "./CustomPlaceAdd";
 import { useEffect, useState } from "react";
@@ -44,7 +45,10 @@ export default function CustomPlaceList() {
 
   return (
     <Container>
-      <Button onClick={() => openDialog(null)}>추가</Button>
+      <Box sx={{ textAlign: "right" }}>
+        <Button onClick={() => openDialog(null)}>추가</Button>
+      </Box>
+
       {customPlaceList && customPlaceList.length > 0
         ? customPlaceList.map((customPlace) => (
             <PlaceInfoSmall

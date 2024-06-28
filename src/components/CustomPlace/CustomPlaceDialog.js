@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import CustomPlaceAdd from "./CustomPlaceAdd";
 import { useAuthAPI } from "../../AuthAPI";
+
 export default function CustomPlaceDialog({
   openAddDialog,
   setOpenAddDialog,
@@ -31,6 +32,7 @@ export default function CustomPlaceDialog({
         }
   );
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   const AuthAPI = useAuthAPI();
 
@@ -62,6 +64,22 @@ export default function CustomPlaceDialog({
       success: () => {
         setOpenAddDialog(false);
         setOpenSnackbar(true);
+        reload();
+      },
+      fail: () => {
+        console.log("fail");
+      },
+    });
+  };
+
+  const deleteCustomPlace = () => {
+    AuthAPI({
+      url: `/api/customPlace?placeId=${customPlaceInfo.placeId}`,
+      method: "DELETE",
+      data: null,
+      success: () => {
+        setOpenDeleteDialog(false);
+        setOpenAddDialog(false);
         reload();
       },
       fail: () => {
@@ -107,6 +125,19 @@ export default function CustomPlaceDialog({
           >
             닫기
           </Button>
+          {customPlaceInfo ? (
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                setOpenDeleteDialog(true);
+              }}
+            >
+              삭제
+            </Button>
+          ) : (
+            ""
+          )}
           <Button
             variant="contained"
             onClick={customPlaceInfo ? updateCustomPlace : addNewCustomPlace}
@@ -123,6 +154,23 @@ export default function CustomPlaceDialog({
         }}
         message="저장되었습니다."
       />
+      <Dialog
+        open={openDeleteDialog}
+        onClose={() => {
+          setOpenDeleteDialog(false);
+        }}
+      >
+        <DialogTitle>나만의 장소 삭제</DialogTitle>
+        <DialogContent>
+          [{customPlaceInfo.placeName}] 나만의 장소를 삭제할까요?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDeleteDialog(false)}>취소</Button>
+          <Button color="error" variant="contained" onClick={deleteCustomPlace}>
+            삭제
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
