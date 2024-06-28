@@ -154,23 +154,31 @@ export default function CustomPlaceDialog({
         }}
         message="저장되었습니다."
       />
-      <Dialog
-        open={openDeleteDialog}
-        onClose={() => {
-          setOpenDeleteDialog(false);
-        }}
-      >
-        <DialogTitle>나만의 장소 삭제</DialogTitle>
-        <DialogContent>
-          [{customPlaceInfo.placeName}] 나만의 장소를 삭제할까요?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDeleteDialog(false)}>취소</Button>
-          <Button color="error" variant="contained" onClick={deleteCustomPlace}>
-            삭제
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {customPlaceInfo ? (
+        <Dialog
+          open={openDeleteDialog}
+          onClose={() => {
+            setOpenDeleteDialog(false);
+          }}
+        >
+          <DialogTitle>나만의 장소 삭제</DialogTitle>
+          <DialogContent>
+            [{customPlaceInfo.placeName}] 나만의 장소를 삭제할까요?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDeleteDialog(false)}>취소</Button>
+            <Button
+              color="error"
+              variant="contained"
+              onClick={deleteCustomPlace}
+            >
+              삭제
+            </Button>
+          </DialogActions>
+        </Dialog>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
