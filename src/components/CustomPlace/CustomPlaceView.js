@@ -94,7 +94,10 @@ const CustomPlaceView = () => {
           >
             <Box sx={{ width: selectedCustomPlace ? "50%" : "100%" }}>
               {customPlaceList.map((customPlace) => (
-                <Box onClick={() => setSelectedCustomPlace(customPlace)}>
+                <Box
+                  onClick={() => setSelectedCustomPlace(customPlace)}
+                  key={customPlace.placeId}
+                >
                   <CustomPlaceSmall
                     placeDetail={customPlace}
                     rightButton={
@@ -107,7 +110,6 @@ const CustomPlaceView = () => {
                         <SettingsIcon />
                       </IconButton>
                     }
-                    key={customPlace.placeId}
                     openDialog={openDialog}
                   />
                 </Box>

@@ -132,6 +132,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                               ...searchInfo,
                               criteriaPlace: place,
                             });
+                            history("/");
                           }}
                         />
                       </CardContent>

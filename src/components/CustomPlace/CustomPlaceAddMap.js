@@ -28,8 +28,7 @@ export default function CustomPlaceAddMap({
         ? 127.028180714381
         : newCustomPlace.longitude
     );
-    console.log(newCustomPlace);
-    console.log(center);
+
     mapOption = {
       center: center, // 지도의 중심좌표
       level: 3, // 지도의 확대 레벨

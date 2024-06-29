@@ -114,6 +114,7 @@ export default function PlaceInfoSmall({
                     ...searchInfo,
                     criteriaPlace: placeDetail,
                   });
+                  history("/");
                 }}
               />
             </Box>

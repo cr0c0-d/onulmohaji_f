@@ -33,7 +33,7 @@ export default function RouteShare() {
     // input 요소 선택
     // urlInputRef.current.select();
     // urlInputRef.current.setSelectionRange(0, 99999); // 모바일 장치 호환성
-    console.log(urlInputRef);
+
     // 클립보드에 텍스트 복사
     navigator.clipboard
       .writeText(urlInputRef.current.value)

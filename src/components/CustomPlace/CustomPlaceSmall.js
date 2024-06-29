@@ -88,6 +88,7 @@ export default function CustomPlaceSmall({
                     ...searchInfo,
                     criteriaPlace: placeDetail,
                   });
+                  history("/");
                 }}
               />
             </Box>

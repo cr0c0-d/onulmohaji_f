@@ -11,10 +11,6 @@ export default function CustomPlaceAdd({
 }) {
   const [searchKeyword, setSearchKeyword] = useState("");
 
-  useEffect(() => {
-    console.log(newCustomPlace);
-  }, [newCustomPlace]);
-
   const selectAddress = (data) => {
     setSearchKeyword(data.jibunAddress || data.autoJibunAddress);
     // setNewCustomPlace({
