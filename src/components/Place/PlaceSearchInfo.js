@@ -1,4 +1,4 @@
-import { DatePicker } from "@mui/x-date-pickers";
+import { DatePicker, PickersDay } from "@mui/x-date-pickers";
 import {
   Grid,
   InputLabel,
@@ -11,12 +11,16 @@ import {
   Stack,
   FormLabel,
   InputAdornment,
+  Badge,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useSearchContext } from "../../SearchContext";
 import PlaceInfoSmall from "./PlaceInfoSmall";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRoute } from "../../RouteContext";
+import { useAuthAPI } from "../../AuthAPI";
+import { useUser } from "../../UserContext";
 export default function PlaceSearchInfo() {
   const [inputKeyword, setInputKeyword] = useState("");
   const {
@@ -26,6 +30,54 @@ export default function PlaceSearchInfo() {
     pickedLocal_1,
     setPickedLocal_1,
   } = useSearchContext();
+
+  const [scheduledDays, setScheduledDays] = useState([]);
+
+  const { userInfo } = useUser();
+  const AuthAPI = useAuthAPI();
+
+  const findRouteDateList = () => {
+    AuthAPI({
+      url: `/api/route/dateList/${userInfo.id}`,
+      method: "GET",
+      data: null,
+      success: (response) => {
+        setScheduledDays(response.data);
+      },
+      fail: () => {
+        setScheduledDays([]);
+      },
+    });
+  };
+
+  function ScheduledDays(props) {
+    const { scheduledDays = [], day, outsideCurrentMonth, ...other } = props;
+    //console.log(props.day.date());
+    // const isSelected =
+    //   !props.outsideCurrentMonth &&
+    //   highlightedDays.indexOf(props.day.date()) >= 0;
+    const isSelected =
+      scheduledDays.indexOf(props.day.format("YYYY-MM-DD")) >= 0;
+
+    return (
+      <Badge
+        key={props.day.toString()}
+        overlap="circular"
+        badgeContent={isSelected ? "✅" : undefined}
+      >
+        <PickersDay
+          {...other}
+          outsideCurrentMonth={outsideCurrentMonth}
+          day={day}
+        />
+      </Badge>
+    );
+  }
+
+  useEffect(() => {
+    findRouteDateList();
+  }, []);
+
   return (
     <Stack spacing={3}>
       <Grid container spacing={4}>
@@ -40,6 +92,12 @@ export default function PlaceSearchInfo() {
               setSearchInfo({ ...searchInfo, date: newValue })
             }
             sx={{ maxWidth: "160px" }}
+            slots={{ day: ScheduledDays }}
+            slotProps={{
+              day: {
+                scheduledDays,
+              },
+            }}
           />
         </Grid>
 
