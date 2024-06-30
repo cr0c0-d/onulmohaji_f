@@ -130,7 +130,12 @@ export default function Navbar() {
           >
             {userInfo.nickname ? (
               <div>
-                <MenuItem onClick={handleClose}>
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    history("/route/list");
+                  }}
+                >
                   <ListItemIcon>
                     <RouteIcon />
                   </ListItemIcon>

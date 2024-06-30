@@ -18,6 +18,7 @@ import PlaceListByType from "./components/Place/PlaceListByType";
 import RoutePermission from "./components/Route/RoutePermission";
 import CustomPlaceList from "./components/CustomPlace/CustomPlaceList";
 import CustomPlaceView from "./components/CustomPlace/CustomPlaceView";
+import RouteList from "./components/Route/RouteList";
 
 const theme = createTheme({
   typography: {
@@ -82,6 +83,7 @@ function App() {
                         path="/customPlace/list"
                         element={<CustomPlaceView />}
                       />
+                      <Route path="/route/list" element={<RouteList />} />
                     </Route>
                   </Routes>
                 </BrowserRouter>
