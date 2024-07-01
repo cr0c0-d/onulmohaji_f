@@ -33,9 +33,11 @@ import SouthIcon from "@mui/icons-material/South";
 import MapIcon from "@mui/icons-material/Map";
 import { useNavigate } from "react-router-dom";
 import PeopleIcon from "@mui/icons-material/People";
+import EditIcon from "@mui/icons-material/Edit";
 import RouteShare from "./RouteShare";
 import RouteMap from "./RouteMap";
 import PlaceInfoSmall from "../Place/PlaceInfoSmall";
+import RouteTitleEdit from "./RouteTitleEdit";
 
 export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
@@ -44,6 +46,7 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
   // route 모드 ->  editOrder : 순서 변경 / remove : 삭제 / showRoute : 경로 보기
   const [mode, setMode] = useState("editOrder");
   const [openShareModal, setOpenShareModal] = useState(false);
+  const [openEditTitleModal, setEditTitleModal] = useState(false);
   const [routeMenuAnchor, setRouteMenuAnchor] = useState(null);
   const { userInfo } = useUser();
   const history = useNavigate();
@@ -51,7 +54,7 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
 
   const saveRouteDetailOrder = (routeDetailList) => {
     AuthAPI({
-      url: `/api/route`,
+      url: `/api/routeDetail`,
       method: "PUT",
       data: routeDetailList,
       success: () => {
@@ -124,7 +127,8 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                   ""
                 )
               }
-              title={`${routeDate.format("M월 D일")}의 일정`}
+              //title={`${routeDate.format("M월 D일")}의 일정`}
+              title={route ? route.title : ""}
             />
             {route !== null ? (
               <CardContent>
@@ -284,6 +288,18 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
         <MenuItem
           onClick={() => {
             routeMenuClose();
+            setEditTitleModal(true);
+          }}
+        >
+          <ListItemIcon>
+            <EditIcon />
+          </ListItemIcon>
+          <ListItemText>제목 수정</ListItemText>
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            routeMenuClose();
             setOpenShareModal(true);
           }}
         >
@@ -301,14 +317,29 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
         </MenuItem>
       </Menu>
       {route !== null && route !== undefined ? (
-        <Modal
-          open={openShareModal}
-          onClose={() => {
-            setOpenShareModal(false);
-          }}
-        >
-          <RouteShare />
-        </Modal>
+        <div>
+          <Modal
+            open={openShareModal}
+            onClose={() => {
+              setOpenShareModal(false);
+            }}
+          >
+            <RouteShare />
+          </Modal>
+          <RouteTitleEdit
+            route={route}
+            open={openEditTitleModal}
+            setOpen={setEditTitleModal}
+          />
+          {/* <Modal
+            open={openEditTitleModal}
+            onClose={() => {
+              setEditTitleModal(false);
+            }}
+          >
+            <RouteTitleEdit route={route} open={openEditTitleModal} setOpen={setEditTitleModal}/>
+          </Modal> */}
+        </div>
       ) : (
         ""
       )}
