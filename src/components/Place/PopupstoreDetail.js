@@ -40,9 +40,9 @@ function PopupstoreDetail({ detail }) {
     let returnStr = "";
     const workingTimeArr = JSON.parse(detail.workingTime);
 
-    workingTimeArr.map((time) => {
+    workingTimeArr.map((time, index) => {
       returnStr += time.day
-        ? `<Typography>${time.day} : ${
+        ? `<Typography key={${index}}>${time.day} : ${
             time.holiday ? "휴무" : time.startDate + " ~ " + time.endDate
           }</Typography>`
         : "";

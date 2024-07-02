@@ -121,7 +121,7 @@ export default function RouteList() {
 
         {route !== null
           ? route.routeDetailList.map((routeDetail, index) => (
-              <PlaceInfoSmall placeDetail={routeDetail} />
+              <PlaceInfoSmall placeDetail={routeDetail} key={index} />
             ))
           : ""}
       </Stack>
