@@ -24,16 +24,20 @@ import WifiIcon from "@mui/icons-material/Wifi";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import BookOnlineIcon from "@mui/icons-material/BookOnline";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import LinkIcon from "@mui/icons-material/Link";
 
 import { useEffect, useState } from "react";
 import { useUser } from "../../UserContext";
 import { useRoute } from "../../RouteContext";
 import { useNavigate } from "react-router-dom";
+import { useSearchContext } from "../../SearchContext";
 
 function PopupstoreDetail({ detail }) {
   const { userInfo } = useUser();
   const { addRouteDetail } = useRoute();
+  const { searchInfo, setSearchInfo } = useSearchContext();
+
   const history = useNavigate();
 
   const getWorkingTime = () => {
@@ -124,6 +128,21 @@ function PopupstoreDetail({ detail }) {
                       } else {
                         history("/login");
                       }
+                    }}
+                  />{" "}
+                  <Chip
+                    icon={<LocationSearchingIcon />}
+                    label="주변 검색"
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setSearchInfo({
+                        ...searchInfo,
+                        criteriaPlace: detail,
+                      });
+                      history("/");
                     }}
                   />
                 </Typography>
@@ -281,9 +300,9 @@ function ShowImageList(detail) {
   );
 }
 
-function PopupInfo(detail) {
+function PopupInfo({ detail }) {
   return (
-    <List sx={{ display: "inline-list-item" }}>
+    <List sx={{ display: "inline-flex" }}>
       <ListItem>
         <ListItemAvatar>
           <Avatar>

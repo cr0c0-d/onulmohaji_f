@@ -17,6 +17,7 @@ import {
 import PaymentsIcon from "@mui/icons-material/Payments";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import LinkIcon from "@mui/icons-material/Link";
 import CallIcon from "@mui/icons-material/Call";
 
@@ -24,11 +25,13 @@ import { useEffect, useState } from "react";
 import { useUser } from "../../UserContext";
 import { useRoute } from "../../RouteContext";
 import { useNavigate } from "react-router-dom";
+import { useSearchContext } from "../../SearchContext";
 
 export default function FestivalDetail({ detail }) {
   const { userInfo } = useUser();
   const { addRouteDetail } = useRoute();
   const history = useNavigate();
+  const { searchInfo, setSearchInfo } = useSearchContext();
 
   return (
     <Container sx={{ width: "100%" }}>
@@ -78,6 +81,21 @@ export default function FestivalDetail({ detail }) {
                       } else {
                         history("/login");
                       }
+                    }}
+                  />{" "}
+                  <Chip
+                    icon={<LocationSearchingIcon />}
+                    label="주변 검색"
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setSearchInfo({
+                        ...searchInfo,
+                        criteriaPlace: detail,
+                      });
+                      history("/");
                     }}
                   />
                 </Typography>
