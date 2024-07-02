@@ -128,7 +128,11 @@ export default function RouteDraggable({ drawerWidth, setDrawerWidth }) {
                 )
               }
               //title={`${routeDate.format("M월 D일")}의 일정`}
-              title={route ? route.title : ""}
+              title={
+                route && route.title
+                  ? route.title
+                  : `${routeDate.format("M월 D일")}의 일정`
+              }
             />
             {route !== null ? (
               <CardContent>
