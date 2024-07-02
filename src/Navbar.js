@@ -59,7 +59,7 @@ export default function Navbar() {
           >
             오늘뭐하지
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "flex" } }}>
             <Button
               sx={{ my: 2, color: "white", display: "block" }}
               onClick={() => history("/")}
