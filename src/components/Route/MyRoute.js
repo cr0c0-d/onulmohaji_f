@@ -7,6 +7,7 @@ import { Badge, Box, Container, Divider, Grid, Stack } from "@mui/material";
 import RouteDraggable from "./RouteDraggable";
 import PlaceInfoSmall from "../Place/PlaceInfoSmall";
 import RouteList from "./RouteList";
+import RouteDetail from "./RouteDetail";
 
 export default function MyRoute() {
   const AuthAPI = useAuthAPI();
@@ -152,13 +153,14 @@ export default function MyRoute() {
           </Grid>
           <Divider orientation="vertical" variant="middle" flexItem />
           <Grid item sx={{ display: "flex" }}>
-            <Box>
+            {route !== null ? <RouteDetail route={route} /> : ""}
+            {/* <Box>
               {route !== null
                 ? route.routeDetailList.map((routeDetail, index) => (
                     <PlaceInfoSmall placeDetail={routeDetail} key={index} />
                   ))
                 : ""}
-            </Box>
+            </Box> */}
           </Grid>
         </Grid>
       </Stack>
