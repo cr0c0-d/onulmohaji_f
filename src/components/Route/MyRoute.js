@@ -29,7 +29,7 @@ export default function MyRoute() {
       success: (response) => {
         setScheduledDays(response.data);
         if (response.data !== null && response.data.length > 0) {
-          setSelectedDate(dayjs(response.data[response.data.length - 1]));
+          setSelectedDate(dayjs(response.data[0]));
         }
       },
       fail: () => {
