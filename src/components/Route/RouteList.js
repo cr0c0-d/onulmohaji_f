@@ -11,12 +11,15 @@ import {
 } from "@mui/material";
 import RouteIcon from "@mui/icons-material/Route";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function RouteList({
   routeList,
   selectedDate,
   setSelectedDate,
 }) {
+  const history = useNavigate();
   return (
     <List>
       <Divider component="li" />
@@ -27,6 +30,7 @@ export default function RouteList({
                 key={index}
                 onClick={() => {
                   setSelectedDate(dayjs(route.date));
+                  history(`/myRoute/list/${route.id}`);
                 }}
                 sx={{ cursor: "pointer" }}
               >
