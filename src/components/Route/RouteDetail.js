@@ -24,13 +24,16 @@ export default function RouteDetail({ route }) {
     <Container>
       <Box>
         <Stack spacing={3}>
-          <Typography variant="h6">일정 제목</Typography>
+          <Typography variant="h5">{title}</Typography>
+          <Typography variant="body1">{route.routeDate}</Typography>
+          {/* <Typography variant="h6">일정 제목</Typography>
           <TextField
             value={title}
             //label="일정 제목"
             onChange={(e) => setTitle(e.target.value)}
-          />
+          /> */}
           <Divider />
+
           {route.memberList && route.memberList.length > 0 ? (
             <Box>
               <Typography variant="h6">멤버 목록</Typography>
@@ -50,11 +53,13 @@ export default function RouteDetail({ route }) {
           ) : (
             ""
           )}
-          <Typography variant="h6">일정</Typography>
           <Box>
             {route !== null
               ? route.routeDetailList.map((routeDetail) => (
-                  <PlaceInfoSmall placeDetail={routeDetail} />
+                  <PlaceInfoSmall
+                    placeDetail={routeDetail}
+                    key={routeDetail.id}
+                  />
                 ))
               : ""}
           </Box>

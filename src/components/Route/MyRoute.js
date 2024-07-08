@@ -8,10 +8,13 @@ import RouteDraggable from "./RouteDraggable";
 import PlaceInfoSmall from "../Place/PlaceInfoSmall";
 import RouteList from "./RouteList";
 import RouteDetail from "./RouteDetail";
+import { useParams } from "react-router-dom";
 
 export default function MyRoute() {
   const AuthAPI = useAuthAPI();
+
   const { userInfo } = useUser();
+  let paramRouteId = useParams().routeId;
 
   const [routeList, setRouteList] = useState();
 
@@ -55,26 +58,16 @@ export default function MyRoute() {
     });
   };
 
-  //   const getRouteList = () => {
-  //     AuthAPI({
-  //       url: `/api/route/list/${userInfo.id}`,
-  //       method: "GET",
-  //       data: null,
-  //       success: (response) => {
-  //         setRouteList(response.data);
-  //       },
-  //       fail: () => {
-  //         setRouteList(null);
-  //       },
-  //     });
-  //   };
-
   useEffect(() => {
     findRouteDateList();
     findRouteList();
-  }, []);
 
-  const getRoute = () => {
+    if (paramRouteId) {
+      findRouteById(paramRouteId);
+    }
+  }, [paramRouteId]);
+
+  const findRoute = () => {
     AuthAPI({
       url: `/api/route?userId=${userInfo.id}&date=${selectedDate.format(
         "YYYY-MM-DD"
@@ -90,8 +83,25 @@ export default function MyRoute() {
     });
   };
 
+  const findRouteById = (routeId) => {
+    AuthAPI({
+      url: `/api/route/${routeId}`,
+      method: "GET",
+      data: null,
+      success: (response) => {
+        setRoute(response.data);
+        setSelectedDate(dayjs(response.data.routeDate));
+      },
+      fail: () => {
+        setRoute(null);
+      },
+    });
+  };
+
   useEffect(() => {
-    getRoute();
+    if (!paramRouteId) {
+      findRoute();
+    }
   }, [selectedDate]);
 
   function ScheduledDays(props) {
