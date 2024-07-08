@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Layout from "./Layout";
 import PlaceSearchMain from "./components/Place/PlaceSearchMain";
@@ -50,12 +50,24 @@ function App() {
                     <Route path="/" element={<Layout />}>
                       <Route exact path="/" element={<PlaceSearchMain />} />
                       <Route
+                        path="/festival"
+                        element={<Navigate to="/festival/list" />}
+                      />
+                      <Route
                         path="/festival/:placeId"
                         element={<PlaceDetail placeType="festival" />}
                       />
                       <Route
+                        path="/exhibition"
+                        element={<Navigate to="/exhibition/list" />}
+                      />
+                      <Route
                         path="/exhibition/:placeId"
                         element={<PlaceDetail placeType="exhibition" />}
+                      />
+                      <Route
+                        path="/popup"
+                        element={<Navigate to="/popup/list" />}
                       />
                       <Route
                         path="/popup/:placeId"
@@ -83,7 +95,12 @@ function App() {
                         path="/customPlace/list"
                         element={<CustomPlaceView />}
                       />
-                      <Route path="/route/list" element={<MyRoute />} />
+                      <Route path="/myRoute/list/" element={<MyRoute />}>
+                        <Route
+                          path="/myRoute/list/:routeId"
+                          element={<MyRoute />}
+                        />
+                      </Route>
                     </Route>
                   </Routes>
                 </BrowserRouter>

@@ -133,7 +133,7 @@ export default function Navbar() {
                 <MenuItem
                   onClick={() => {
                     setAnchorEl(null);
-                    history("/route/list");
+                    history("/myRoute/list");
                   }}
                 >
                   <ListItemIcon>
