@@ -148,13 +148,13 @@ export default function MyRoute() {
           }}
         />
         <Grid
+          container
           sx={{
             display: "inline-flex",
-            justifyItems: "flex-start",
           }}
           spacing={2}
         >
-          <Grid item sx={{ display: "flex" }}>
+          <Grid item xs={12} md={3} xl={3}>
             <RouteList
               routeList={routeList}
               selectedDate={selectedDate}
@@ -162,7 +162,7 @@ export default function MyRoute() {
             />
           </Grid>
           <Divider orientation="vertical" variant="middle" flexItem />
-          <Grid item sx={{ display: "flex" }}>
+          <Grid item xs={12} md={7} xl={7}>
             {route !== null ? <RouteDetail route={route} /> : ""}
             {/* <Box>
               {route !== null
