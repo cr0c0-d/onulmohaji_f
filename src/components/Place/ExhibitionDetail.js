@@ -14,33 +14,43 @@ import {
   ListItemAvatar,
   Chip,
 } from "@mui/material";
-import ChildCareIcon from "@mui/icons-material/ChildCare";
-import TimeToLeaveIcon from "@mui/icons-material/TimeToLeave";
 import PaymentsIcon from "@mui/icons-material/Payments";
-import FastfoodIcon from "@mui/icons-material/Fastfood";
-import PetsIcon from "@mui/icons-material/Pets";
-import FaceIcon from "@mui/icons-material/Face";
-import WifiIcon from "@mui/icons-material/Wifi";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import BookOnlineIcon from "@mui/icons-material/BookOnline";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import LinkIcon from "@mui/icons-material/Link";
+import CallIcon from "@mui/icons-material/Call";
 
 import { useEffect, useState } from "react";
 import { useUser } from "../../UserContext";
 import { useRoute } from "../../RouteContext";
 import { useNavigate } from "react-router-dom";
+import { useSearchContext } from "../../SearchContext";
 
-function ExhibitionDetail({ detail }) {
+export default function ExhibitionDetail({ detail }) {
   const { userInfo } = useUser();
   const { addRouteDetail } = useRoute();
   const history = useNavigate();
+  const { searchInfo, setSearchInfo } = useSearchContext();
 
   return (
     <Container sx={{ width: "100%" }}>
       <br />
       {detail !== null ? (
         <Stack>
+          <Typography gutterBottom>
+            정보 출처 :{" "}
+            <Button
+              color="success"
+              component="label"
+              variant="outlined"
+              size="small"
+              onClick={() => window.open(`https://www.culture.go.kr/index.do`)}
+            >
+              문화포털
+            </Button>
+          </Typography>
+          <br />
           <Grid container spacing={2} sx={{ display: "flex" }}>
             <Grid item xl={4}>
               <img
@@ -63,10 +73,25 @@ function ExhibitionDetail({ detail }) {
                     onClick={(event) => {
                       event.stopPropagation();
                       if (userInfo.id !== undefined) {
-                        addRouteDetail(detail.placeId, "popup");
+                        addRouteDetail(detail.placeId, "festival");
                       } else {
                         history("/login");
                       }
+                    }}
+                  />{" "}
+                  <Chip
+                    icon={<LocationSearchingIcon />}
+                    label="주변 검색"
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setSearchInfo({
+                        ...searchInfo,
+                        criteriaPlace: detail,
+                      });
+                      history("/");
                     }}
                   />
                 </Typography>
@@ -77,16 +102,44 @@ function ExhibitionDetail({ detail }) {
                   {detail.address}
                 </Typography>
                 <Grid item>
-                  {detail.brandUrl ? (
+                  {detail.placeUrl ? (
                     <Chip
                       icon={<LinkIcon />}
-                      label="브랜드 홈페이지"
+                      label="
+                        장소 홈페이지
+                      "
                       variant="outlined"
-                      onClick={() => {
-                        window.open(detail.brandUrl);
-                      }}
+                      // onClick={() => {
+                      //   window.open(detail.homepageUrl);
+                      // }}
+                      // dangerouslySetInnerHTML={{ __html: detail.homepageUrl }}
                     />
                   ) : (
+                    // <div
+                    //   dangerouslySetInnerHTML={{
+                    //     __html: detail.homepageUrl,
+                    //   }}
+                    // ></div>
+                    ""
+                  )}{" "}
+                  {detail.url ? (
+                    <Chip
+                      icon={<LinkIcon />}
+                      label="
+                        전시회 정보
+                      "
+                      variant="outlined"
+                      // onClick={() => {
+                      //   window.open(detail.homepageUrl);
+                      // }}
+                      // dangerouslySetInnerHTML={{ __html: detail.homepageUrl }}
+                    />
+                  ) : (
+                    // <div
+                    //   dangerouslySetInnerHTML={{
+                    //     __html: detail.homepageUrl,
+                    //   }}
+                    // ></div>
                     ""
                   )}{" "}
                   {detail.instaUrl ? (
@@ -101,27 +154,7 @@ function ExhibitionDetail({ detail }) {
                   ) : (
                     ""
                   )}{" "}
-                  {detail.preRegisterInfo ? (
-                    <Chip
-                      icon={<BookOnlineIcon />}
-                      label="온라인 예약"
-                      variant="outlined"
-                      onClick={() => {
-                        window.open(detail.preRegisterInfo.link);
-                      }}
-                    />
-                  ) : (
-                    ""
-                  )}
                 </Grid>
-                {/* 운영시간 */}
-                <Card>
-                  <CardContent>
-                    <Stack
-                      dangerouslySetInnerHTML={{ __html: getWorkingTime() }}
-                    ></Stack>
-                  </CardContent>
-                </Card>
               </Stack>
             </Grid>
           </Grid>
@@ -129,10 +162,10 @@ function ExhibitionDetail({ detail }) {
           <Grid item>
             <br />
             <Stack spacing={3}>
-              {detail !== null ? (
+              {detail && (detail.fare || detail.contact) ? (
                 <Card>
                   <CardContent>
-                    <PopupInfo detail={detail} />
+                    <InfoList detail={detail} />
                   </CardContent>
                 </Card>
               ) : (
@@ -160,9 +193,6 @@ function ExhibitionDetail({ detail }) {
               ) : (
                 ""
               )}
-              {detail.imageList !== null && detail.imageList.length > 0
-                ? ShowImageList(detail)
-                : ""}
             </Stack>
           </Grid>
         </Stack>
@@ -173,136 +203,30 @@ function ExhibitionDetail({ detail }) {
   );
 }
 
-function ShowImageList(detail) {
-  const [showAll, setShowAll] = useState(false);
-  return (
-    <Container>
-      <div>
-        <Box
-          id="imageBox"
-          sx={{
-            height: showAll ? "auto" : "600px",
-            overflow: "hidden",
-            position: "relative",
-          }}
-        >
-          {showAll ? (
-            ""
-          ) : (
-            <div
-              id="gradientBox"
-              style={{
-                top: 0,
-                left: 0,
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                zIndex: 0,
-                background:
-                  "linear-gradient(to top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
-                pointerEvents: "none",
-              }}
-            ></div>
-          )}
-
-          <Stack>
-            {detail.imageList.map((image, index) => (
-              <img src={image} style={{ width: "auto" }} key={index} />
-            ))}
-          </Stack>
-        </Box>
-      </div>
-      <Button
-        sx={{ width: "100%" }}
-        variant="outlined"
-        onClick={() => setShowAll(!showAll)}
-        size="large"
-      >
-        이미지 {showAll ? "접기" : "펼치기"}
-      </Button>
-    </Container>
-  );
-}
-
-function PopupInfo(detail) {
+function InfoList({ detail }) {
+  const fare = detail.fare.replace("<br>", " / ");
   return (
     <List sx={{ display: "inline-list-item" }}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <TimeToLeaveIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={detail.parking === 0 ? "주차불가" : "주차가능"}
-        />
-      </ListItem>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <PaymentsIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={`입장료 ${detail.free === 0 ? "유료" : "무료"}`}
-        />
-      </ListItem>
-      {detail.noKids === 1 ? (
+      {detail.fare ? (
         <ListItem>
           <ListItemAvatar>
             <Avatar>
-              <ChildCareIcon />
+              <PaymentsIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="노키즈존" />
+          <ListItemText primary={fare} />
         </ListItem>
       ) : (
         ""
       )}
-      {detail.food === 1 ? (
+      {detail.contact ? (
         <ListItem>
           <ListItemAvatar>
             <Avatar>
-              <FastfoodIcon />
+              <CallIcon />
             </Avatar>
           </ListItemAvatar>
-          <ListItemText primary="음식물 반입금지" />
-        </ListItem>
-      ) : (
-        ""
-      )}
-      {detail.pet === 1 ? (
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <PetsIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="반려동물 불가" />
-        </ListItem>
-      ) : (
-        ""
-      )}
-      {detail.adult === 1 ? (
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <FaceIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="성인만 가능" />
-        </ListItem>
-      ) : (
-        ""
-      )}
-      {detail.wifi === 1 ? (
-        <ListItem>
-          <ListItemAvatar>
-            <Avatar>
-              <WifiIcon />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary="와이파이 지원" />
+          <ListItemText primary={detail.contact} />
         </ListItem>
       ) : (
         ""
@@ -310,5 +234,3 @@ function PopupInfo(detail) {
     </List>
   );
 }
-
-export default ExhibitionDetail;
