@@ -115,110 +115,117 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
       <br />
 
       <Grid container spacing={3}>
-        {facilityList === null
-          ? Array.from({ length: 4 }, (_, index) => index).map((_, index) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                <Card>
-                  <Skeleton variant="rectangular" sx={{ height: 300 }} />
-                  <CardContent>
-                    <Typography gutterBottom variant="body1">
-                      <Skeleton />
-                    </Typography>
-                    <Typography variant="body2">
-                      <Skeleton />
-                    </Typography>
-                    <Typography variant="body2">
-                      <Skeleton />
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          : facilityList
-              .filter((facility) => facility.distance <= distance)
-              .map((facility, index) =>
-                index < showLimit && facility.distance <= distance ? (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                    <Card
-                      style={{ cursor: "pointer" }}
-                      onClick={() => window.open(facility.placeUrl)}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="300"
-                        image={
-                          facility.thumbnail ||
-                          process.env.REACT_APP_DEFAULT_IMAGE_URL
-                        }
-                        alt={facility.placeName}
-                      />
-                      <CardContent>
-                        <Typography
-                          gutterBottom
-                          variant="body1"
-                          component="div"
-                        >
-                          {facility.placeName}
-                        </Typography>
+        {facilityList === null ? (
+          Array.from({ length: 4 }, (_, index) => index).map((_, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <Card>
+                <Skeleton variant="rectangular" sx={{ height: 300 }} />
+                <CardContent>
+                  <Typography gutterBottom variant="body1">
+                    <Skeleton />
+                  </Typography>
+                  <Typography variant="body2">
+                    <Skeleton />
+                  </Typography>
+                  <Typography variant="body2">
+                    <Skeleton />
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))
+        ) : facilityList.filter((facility) => facility.distance <= distance)
+            .length === 0 ? (
+          <Grid item sx={{ alignContent: "center", width: "100%" }}>
+            <Card>
+              <CardContent sx={{ textAlign: "center" }}>
+                <Typography variant="body1">검색 결과가 없습니다.</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ) : (
+          facilityList
+            .filter((facility) => facility.distance <= distance)
+            .map((facility, index) =>
+              index < showLimit && facility.distance <= distance ? (
+                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                  <Card
+                    style={{ cursor: "pointer" }}
+                    onClick={() => window.open(facility.placeUrl)}
+                  >
+                    <CardMedia
+                      component="img"
+                      height="300"
+                      image={
+                        facility.thumbnail ||
+                        process.env.REACT_APP_DEFAULT_IMAGE_URL
+                      }
+                      alt={facility.placeName}
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="body1" component="div">
+                        {facility.placeName}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {facility.categoryName}
+                      </Typography>
+
+                      {type === "facility" ? (
+                        ""
+                      ) : (
                         <Typography variant="body2" color="text.secondary">
-                          {facility.categoryName}
+                          {facility.distance > 999
+                            ? (facility.distance / 1000)
+                                .toString()
+                                .substring(0, 3) + "km"
+                            : facility.distance + "m"}
                         </Typography>
+                      )}
 
-                        {type === "facility" ? (
-                          ""
-                        ) : (
-                          <Typography variant="body2" color="text.secondary">
-                            {facility.distance > 999
-                              ? (facility.distance / 1000)
-                                  .toString()
-                                  .substring(0, 3) + "km"
-                              : facility.distance + "m"}
-                          </Typography>
-                        )}
-
-                        <Chip
-                          icon={<StarIcon />}
-                          label={
-                            facility.scoresum != null &&
-                            facility.scorecnt != null &&
-                            facility.scoresum !== 0 &&
-                            facility.scorecnt !== 0
-                              ? Math.floor(
-                                  (facility.scoresum / facility.scorecnt) * 10
-                                ) /
-                                  10 +
-                                " (" +
-                                facility.scorecnt +
-                                ")"
-                              : "별점 정보 없음"
+                      <Chip
+                        icon={<StarIcon />}
+                        label={
+                          facility.scoresum != null &&
+                          facility.scorecnt != null &&
+                          facility.scoresum !== 0 &&
+                          facility.scorecnt !== 0
+                            ? Math.floor(
+                                (facility.scoresum / facility.scorecnt) * 10
+                              ) /
+                                10 +
+                              " (" +
+                              facility.scorecnt +
+                              ")"
+                            : "별점 정보 없음"
+                        }
+                        size="small"
+                        color="warning"
+                      />
+                    </CardContent>
+                    <CardContent>
+                      <Chip
+                        icon={<PlaylistAddIcon />}
+                        label="일정에 추가"
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          if (userInfo.id !== undefined) {
+                            addRouteDetail(facility.id);
+                          } else {
+                            history("/login");
                           }
-                          size="small"
-                          color="warning"
-                        />
-                      </CardContent>
-                      <CardContent>
-                        <Chip
-                          icon={<PlaylistAddIcon />}
-                          label="일정에 추가"
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            if (userInfo.id !== undefined) {
-                              addRouteDetail(facility.id);
-                            } else {
-                              history("/login");
-                            }
-                          }}
-                        />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ) : (
-                  ""
-                )
-              )}
+                        }}
+                      />
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ) : (
+                ""
+              )
+            )
+        )}
       </Grid>
       <br />
     </Container>
