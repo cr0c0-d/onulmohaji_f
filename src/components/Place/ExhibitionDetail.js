@@ -109,17 +109,11 @@ export default function ExhibitionDetail({ detail }) {
                         장소 홈페이지
                       "
                       variant="outlined"
-                      // onClick={() => {
-                      //   window.open(detail.homepageUrl);
-                      // }}
-                      // dangerouslySetInnerHTML={{ __html: detail.homepageUrl }}
+                      onClick={() => {
+                        window.open(detail.placeUrl);
+                      }}
                     />
                   ) : (
-                    // <div
-                    //   dangerouslySetInnerHTML={{
-                    //     __html: detail.homepageUrl,
-                    //   }}
-                    // ></div>
                     ""
                   )}{" "}
                   {detail.url ? (
@@ -129,10 +123,9 @@ export default function ExhibitionDetail({ detail }) {
                         전시회 정보
                       "
                       variant="outlined"
-                      // onClick={() => {
-                      //   window.open(detail.homepageUrl);
-                      // }}
-                      // dangerouslySetInnerHTML={{ __html: detail.homepageUrl }}
+                      onClick={() => {
+                        window.open(detail.url);
+                      }}
                     />
                   ) : (
                     // <div
@@ -206,7 +199,12 @@ export default function ExhibitionDetail({ detail }) {
 function InfoList({ detail }) {
   const fare = detail.fare.replace("<br>", " / ");
   return (
-    <List sx={{ display: "inline-list-item" }}>
+    <List
+      sx={{
+        // display: "inline-list-item"
+        display: "block",
+      }}
+    >
       {detail.fare ? (
         <ListItem>
           <ListItemAvatar>
