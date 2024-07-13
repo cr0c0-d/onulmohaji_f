@@ -97,7 +97,6 @@ export default function CustomPlaceAddMap({
         latitude: mouseEvent.latLng.getLat(),
         longitude: mouseEvent.latLng.getLng(),
       });
-      console.log(newCustomPlace);
       marker.setPosition(mouseEvent.latLng);
       searchDetailAddrFromCoords(mouseEvent.latLng, setInfoWindow);
     });

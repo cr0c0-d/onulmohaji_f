@@ -148,7 +148,6 @@ export default function Login() {
       return;
     });
     if (json !== undefined && json.status === 200) {
-      console.log(json);
       sessionStorage.setItem("state", json.data.state);
       //window.open(json.data.url);
       window.location.href = json.data.url;
