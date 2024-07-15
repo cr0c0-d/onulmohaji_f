@@ -17,10 +17,12 @@ import {
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import { useNavigate } from "react-router-dom";
 import { useRoute } from "../../RouteContext";
 import { useAuthAPI } from "../../AuthAPI";
 import { useUser } from "../../UserContext";
+import { useSearchContext } from "../../SearchContext";
 
 const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const [showLimit, setShowLimit] = useState(limit);
@@ -28,6 +30,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const { route, setRoute, routeDate, setRouteDate, getRoute } = useRoute();
   const AuthAPI = useAuthAPI();
   const { userInfo } = useUser();
+  const { searchInfo, setSearchInfo } = useSearchContext();
 
   // 거리 범위
   const [distance, setDistance] = useState(1000);
@@ -77,6 +80,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
           display: "flex",
           justifyContent: "space-between",
           padding: "10px",
+          width: "100%",
         }}
       >
         <Typography variant="h5">가까운 {typeName} 목록</Typography>
@@ -216,6 +220,21 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                           } else {
                             history("/login");
                           }
+                        }}
+                      />{" "}
+                      <Chip
+                        icon={<LocationSearchingIcon />}
+                        label="주변 검색"
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setSearchInfo({
+                            ...searchInfo,
+                            criteriaPlace: facility,
+                          });
+                          history("/");
                         }}
                       />
                     </CardContent>
