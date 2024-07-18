@@ -102,15 +102,27 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
         )}
 
         {limit !== 999 ? (
-          <Button
-            size="small"
-            variant="contained"
-            onClick={() => {
-              setShowLimit(999);
-            }}
-          >
-            전체보기
-          </Button>
+          showLimit !== 999 ? (
+            <Button
+              size="small"
+              variant="contained"
+              onClick={() => {
+                setShowLimit(999);
+              }}
+            >
+              전체보기
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              variant="contained"
+              onClick={() => {
+                setShowLimit(4);
+              }}
+            >
+              접기
+            </Button>
+          )
         ) : (
           ""
         )}
@@ -168,11 +180,12 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                     />
                     <CardContent>
                       <Typography gutterBottom variant="body1" component="div">
+                        <Chip label={facility.placeTypeName} />{" "}
                         {facility.placeName}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary">
+                      {/* <Typography variant="body2" color="text.secondary">
                         {facility.categoryName}
-                      </Typography>
+                      </Typography> */}
 
                       {type === "facility" ? (
                         ""
@@ -185,7 +198,6 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                             : facility.distance + "m"}
                         </Typography>
                       )}
-
                       <Chip
                         icon={<StarIcon />}
                         label={
