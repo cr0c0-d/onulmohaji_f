@@ -33,7 +33,7 @@ function PlaceTotalList() {
         ""
       )}
 
-      {facility !== null && facility.length !== 0 ? (
+      {/* {facility !== null && facility.length !== 0 ? (
         <Box>
           <FacilityList
             facilityList={facility}
@@ -44,7 +44,20 @@ function PlaceTotalList() {
         </Box>
       ) : (
         ""
-      )}
+      )} */}
+      {facility !== null && facility.length !== 0
+        ? facility.map((facilityCategory, index) => (
+            <Box>
+              <FacilityList
+                facilityList={facilityCategory.facilityList}
+                type="facility"
+                typeName={facilityCategory.typeName}
+                limit={4}
+                key={index}
+              />
+            </Box>
+          ))
+        : ""}
     </Stack>
   );
 }
