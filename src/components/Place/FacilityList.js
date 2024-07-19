@@ -83,7 +83,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
           width: "100%",
         }}
       >
-        <Typography variant="h5">가까운 {typeName} 목록</Typography>
+        <Typography variant="h5">{typeName}</Typography>
         {type === "facility" ? (
           ""
         ) : (
@@ -101,7 +101,10 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
           </Grid>
         )}
 
-        {limit !== 999 ? (
+        {facilityList.filter((facility) => facility.distance <= distance)
+          .length < 5 ? (
+          ""
+        ) : limit !== 999 ? (
           showLimit !== 999 ? (
             <Button
               size="small"
@@ -198,6 +201,8 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                             : facility.distance + "m"}
                         </Typography>
                       )}
+                    </CardContent>
+                    <CardContent sx={{ padding: "0px 16px" }}>
                       <Chip
                         icon={<StarIcon />}
                         label={
