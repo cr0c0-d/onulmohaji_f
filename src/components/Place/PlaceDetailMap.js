@@ -59,7 +59,7 @@ export default function PlaceDetailMap({ detail }) {
                 );
               }}
             >
-              {detail.address}
+              {detail.address || detail.placeName}
             </Typography>
           </CardContent>
         </Card>
