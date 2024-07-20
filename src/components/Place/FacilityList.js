@@ -84,7 +84,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
         }}
       >
         <Typography variant="h5">{typeName}</Typography>
-        {type === "facility" ? (
+        {/* {type === "facility" ? (
           ""
         ) : (
           <Grid item>
@@ -99,32 +99,36 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
               />
             </Box>
           </Grid>
-        )}
+        )} */}
 
-        {facilityList.filter((facility) => facility.distance <= distance)
-          .length < 5 ? (
-          ""
-        ) : limit !== 999 ? (
-          showLimit !== 999 ? (
-            <Button
-              size="small"
-              variant="contained"
-              onClick={() => {
-                setShowLimit(999);
-              }}
-            >
-              전체보기
-            </Button>
+        {facilityList ? (
+          facilityList.filter((facility) => facility.distance <= distance)
+            .length < 5 ? (
+            ""
+          ) : limit !== 999 ? (
+            showLimit !== 999 ? (
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => {
+                  setShowLimit(999);
+                }}
+              >
+                전체보기
+              </Button>
+            ) : (
+              <Button
+                size="small"
+                variant="contained"
+                onClick={() => {
+                  setShowLimit(4);
+                }}
+              >
+                접기
+              </Button>
+            )
           ) : (
-            <Button
-              size="small"
-              variant="contained"
-              onClick={() => {
-                setShowLimit(4);
-              }}
-            >
-              접기
-            </Button>
+            ""
           )
         ) : (
           ""
@@ -194,11 +198,17 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                         ""
                       ) : (
                         <Typography variant="body2" color="text.secondary">
-                          {facility.distance > 999
-                            ? (facility.distance / 1000)
-                                .toString()
-                                .substring(0, 3) + "km"
-                            : facility.distance + "m"}
+                          <Chip
+                            label={
+                              facility.distance > 999
+                                ? (facility.distance / 1000)
+                                    .toString()
+                                    .substring(0, 3) + "km"
+                                : facility.distance + "m"
+                            }
+                            size="small"
+                            variant="outlined"
+                          />
                         </Typography>
                       )}
                     </CardContent>
