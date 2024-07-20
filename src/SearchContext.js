@@ -17,6 +17,7 @@ export const SearchProvider = ({ children }) => {
     localcode: null,
     keyword: "",
     criteriaPlace: null,
+    distance: 3000, // 검색 기준지로부터 거리, 기본값 3km
   });
 
   // 선택 지역코드 - 대분류
@@ -97,7 +98,8 @@ export const SearchProvider = ({ children }) => {
           ? searchInfo.criteriaPlace.longitude
           : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
       }
-      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
+      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}
+      &distance=${searchInfo.distance}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -126,7 +128,9 @@ export const SearchProvider = ({ children }) => {
           ? searchInfo.criteriaPlace.longitude
           : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
       }
-      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
+      ${
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+      }&distance=${searchInfo.distance}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -153,7 +157,9 @@ export const SearchProvider = ({ children }) => {
           ? searchInfo.criteriaPlace.longitude
           : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
       }
-      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
+      ${
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+      }&distance=${searchInfo.distance}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -180,7 +186,9 @@ export const SearchProvider = ({ children }) => {
           ? searchInfo.criteriaPlace.longitude
           : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
       }
-      ${searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""}`,
+      ${
+        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+      }&distance=${searchInfo.distance}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
