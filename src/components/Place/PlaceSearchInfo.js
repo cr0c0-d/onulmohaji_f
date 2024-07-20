@@ -12,6 +12,8 @@ import {
   FormLabel,
   InputAdornment,
   Badge,
+  Slider,
+  Box,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useSearchContext } from "../../SearchContext";
@@ -165,6 +167,45 @@ export default function PlaceSearchInfo() {
           ""
         )}
         <Grid item>
+          <Box sx={{ width: "200px" }}>
+            <Slider
+              value={searchInfo.distance}
+              step={1000}
+              marks={[
+                {
+                  value: 1000,
+                  label: "1km",
+                },
+
+                {
+                  value: 3000,
+                  label: "3km",
+                },
+
+                {
+                  value: 5000,
+                  label: "5km",
+                },
+
+                {
+                  value: 7000,
+                  label: "7km",
+                },
+
+                {
+                  value: 9000,
+                  label: "9km",
+                },
+              ]}
+              max={10000}
+              min={1000}
+              onChange={(e) =>
+                setSearchInfo({ ...searchInfo, distance: e.target.value })
+              }
+            />
+          </Box>
+        </Grid>
+        <Grid item>
           <FormControl>
             <InputLabel>검색어</InputLabel>
             <Input
@@ -204,6 +245,7 @@ export default function PlaceSearchInfo() {
             />
           </FormControl>
         </Grid>
+
         <Grid item>
           <Button
             variant="contained"
