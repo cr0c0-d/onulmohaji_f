@@ -20,6 +20,17 @@ export const SearchProvider = ({ children }) => {
     distance: 3000, // 검색 기준지로부터 거리, 기본값 3km
   });
 
+  const [categoryFilter, setCategoryFilter] = useState({
+    festival: true,
+    exhibition: true,
+    popup: true,
+    indoor: true,
+    food: true,
+    cafe: true,
+    art: true,
+    attraction: true,
+  });
+
   // 선택 지역코드 - 대분류
   const [pickedLocal_1, setPickedLocal_1] = useState(null);
   // 선택 지역코드 - 소분류
