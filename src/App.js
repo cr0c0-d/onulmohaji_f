@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Layout from "./Layout";
-import PlaceSearchMain from "./components/Place/PlaceSearchMain";
+import PlaceSearchMain from "./components/Place/SearchInfo/PlaceSearchMain";
 import { UserProvider, useUser } from "./UserContext";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";

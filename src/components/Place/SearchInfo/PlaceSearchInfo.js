@@ -16,18 +16,21 @@ import {
   Box,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { useSearchContext } from "../../SearchContext";
-import PlaceInfoSmall from "./PlaceInfoSmall";
+import { useSearchContext } from "../../../SearchContext";
+import PlaceInfoSmall from "../PlaceInfoSmall";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useEffect, useState } from "react";
-import { useRoute } from "../../RouteContext";
-import { useAuthAPI } from "../../AuthAPI";
-import { useUser } from "../../UserContext";
+import { useRoute } from "../../../RouteContext";
+import { useAuthAPI } from "../../../AuthAPI";
+import { useUser } from "../../../UserContext";
+import CategoryFilter from "./CategoryFilter";
 export default function PlaceSearchInfo() {
   const [inputKeyword, setInputKeyword] = useState("");
   const {
     searchInfo,
     setSearchInfo,
+    categoryFilter,
+    setCategoryFilter,
     localcodes,
     pickedLocal_1,
     setPickedLocal_1,
@@ -204,6 +207,12 @@ export default function PlaceSearchInfo() {
               }
             />
           </Box>
+        </Grid>
+        <Grid item>
+          <CategoryFilter
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+          />
         </Grid>
         <Grid item>
           <FormControl>

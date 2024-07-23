@@ -1,7 +1,7 @@
 import { Container, Stack } from "@mui/material";
-import { useSearchContext } from "../../SearchContext";
+import { useSearchContext } from "../../../SearchContext";
 import PlaceSearchInfo from "./PlaceSearchInfo";
-import PlaceTotalList from "./PlaceTotalList";
+import PlaceTotalList from "../PlaceTotalList";
 
 function PlaceSearchMain() {
   const { searchInfo } = useSearchContext();
