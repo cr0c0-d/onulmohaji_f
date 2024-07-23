@@ -3,7 +3,7 @@ import PlaceList from "./PlaceList";
 import { useSearchContext } from "../../SearchContext";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useNavigate } from "react-router-dom";
-import PlaceSearchInfo from "./PlaceSearchInfo";
+import PlaceSearchInfo from "./SearchInfo/PlaceSearchInfo";
 
 export default function PlaceListByType({ type }) {
   const { searchInfo, festival, exhibition, popupstore, facility } =
