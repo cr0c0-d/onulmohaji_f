@@ -20,16 +20,27 @@ export const SearchProvider = ({ children }) => {
     distance: 3000, // 검색 기준지로부터 거리, 기본값 3km
   });
 
-  const [categoryFilter, setCategoryFilter] = useState({
-    festival: true,
-    exhibition: true,
-    popup: true,
-    indoor: true,
-    food: true,
-    cafe: true,
-    art: true,
-    attraction: true,
-  });
+  const [categoryFilter, setCategoryFilter] = useState([
+    { id: "festival", name: "축제", visible: true },
+    { id: "exhibition", name: "전시회", visible: true },
+    { id: "popup", name: "팝업스토어", visible: true },
+    { id: "indoor", name: "실내놀거리", visible: true },
+    { id: "food", name: "음식점", visible: true },
+    { id: "cafe", name: "카페", visible: true },
+    { id: "art", name: "문화예술", visible: true },
+    { id: "attraction", name: "관광명소", visible: false },
+  ]);
+
+  // const [categoryFilter, setCategoryFilter] = useState({
+  //   festival: { name: "축제", visible: true },
+  //   exhibition: { name: "전시회", visible: true },
+  //   popup: { name: "팝업스토어", visible: true },
+  //   indoor: { name: "실내놀거리", visible: true },
+  //   food: { name: "음식점", visible: true },
+  //   cafe: { name: "카페", visible: true },
+  //   art: { name: "문화예술", visible: true },
+  //   attraction: { name: "관광명소", visible: false },
+  // });
 
   // 선택 지역코드 - 대분류
   const [pickedLocal_1, setPickedLocal_1] = useState(null);
@@ -230,6 +241,8 @@ export const SearchProvider = ({ children }) => {
       value={{
         searchInfo,
         setSearchInfo,
+        categoryFilter,
+        setCategoryFilter,
         localcodes,
         pickedLocal_1,
         setPickedLocal_1,

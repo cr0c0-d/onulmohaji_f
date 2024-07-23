@@ -2,14 +2,17 @@ import { Stack, Box } from "@mui/material";
 import PlaceList from "./PlaceList";
 import { useSearchContext } from "../../SearchContext";
 import FacilityList from "./FacilityList";
-import PlaceSearchInfo from "./PlaceSearchInfo";
+import PlaceSearchInfo from "./SearchInfo/PlaceSearchInfo";
 
 function PlaceTotalList() {
-  const { festival, exhibition, popupstore, facility } = useSearchContext();
+  const { categoryFilter, festival, exhibition, popupstore, facility } =
+    useSearchContext();
 
   return (
     <Stack spacing={5}>
-      {festival !== null && festival.length !== 0 ? (
+      {festival !== null &&
+      festival.length !== 0 &&
+      categoryFilter.find((obj) => obj.id === "festival").visible ? (
         <Box>
           <PlaceList placeList={festival} type="festival" limit="4" />
         </Box>
@@ -17,7 +20,9 @@ function PlaceTotalList() {
         ""
       )}
 
-      {exhibition !== null && exhibition.length !== 0 ? (
+      {exhibition !== null &&
+      exhibition.length !== 0 &&
+      categoryFilter.find((obj) => obj.id === "exhibition").visible ? (
         <Box>
           <PlaceList placeList={exhibition} type="exhibition" limit="4" />
         </Box>
@@ -25,7 +30,9 @@ function PlaceTotalList() {
         ""
       )}
 
-      {popupstore !== null && popupstore.length !== 0 ? (
+      {popupstore !== null &&
+      popupstore.length !== 0 &&
+      categoryFilter.find((obj) => obj.id === "popup").visible ? (
         <Box>
           <PlaceList placeList={popupstore} type="popup" limit="4" />
         </Box>
@@ -46,17 +53,22 @@ function PlaceTotalList() {
         ""
       )} */}
       {facility !== null && facility.length !== 0
-        ? facility.map((facilityCategory, index) => (
-            <Box>
-              <FacilityList
-                facilityList={facilityCategory.facilityList}
-                type="facility"
-                typeName={facilityCategory.typeName}
-                limit={4}
-                key={index}
-              />
-            </Box>
-          ))
+        ? facility.map((facilityCategory, index) =>
+            categoryFilter.find((obj) => obj.id === facilityCategory.type)
+              .visible ? (
+              <Box>
+                <FacilityList
+                  facilityList={facilityCategory.facilityList}
+                  type={facilityCategory.typeName}
+                  typeName={facilityCategory.typeName}
+                  limit={4}
+                  key={index}
+                />
+              </Box>
+            ) : (
+              ""
+            )
+          )
         : ""}
     </Stack>
   );
