@@ -12,8 +12,10 @@ export default function CategoryFilter({ categoryFilter, setCategoryFilter }) {
   return (
     <div>
       {categoryFilter ? (
-        <Box>
-          <Typography variant="h6">카테고리 필터</Typography>
+        <Box sx={{ padding: "3px" }}>
+          <Typography variant="h6" gutterBottom>
+            카테고리 필터
+          </Typography>
           <FormGroup>
             {categoryFilter.map((category, index) => (
               <FormControlLabel

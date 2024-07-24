@@ -14,6 +14,8 @@ import {
   Badge,
   Slider,
   Box,
+  Popover,
+  Container,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useSearchContext } from "../../../SearchContext";
@@ -24,6 +26,7 @@ import { useRoute } from "../../../RouteContext";
 import { useAuthAPI } from "../../../AuthAPI";
 import { useUser } from "../../../UserContext";
 import CategoryFilter from "./CategoryFilter";
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 export default function PlaceSearchInfo() {
   const [inputKeyword, setInputKeyword] = useState("");
   const {
@@ -37,6 +40,8 @@ export default function PlaceSearchInfo() {
   } = useSearchContext();
 
   const [scheduledDays, setScheduledDays] = useState([]);
+  const [openFilter, setOpenFilter] = useState(false);
+  const [openFilterAnchor, setOpenFilterAnchor] = useState(null);
 
   const { userInfo } = useUser();
   const AuthAPI = useAuthAPI();
@@ -209,10 +214,33 @@ export default function PlaceSearchInfo() {
           </Box>
         </Grid>
         <Grid item>
-          <CategoryFilter
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-          />
+          <Button
+            variant="outlined"
+            onClick={(e) => {
+              setOpenFilterAnchor(e.currentTarget);
+            }}
+            startIcon={<FilterAltIcon />}
+          >
+            카테고리 필터
+          </Button>
+          <Popover
+            open={Boolean(openFilterAnchor)}
+            anchorEl={openFilterAnchor}
+            onClose={() => {
+              setOpenFilterAnchor(null);
+            }}
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left",
+            }}
+          >
+            <Container>
+              <CategoryFilter
+                categoryFilter={categoryFilter}
+                setCategoryFilter={setCategoryFilter}
+              />
+            </Container>
+          </Popover>
         </Grid>
         <Grid item>
           <FormControl>
