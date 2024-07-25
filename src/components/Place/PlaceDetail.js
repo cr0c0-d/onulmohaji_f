@@ -177,7 +177,7 @@ function PlaceDetail({ placeType }) {
           <Grid container>
             <PlaceDetailMap detail={detail} />
           </Grid>
-
+          {/* 
           <Grid container>
             <FacilityList
               facilityList={facilities}
@@ -185,7 +185,7 @@ function PlaceDetail({ placeType }) {
               typeName="음식점"
               limit={4}
             />
-          </Grid>
+          </Grid> */}
         </Stack>
       ) : (
         ""
