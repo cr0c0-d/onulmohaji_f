@@ -141,11 +141,16 @@ export default function Navbar() {
                   </ListItemIcon>
                   나의 일정
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem
+                  onClick={() => {
+                    setAnchorEl(null);
+                    history("/myPage");
+                  }}
+                >
                   <ListItemIcon>
                     <EditIcon />
                   </ListItemIcon>
-                  정보 수정
+                  검색조건 기본값 설정
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={() => logoutAPI(true)}>

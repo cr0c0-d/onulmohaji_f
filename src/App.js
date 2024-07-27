@@ -7,8 +7,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import "dayjs/locale/ko";
 import PlaceDetail from "./components/Place/PlaceDetail";
-import Signup from "./components/Signup";
-import Login from "./components/Login";
+import Signup from "./components/Member/Signup";
+import Login from "./components/Member/Login";
 import { RouteProvider } from "./RouteContext";
 import { SearchProvider } from "./SearchContext";
 import { useState } from "react";
@@ -19,6 +19,7 @@ import RoutePermission from "./components/Route/RoutePermission";
 import CustomPlaceList from "./components/CustomPlace/CustomPlaceList";
 import CustomPlaceView from "./components/CustomPlace/CustomPlaceView";
 import MyRoute from "./components/Route/MyRoute";
+import MyPage from "./components/Member/MyPage";
 
 const theme = createTheme({
   typography: {
@@ -101,6 +102,7 @@ function App() {
                           element={<MyRoute />}
                         />
                       </Route>
+                      <Route path="/myPage" element={<MyPage />} />
                     </Route>
                   </Routes>
                 </BrowserRouter>
