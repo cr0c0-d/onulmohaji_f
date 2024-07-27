@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 
 import { useUser } from "./UserContext";
 import { useRoute } from "./RouteContext";
+import { useAuthAPI } from "./AuthAPI";
 
 const SearchContext = createContext();
 
@@ -64,6 +65,11 @@ export const SearchProvider = ({ children }) => {
 
   const { userInfo, settingDone } = useUser();
 
+  const AuthAPI = useAuthAPI();
+
+  // 로그인회원 검색조건 설정값
+  const [memberSearchInfo, setMemberSearchInfo] = useState(null);
+
   /********************************************* function ***************************************************/
   // 지역코드 목록 조회 API
   const getLocalcodes = async () => {
@@ -81,23 +87,52 @@ export const SearchProvider = ({ children }) => {
     }
   };
 
-  // 지역코드 목록 조회 후 선택 지역 기본값 지정
+  const getMemberSearchInfo = () => {
+    AuthAPI({
+      url: `/api/memberSearchInfo/${userInfo.id}`,
+      method: "GET",
+      data: null,
+      success: (result) => {
+        setMemberSearchInfo(result.data);
+      },
+      fail: () => {
+        console.log("FAIL");
+      },
+    });
+  };
+
+  // 지역코드 목록 조회 후
+  // 로그인 상태일 경우 => 로그인 회원 검색조건 설정값 조회
+  // 비로그인 상태일 경우 => 검색조건 지역 서울시 강남구로 지정
   useEffect(() => {
     if (localcodes !== null) {
       // 로그인 회원정보의 지역정보 불러오는 로직
-      if (userInfo && userInfo.localcode) {
+      if (userInfo) {
         // 로그인 회원 정보가 있으면
-        setPickedLocal_1(
-          localcodes.find((obj) => obj.id === userInfo.localcode).parentId
-        );
-        setSearchInfo({ ...searchInfo, localcode: userInfo.localcode });
+        getMemberSearchInfo();
       } else {
         // 로그인정보가 없으면 기본값 서울시 강남구
         setPickedLocal_1(11);
         setSearchInfo({ ...searchInfo, localcode: 11680 });
       }
     }
-  }, [localcodes, userInfo]);
+  }, [localcodes]);
+
+  // 로그인 회원 검색조건 설정값 조회 후
+  useEffect(() => {
+    if (memberSearchInfo) {
+      setPickedLocal_1(
+        localcodes.find((obj) => obj.id === memberSearchInfo.localcodeId)
+          .parentId
+      );
+      setSearchInfo({
+        ...searchInfo,
+        date: dayjs(memberSearchInfo.defaultDateValue),
+        localcode: memberSearchInfo.localcodeId,
+        distance: memberSearchInfo.distance,
+      });
+    }
+  }, [memberSearchInfo]);
 
   // 첫 로딩시 지역코드 목록 조회
   useEffect(() => {
