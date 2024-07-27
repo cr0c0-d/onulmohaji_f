@@ -15,10 +15,10 @@ import LockIcon from "@mui/icons-material/Lock";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUser } from "../UserContext";
-import NaverLoginButton from "../img/btn_naver_login.png";
-import GoogleLoginButton from "../img/btn_google_login.png";
-import KakaoLoginButton from "../img/btn_kakao_login.png";
+import { useUser } from "../../UserContext";
+import NaverLoginButton from "../../img/btn_naver_login.png";
+import GoogleLoginButton from "../../img/btn_google_login.png";
+import KakaoLoginButton from "../../img/btn_kakao_login.png";
 
 export default function Login() {
   /********************************************* 상태관리, 변수 선언 ***************************************************/
