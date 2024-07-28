@@ -66,85 +66,91 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
       <Divider variant="middle" />
       <br />
       <Container>
-        {/* {placeList.length === 0 ? (
-          <Typography sx={{ width: "100%" }}>검색 결과가 없습니다.</Typography>
-        ) : ( */}
-        <Grid container spacing={3}>
-          {placeList && placeList.length > 0
-            ? placeList.map((place, index) =>
-                index < showLimit ? (
-                  <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                    <Card
-                      style={{ cursor: "pointer" }}
-                      onClick={() => history(`/${type}/${place.placeId}`)}
-                    >
-                      <CardMedia
-                        component="img"
-                        height="300"
-                        image={place.thumbnail}
-                        alt={place.placeName}
-                      />
-                      <CardContent>
-                        <Typography
-                          gutterBottom
-                          variant="body1"
-                          sx={{ fontWeight: "bold" }}
-                          component="div"
-                        >
-                          {place.placeName}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          gutterBottom
-                          color="text.secondary"
-                        >
-                          {place.address_short}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {place.startDate} ~ {place.endDate}
-                        </Typography>
-                      </CardContent>
-                      <CardContent>
-                        <Chip
-                          icon={<PlaylistAddIcon />}
-                          label="일정에 추가"
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            if (userInfo.id !== undefined) {
-                              addRouteDetail(place.placeId, type);
-                            } else {
-                              history("/login");
-                            }
-                          }}
-                        />{" "}
-                        <Chip
-                          icon={<LocationSearchingIcon />}
-                          label="주변 검색"
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            setSearchInfo({
-                              ...searchInfo,
-                              criteriaPlace: place,
-                            });
-                            history("/");
-                          }}
+        {placeList.length === 0 ? (
+          <Grid item sx={{ alignContent: "center", width: "100%" }}>
+            <Card>
+              <CardContent sx={{ textAlign: "center" }}>
+                <Typography variant="body1">검색 결과가 없습니다.</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ) : (
+          <Grid container spacing={3}>
+            {placeList && placeList.length > 0
+              ? placeList.map((place, index) =>
+                  index < showLimit ? (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                      <Card
+                        style={{ cursor: "pointer" }}
+                        onClick={() => history(`/${type}/${place.placeId}`)}
+                      >
+                        <CardMedia
+                          component="img"
+                          height="300"
+                          image={place.thumbnail}
+                          alt={place.placeName}
                         />
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ) : (
-                  ""
+                        <CardContent>
+                          <Typography
+                            gutterBottom
+                            variant="body1"
+                            sx={{ fontWeight: "bold" }}
+                            component="div"
+                          >
+                            {place.placeName}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            gutterBottom
+                            color="text.secondary"
+                          >
+                            {place.address_short}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {place.startDate} ~ {place.endDate}
+                          </Typography>
+                        </CardContent>
+                        <CardContent>
+                          <Chip
+                            icon={<PlaylistAddIcon />}
+                            label="일정에 추가"
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              if (userInfo.id !== undefined) {
+                                addRouteDetail(place.placeId, type);
+                              } else {
+                                history("/login");
+                              }
+                            }}
+                          />{" "}
+                          <Chip
+                            icon={<LocationSearchingIcon />}
+                            label="주변 검색"
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              setSearchInfo({
+                                ...searchInfo,
+                                criteriaPlace: place,
+                              });
+                              history("/");
+                            }}
+                          />
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ) : (
+                    ""
+                  )
                 )
-              )
-            : ""}
-        </Grid>
-        {/* )} */}
+              : ""}
+          </Grid>
+        )}
       </Container>
     </Container>
   );

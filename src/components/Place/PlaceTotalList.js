@@ -11,7 +11,6 @@ function PlaceTotalList() {
   return (
     <Stack spacing={5}>
       {festival !== null &&
-      festival.length !== 0 &&
       categoryFilter.find((obj) => obj.id === "festival").visible ? (
         <Box>
           <PlaceList placeList={festival} type="festival" limit="4" />
@@ -21,7 +20,6 @@ function PlaceTotalList() {
       )}
 
       {exhibition !== null &&
-      exhibition.length !== 0 &&
       categoryFilter.find((obj) => obj.id === "exhibition").visible ? (
         <Box>
           <PlaceList placeList={exhibition} type="exhibition" limit="4" />
@@ -31,7 +29,6 @@ function PlaceTotalList() {
       )}
 
       {popupstore !== null &&
-      popupstore.length !== 0 &&
       categoryFilter.find((obj) => obj.id === "popup").visible ? (
         <Box>
           <PlaceList placeList={popupstore} type="popup" limit="4" />
@@ -52,7 +49,7 @@ function PlaceTotalList() {
       ) : (
         ""
       )} */}
-      {facility !== null && facility.length !== 0
+      {facility !== null
         ? facility.map((facilityCategory, index) =>
             categoryFilter.find((obj) => obj.id === facilityCategory.type)
               .visible ? (
