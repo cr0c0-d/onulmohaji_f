@@ -49,7 +49,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
             ? "팝업스토어"
             : ""}
         </Typography>
-        {limit !== 999 ? (
+        {placeList.length > 4 && limit !== 999 ? (
           <Button
             size="small"
             variant="contained"
