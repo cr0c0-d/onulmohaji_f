@@ -32,23 +32,6 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
   const { userInfo } = useUser();
   const { searchInfo, setSearchInfo } = useSearchContext();
 
-  // 거리 범위
-  const [distance, setDistance] = useState(1000);
-  const distanceRange = [
-    {
-      value: 1000,
-      label: "1km",
-    },
-    {
-      value: 2000,
-      label: "2km",
-    },
-    {
-      value: 3000,
-      label: "3km",
-    },
-  ];
-
   const addRouteDetail = (placeId) => {
     AuthAPI({
       url: "/api/routeDetail",
@@ -67,11 +50,6 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
     });
   };
 
-  useEffect(() => {
-    if (type === "facility") {
-      setDistance(10000);
-    }
-  }, []);
   return (
     <Container>
       <br />
@@ -84,26 +62,9 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
         }}
       >
         <Typography variant="h5">{typeName}</Typography>
-        {/* {type === "facility" ? (
-          ""
-        ) : (
-          <Grid item>
-            <Box sx={{ width: "200px" }}>
-              <Slider
-                value={distance}
-                step={1000}
-                marks={distanceRange}
-                max={3000}
-                min={1000}
-                onChange={(e) => setDistance(e.target.value)}
-              />
-            </Box>
-          </Grid>
-        )} */}
 
         {facilityList ? (
-          facilityList.filter((facility) => facility.distance <= distance)
-            .length < 5 ? (
+          facilityList.length < 5 ? (
             ""
           ) : limit !== 999 ? (
             showLimit !== 999 ? (
@@ -157,8 +118,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
               </Card>
             </Grid>
           ))
-        ) : facilityList.filter((facility) => facility.distance <= distance)
-            .length === 0 ? (
+        ) : facilityList.length === 0 ? (
           <Grid item sx={{ alignContent: "center", width: "100%" }}>
             <Card>
               <CardContent sx={{ textAlign: "center" }}>
@@ -167,110 +127,105 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
             </Card>
           </Grid>
         ) : (
-          facilityList
-            .filter((facility) => facility.distance <= distance)
-            .map((facility, index) =>
-              index < showLimit && facility.distance <= distance ? (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
-                  <Card
-                    style={{ cursor: "pointer" }}
-                    onClick={() => window.open(facility.placeUrl)}
-                  >
-                    <CardMedia
-                      component="img"
-                      height="300"
-                      image={
-                        facility.thumbnail ||
-                        process.env.REACT_APP_DEFAULT_IMAGE_URL
-                      }
-                      alt={facility.placeName}
-                    />
-                    <CardContent>
-                      <Typography gutterBottom variant="body1" component="div">
-                        <Chip label={facility.placeTypeName} />{" "}
-                        {facility.placeName}
-                      </Typography>
-                      {/* <Typography variant="body2" color="text.secondary">
-                        {facility.categoryName}
-                      </Typography> */}
+          facilityList.map((facility, index) =>
+            index < limit ? (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+                <Card
+                  style={{ cursor: "pointer" }}
+                  onClick={() => window.open(facility.placeUrl)}
+                >
+                  <CardMedia
+                    component="img"
+                    height="300"
+                    image={
+                      facility.thumbnail ||
+                      process.env.REACT_APP_DEFAULT_IMAGE_URL
+                    }
+                    alt={facility.placeName}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="body1" component="div">
+                      <Chip label={facility.placeTypeName} />{" "}
+                      {facility.placeName}
+                    </Typography>
 
-                      {type === "facility" ? (
-                        ""
-                      ) : (
-                        <Typography variant="body2" color="text.secondary">
-                          <Chip
-                            label={
-                              facility.distance > 999
-                                ? (facility.distance / 1000)
-                                    .toString()
-                                    .substring(0, 3) + "km"
-                                : facility.distance + "m"
-                            }
-                            size="small"
-                            variant="outlined"
-                          />
-                        </Typography>
-                      )}
-                    </CardContent>
-                    <CardContent sx={{ padding: "0px 16px" }}>
-                      <Chip
-                        icon={<StarIcon />}
-                        label={
-                          facility.scoresum != null &&
-                          facility.scorecnt != null &&
-                          facility.scoresum !== 0 &&
-                          facility.scorecnt !== 0
-                            ? Math.floor(
-                                (facility.scoresum / facility.scorecnt) * 10
-                              ) /
-                                10 +
-                              " (" +
-                              facility.scorecnt +
-                              ")"
-                            : "별점 정보 없음"
-                        }
-                        size="small"
-                        color="warning"
-                      />
-                    </CardContent>
-                    <CardContent>
-                      <Chip
-                        icon={<PlaylistAddIcon />}
-                        label="일정에 추가"
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          if (userInfo.id !== undefined) {
-                            addRouteDetail(facility.id);
-                          } else {
-                            history("/login");
+                    {type === "facility" ? (
+                      ""
+                    ) : (
+                      <Typography variant="body2" color="text.secondary">
+                        <Chip
+                          label={
+                            facility.distance > 999
+                              ? (facility.distance / 1000)
+                                  .toString()
+                                  .substring(0, 3) + "km"
+                              : facility.distance + "m"
                           }
-                        }}
-                      />{" "}
-                      <Chip
-                        icon={<LocationSearchingIcon />}
-                        label="주변 검색"
-                        variant="outlined"
-                        color="primary"
-                        size="small"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setSearchInfo({
-                            ...searchInfo,
-                            criteriaPlace: facility,
-                          });
-                          history("/");
-                        }}
-                      />
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ) : (
-                ""
-              )
+                          size="small"
+                          variant="outlined"
+                        />
+                      </Typography>
+                    )}
+                  </CardContent>
+                  <CardContent sx={{ padding: "0px 16px" }}>
+                    <Chip
+                      icon={<StarIcon />}
+                      label={
+                        facility.scoresum != null &&
+                        facility.scorecnt != null &&
+                        facility.scoresum !== 0 &&
+                        facility.scorecnt !== 0
+                          ? Math.floor(
+                              (facility.scoresum / facility.scorecnt) * 10
+                            ) /
+                              10 +
+                            " (" +
+                            facility.scorecnt +
+                            ")"
+                          : "별점 정보 없음"
+                      }
+                      size="small"
+                      color="warning"
+                    />
+                  </CardContent>
+                  <CardContent>
+                    <Chip
+                      icon={<PlaylistAddIcon />}
+                      label="일정에 추가"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        if (userInfo.id !== undefined) {
+                          addRouteDetail(facility.id);
+                        } else {
+                          history("/login");
+                        }
+                      }}
+                    />{" "}
+                    <Chip
+                      icon={<LocationSearchingIcon />}
+                      label="주변 검색"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSearchInfo({
+                          ...searchInfo,
+                          criteriaPlace: facility,
+                        });
+                        history("/");
+                      }}
+                    />
+                  </CardContent>
+                </Card>
+              </Grid>
+            ) : (
+              ""
             )
+          )
         )}
       </Grid>
       <br />
