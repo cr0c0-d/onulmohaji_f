@@ -19,6 +19,7 @@ export default function CategoryFilter({ categoryFilter, setCategoryFilter }) {
           <FormGroup>
             {categoryFilter.map((category, index) => (
               <FormControlLabel
+                key={category.id}
                 control={
                   <Checkbox
                     checked={category.visible}
