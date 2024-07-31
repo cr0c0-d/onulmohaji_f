@@ -1,5 +1,7 @@
 import {
   Box,
+  Button,
+  Checkbox,
   Container,
   Divider,
   FormControl,
@@ -13,6 +15,7 @@ import {
   RadioGroup,
   Select,
   Slider,
+  Stack,
   Typography,
 } from "@mui/material";
 import { useSearchContext } from "../../SearchContext";
@@ -22,7 +25,8 @@ import { useEffect, useState } from "react";
 import CategoryFilter from "../Place/SearchInfo/CategoryFilter";
 
 export default function MyPage() {
-  const { localcodes, categoryFilter } = useSearchContext();
+  const { localcodes, categoryFilter, setMemberSearchInfo } =
+    useSearchContext();
   const AuthAPI = useAuthAPI();
   const { userInfo } = useUser();
 
@@ -56,47 +60,83 @@ export default function MyPage() {
     }
   }, [searchInfo, localcodes]);
 
+  useEffect(() => {
+    if (searchInfo) {
+      const categoryJson = JSON.parse(searchInfo.categoryFilter);
+      // categoryJson.map((falseCategory) => {
+      //   let category = categoryFilter.find((obj)=> obj.id===falseCategory.id);
+      //   setCategoryFilter({...categoryFilter, })
+      // });
+    }
+  }, [searchInfo]);
+
   const setCategoryFilter = (categoryFilter) => {
-    setSearchInfo({ ...searchInfo, categoryFilter });
+    let filterJson = {};
+    categoryFilter.map((category) => {
+      if (!category.visible) {
+        filterJson[category.id] = false;
+      }
+    });
+    setSearchInfo({
+      ...searchInfo,
+      categoryFilter: JSON.stringify(filterJson),
+    });
+  };
+
+  const updateMemberSearchInfo = () => {
+    AuthAPI({
+      url: `/api/memberSearchInfo/${userInfo.id}`,
+      method: "PUT",
+      data: searchInfo,
+      success: (result) => {
+        setSearchInfo(result.data);
+        setMemberSearchInfo(result.data);
+      },
+      fail: () => {
+        console.log("FAIL");
+      },
+    });
   };
   return (
     <Container>
       <Box>
-        <Typography variant="h5" gutterBottom>
+        <br />
+        <Typography variant="h4" gutterBottom>
           검색조건 설정
         </Typography>
 
         {searchInfo && localcodes && pickedLocal_1 ? (
-          <FormGroup>
-            {/* 날짜 */}
-            <FormControl>
-              <FormLabel id="defaultDateLabel">날짜 선택 기본값</FormLabel>
-              <RadioGroup
-                aria-labelledby="defaultDateLabel"
-                value={searchInfo.defaultDate}
-                name="defaultDate"
-                onChange={(e) => {
-                  setSearchInfo({
-                    ...searchInfo,
-                    defaultDate: e.currentTarget.value,
-                  });
-                }}
-              >
-                <FormControlLabel
-                  value="today"
-                  control={<Radio />}
-                  label="오늘 날짜 (기본값)"
-                />
-                <FormControlLabel
-                  value="route"
-                  control={<Radio />}
-                  label="가장 가까운 미래의 일정 날짜"
-                />
-              </RadioGroup>
-            </FormControl>
+          <Stack spacing={3}>
+            <FormGroup>
+              {/* 날짜 */}
+              <FormControl>
+                <FormLabel id="defaultDateLabel">날짜 선택 기본값</FormLabel>
 
+                <RadioGroup
+                  aria-labelledby="defaultDateLabel"
+                  value={searchInfo.defaultDate}
+                  name="defaultDate"
+                  onChange={(e) => {
+                    setSearchInfo({
+                      ...searchInfo,
+                      defaultDate: e.currentTarget.value,
+                    });
+                  }}
+                >
+                  <FormControlLabel
+                    value="today"
+                    control={<Radio />}
+                    label="오늘 날짜 (기본값)"
+                  />
+                  <FormControlLabel
+                    value="route"
+                    control={<Radio />}
+                    label="가장 가까운 미래의 일정 날짜"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </FormGroup>
             <Divider />
-            <br />
             {/* 지역 */}
             {localcodes && pickedLocal_1 ? (
               <Grid item>
@@ -153,9 +193,7 @@ export default function MyPage() {
             ) : (
               ""
             )}
-            <br />
             <Divider />
-            <br />
 
             {/* 거리 */}
 
@@ -200,12 +238,42 @@ export default function MyPage() {
               </Box>
             </Grid>
 
+            <Divider />
             {/* 카테고리 */}
-            <CategoryFilter
+            {/* <CategoryFilter
               categoryFilter={categoryFilter}
               setCategoryFilter={setCategoryFilter}
-            />
-          </FormGroup>
+            /> */}
+            <FormGroup>
+              <FormLabel id="categoryFilterLabel">카테고리 필터</FormLabel>
+              {categoryFilter.map((category, index) => (
+                <FormControlLabel
+                  key={category.id}
+                  control={
+                    <Checkbox
+                      checked={category.visible}
+                      onChange={(e) => {
+                        const updatedArray = [...categoryFilter];
+                        updatedArray[index].visible = e.target.checked;
+                        setCategoryFilter(updatedArray);
+                      }}
+                      name={category.id}
+                    />
+                  }
+                  label={category.name}
+                />
+              ))}
+            </FormGroup>
+            <Divider />
+            <Button
+              variant="contained"
+              onClick={() => {
+                updateMemberSearchInfo();
+              }}
+            >
+              저장
+            </Button>
+          </Stack>
         ) : (
           ""
         )}
