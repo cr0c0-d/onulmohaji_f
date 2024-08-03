@@ -285,6 +285,7 @@ export const SearchProvider = ({ children }) => {
         popupstore,
         festival,
         facility,
+        setMemberSearchInfo,
       }}
     >
       {children}
