@@ -21,8 +21,8 @@ import { useAuthAPI } from "../../AuthAPI";
 import CustomPlaceDialog from "./CustomPlaceDialog";
 import PlaceInfoSmall from "../Place/PlaceInfoSmall";
 import CustomPlaceAdd from "./CustomPlaceAdd";
-import CustomPlaceDetail from "./CustomPlaceDetail";
 import CustomPlaceSmall from "./CustomPlaceSmall";
+import CustomPlaceDetailMap from "./CustomPlaceDetailMap";
 
 const CustomPlaceView = () => {
   const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -47,7 +47,6 @@ const CustomPlaceView = () => {
       data: null,
       success: (result) => {
         setCustomPlaceList(result.data);
-        console.log(window.location.pathname);
       },
       fail: () => {
         console.log("fail");
@@ -122,7 +121,9 @@ const CustomPlaceView = () => {
             )}
             {selectedCustomPlace ? (
               <Box sx={{ width: "50%", display: "flex" }}>
-                <CustomPlaceDetail customPlace={selectedCustomPlace} />
+                <Box sx={{ padding: "10px", width: "100%" }}>
+                  <CustomPlaceDetailMap customPlace={selectedCustomPlace} />
+                </Box>
               </Box>
             ) : (
               ""
