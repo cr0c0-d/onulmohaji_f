@@ -70,6 +70,8 @@ export const SearchProvider = ({ children }) => {
   // 로그인회원 검색조건 설정값
   const [memberSearchInfo, setMemberSearchInfo] = useState(null);
 
+  const [initYn, setInitYn] = useState(false);
+
   /********************************************* function ***************************************************/
   // 지역코드 목록 조회 API
   const getLocalcodes = async () => {
@@ -131,13 +133,16 @@ export const SearchProvider = ({ children }) => {
         localcode: memberSearchInfo.localcodeId,
         distance: memberSearchInfo.distance,
       });
+      setInitYn(true);
     }
   }, [memberSearchInfo]);
 
   // 첫 로딩시 지역코드 목록 조회
   useEffect(() => {
-    getLocalcodes();
-  }, []);
+    if (settingDone) {
+      getLocalcodes();
+    }
+  }, [settingDone]);
 
   const getFestivalList = async () => {
     const axiosResponse = await axios({
@@ -258,7 +263,7 @@ export const SearchProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    if (searchInfo.date !== null && searchInfo.localcode !== null) {
+    if (searchInfo.date !== null && searchInfo.localcode !== null && initYn) {
       setPopupstore(null);
       setExhibition(null);
       setFestival(null);
