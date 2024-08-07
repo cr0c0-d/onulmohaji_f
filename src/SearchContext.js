@@ -63,14 +63,14 @@ export const SearchProvider = ({ children }) => {
   // 지역코드
   const [localcodes, setLocalcodes] = useState(null);
 
-  const { userInfo, settingDone } = useUser();
+  const { userInfo, userInitYn } = useUser();
 
   const AuthAPI = useAuthAPI();
 
   // 로그인회원 검색조건 설정값
   const [memberSearchInfo, setMemberSearchInfo] = useState(null);
 
-  const [initYn, setInitYn] = useState(false);
+  const [searchInitYn, setSearchInitYn] = useState(false);
 
   /********************************************* function ***************************************************/
   // 지역코드 목록 조회 API
@@ -109,13 +109,14 @@ export const SearchProvider = ({ children }) => {
   useEffect(() => {
     if (localcodes !== null) {
       // 로그인 회원정보의 지역정보 불러오는 로직
-      if (userInfo) {
+      if (userInfo && userInfo.id) {
         // 로그인 회원 정보가 있으면
         getMemberSearchInfo();
       } else {
         // 로그인정보가 없으면 기본값 서울시 강남구
         setPickedLocal_1(11);
         setSearchInfo({ ...searchInfo, localcode: 11680 });
+        setSearchInitYn(true);
       }
     }
   }, [localcodes]);
@@ -133,16 +134,17 @@ export const SearchProvider = ({ children }) => {
         localcode: memberSearchInfo.localcodeId,
         distance: memberSearchInfo.distance,
       });
-      setInitYn(true);
+      setSearchInitYn(true);
     }
   }, [memberSearchInfo]);
 
   // 첫 로딩시 지역코드 목록 조회
   useEffect(() => {
-    if (settingDone) {
+    console.log(userInitYn);
+    if (userInitYn) {
       getLocalcodes();
     }
-  }, [settingDone]);
+  }, [userInitYn]);
 
   const getFestivalList = async () => {
     const axiosResponse = await axios({
@@ -263,7 +265,13 @@ export const SearchProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    if (searchInfo.date !== null && searchInfo.localcode !== null && initYn) {
+    console.log("searchInitYn");
+    console.log(searchInitYn);
+    if (
+      searchInfo.date !== null &&
+      searchInfo.localcode !== null &&
+      searchInitYn
+    ) {
       setPopupstore(null);
       setExhibition(null);
       setFestival(null);
@@ -274,7 +282,7 @@ export const SearchProvider = ({ children }) => {
       getFestivalList();
       getFacilityList();
     }
-  }, [searchInfo]);
+  }, [searchInfo, searchInitYn]);
 
   return (
     <SearchContext.Provider
@@ -291,6 +299,7 @@ export const SearchProvider = ({ children }) => {
         festival,
         facility,
         setMemberSearchInfo,
+        searchInitYn,
       }}
     >
       {children}

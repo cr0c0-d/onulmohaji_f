@@ -85,8 +85,12 @@ export default function PlaceSearchInfo() {
   }
 
   useEffect(() => {
-    findRouteDateList();
-  }, []);
+    if (userInfo && userInfo.id) {
+      findRouteDateList();
+    } else {
+      setScheduledDays([]);
+    }
+  }, [userInfo]);
 
   return (
     <Stack spacing={3}>

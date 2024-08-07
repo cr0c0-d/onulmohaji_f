@@ -14,8 +14,8 @@ export const RouteProvider = ({ children }) => {
   const [route, setRoute] = useState(null);
   const [routeDate, setRouteDate] = useState(dayjs(new Date()));
   const [openDrawer, setOpenDrawer] = useState(false);
-  const { userInfo, settingDone } = useUser();
-  const { searchInfo } = useSearchContext();
+  const { userInfo, userInitYn } = useUser();
+  const { searchInfo, searchInitYn } = useSearchContext();
   const AuthAPI = useAuthAPI();
 
   const getRoute = () => {
@@ -35,10 +35,10 @@ export const RouteProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (settingDone && userInfo.id !== undefined) {
+    if (searchInitYn && userInfo && userInfo.id) {
       getRoute();
     }
-  }, [userInfo, routeDate, settingDone]);
+  }, [userInfo, routeDate, searchInitYn]);
 
   useEffect(() => {
     if (searchInfo.date != null && searchInfo.date != routeDate) {
