@@ -11,7 +11,7 @@ import Signup from "./components/Member/Signup";
 import Login from "./components/Member/Login";
 import { RouteProvider } from "./RouteContext";
 import { SearchProvider } from "./SearchContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { ThemeProvider, createTheme } from "@mui/material";
 import PlaceListByType from "./components/Place/PlaceListByType";
@@ -35,83 +35,75 @@ const theme = createTheme({
 });
 
 function App() {
-  const [settingDone, setSettingDone] = useState();
   return (
     <ThemeProvider theme={theme}>
-      <UserProvider settingDone={settingDone} setSettingDone={setSettingDone}>
-        {settingDone === true ? (
-          <SearchProvider>
-            <RouteProvider>
-              <LocalizationProvider
-                dateAdapter={AdapterDayjs}
-                adapterLocale="ko"
-              >
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Layout />}>
-                      <Route exact path="/" element={<PlaceSearchMain />} />
+      <UserProvider>
+        <SearchProvider>
+          <RouteProvider>
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ko">
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route exact path="/" element={<PlaceSearchMain />} />
+                    <Route
+                      path="/festival"
+                      element={<Navigate to="/festival/list" />}
+                    />
+                    <Route
+                      path="/festival/:placeId"
+                      element={<PlaceDetail placeType="festival" />}
+                    />
+                    <Route
+                      path="/exhibition"
+                      element={<Navigate to="/exhibition/list" />}
+                    />
+                    <Route
+                      path="/exhibition/:placeId"
+                      element={<PlaceDetail placeType="exhibition" />}
+                    />
+                    <Route
+                      path="/popup"
+                      element={<Navigate to="/popup/list" />}
+                    />
+                    <Route
+                      path="/popup/:placeId"
+                      element={<PlaceDetail placeType="popup" />}
+                    />
+                    <Route
+                      path="/festival/list"
+                      element={<PlaceListByType type="festival" />}
+                    />
+                    <Route
+                      path="/exhibition/list"
+                      element={<PlaceListByType type="exhibition" />}
+                    />
+                    <Route
+                      path="/popup/list"
+                      element={<PlaceListByType type="popup" />}
+                    />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route
+                      path="/route/permission/:shareCode"
+                      element={<RoutePermission />}
+                    />
+                    <Route
+                      path="/customPlace/list"
+                      element={<CustomPlaceView />}
+                    />
+                    <Route path="/myRoute/list/" element={<MyRoute />}>
                       <Route
-                        path="/festival"
-                        element={<Navigate to="/festival/list" />}
+                        path="/myRoute/list/:routeId"
+                        element={<MyRoute />}
                       />
-                      <Route
-                        path="/festival/:placeId"
-                        element={<PlaceDetail placeType="festival" />}
-                      />
-                      <Route
-                        path="/exhibition"
-                        element={<Navigate to="/exhibition/list" />}
-                      />
-                      <Route
-                        path="/exhibition/:placeId"
-                        element={<PlaceDetail placeType="exhibition" />}
-                      />
-                      <Route
-                        path="/popup"
-                        element={<Navigate to="/popup/list" />}
-                      />
-                      <Route
-                        path="/popup/:placeId"
-                        element={<PlaceDetail placeType="popup" />}
-                      />
-                      <Route
-                        path="/festival/list"
-                        element={<PlaceListByType type="festival" />}
-                      />
-                      <Route
-                        path="/exhibition/list"
-                        element={<PlaceListByType type="exhibition" />}
-                      />
-                      <Route
-                        path="/popup/list"
-                        element={<PlaceListByType type="popup" />}
-                      />
-                      <Route path="/signup" element={<Signup />} />
-                      <Route path="/login" element={<Login />} />
-                      <Route
-                        path="/route/permission/:shareCode"
-                        element={<RoutePermission />}
-                      />
-                      <Route
-                        path="/customPlace/list"
-                        element={<CustomPlaceView />}
-                      />
-                      <Route path="/myRoute/list/" element={<MyRoute />}>
-                        <Route
-                          path="/myRoute/list/:routeId"
-                          element={<MyRoute />}
-                        />
-                      </Route>
-                      <Route path="/myPage" element={<MyPage />} />
                     </Route>
-                  </Routes>
-                </BrowserRouter>
-              </LocalizationProvider>
-            </RouteProvider>
-          </SearchProvider>
-        ) : (
-          ""
-        )}
+                    <Route path="/myPage" element={<MyPage />} />
+                  </Route>
+                </Routes>
+              </BrowserRouter>
+            </LocalizationProvider>
+          </RouteProvider>
+        </SearchProvider>
       </UserProvider>
     </ThemeProvider>
   );

@@ -5,10 +5,10 @@ const UserContext = createContext();
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ settingDone, setSettingDone, children }) => {
+export const UserProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState({});
   const [accessToken, setAccessToken] = useState(false);
-  //const [settingDone, setSettingDone] = useState(false);
+  const [userInitYn, setUserInitYn] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -23,13 +23,15 @@ export const UserProvider = ({ settingDone, setSettingDone, children }) => {
   }, []);
 
   useEffect(() => {
-    // 액세스토큰이 있으면 사용자 정보 조회
-    if (accessToken.length > 0) {
-      findMemberByAccessToken(accessToken);
-    } else if (accessToken.length === 0) {
-      setSettingDone(true);
+    if (!userInitYn) {
+      // 액세스토큰이 있으면 사용자 정보 조회
+      if (accessToken.length > 0) {
+        findMemberByAccessToken(accessToken);
+      } else if (accessToken.length === 0) {
+        setUserInitYn(true);
+      }
     }
-  }, [accessToken]);
+  }, [accessToken, userInitYn]);
 
   const findMemberByAccessToken = async (token) => {
     if (token === undefined) {
@@ -59,11 +61,11 @@ export const UserProvider = ({ settingDone, setSettingDone, children }) => {
 
   useEffect(() => {
     if (
-      !settingDone &&
+      !userInitYn &&
       userInfo !== undefined &&
       userInfo.nickname !== undefined
     ) {
-      setSettingDone(true);
+      setUserInitYn(true);
     }
   }, [userInfo]);
 
@@ -110,7 +112,7 @@ export const UserProvider = ({ settingDone, setSettingDone, children }) => {
 
   return (
     <UserContext.Provider
-      value={{ userInfo, setUserInfo, logoutAPI, settingDone }}
+      value={{ userInfo, setUserInfo, logoutAPI, userInitYn }}
     >
       {children}
     </UserContext.Provider>
