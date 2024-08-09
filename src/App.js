@@ -20,6 +20,7 @@ import CustomPlaceList from "./components/CustomPlace/CustomPlaceList";
 import CustomPlaceView from "./components/CustomPlace/CustomPlaceView";
 import MyRoute from "./components/Route/MyRoute";
 import MyPage from "./components/Member/MyPage";
+import FacilityList from "./components/Place/FacilityList";
 
 const theme = createTheme({
   typography: {
@@ -80,6 +81,10 @@ function App() {
                     <Route
                       path="/popup/list"
                       element={<PlaceListByType type="popup" />}
+                    />
+                    <Route
+                      path="/facility/list/:subType"
+                      element={<PlaceListByType type="facility" />}
                     />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
