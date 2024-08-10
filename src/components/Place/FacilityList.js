@@ -72,7 +72,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                 size="small"
                 variant="contained"
                 onClick={() => {
-                  history("/facility/list");
+                  history(`/facility/list/${type}`);
                 }}
               >
                 전체보기

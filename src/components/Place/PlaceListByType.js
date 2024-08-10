@@ -26,7 +26,11 @@ export default function PlaceListByType({ type }) {
             </Button>
           </div>
           {type === "facility" ? (
-            <FacilityList facilityList={facility} limit={999} />
+            <FacilityList
+              facilityList={facility}
+              limit={999}
+              type={window.location.pathname.replace("/facility/list/")}
+            />
           ) : (
             <PlaceList
               placeList={
