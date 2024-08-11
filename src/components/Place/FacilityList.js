@@ -149,7 +149,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                       {facility.placeName}
                     </Typography>
 
-                    {type === "facility" ? (
+                    {searchInfo.criteriaPlace == null ? (
                       ""
                     ) : (
                       <Typography variant="body2" color="text.secondary">

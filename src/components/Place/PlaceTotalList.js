@@ -56,7 +56,7 @@ function PlaceTotalList() {
               <Box>
                 <FacilityList
                   facilityList={facilityCategory.facilityList}
-                  type={facilityCategory.typeName}
+                  type={facilityCategory.type}
                   typeName={facilityCategory.typeName}
                   limit={4}
                   key={index}
