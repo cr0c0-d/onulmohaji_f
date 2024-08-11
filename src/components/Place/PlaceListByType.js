@@ -27,9 +27,22 @@ export default function PlaceListByType({ type }) {
           </div>
           {type === "facility" ? (
             <FacilityList
-              facilityList={facility}
+              facilityList={
+                facility.find(
+                  (obj) =>
+                    obj.type ===
+                    window.location.pathname.replace("/facility/list/", "")
+                ).facilityList
+              }
               limit={999}
-              type={window.location.pathname.replace("/facility/list/")}
+              type={window.location.pathname.replace("/facility/list/", "")}
+              typeName={
+                facility.find(
+                  (obj) =>
+                    obj.type ===
+                    window.location.pathname.replace("/facility/list/", "")
+                ).typeName
+              }
             />
           ) : (
             <PlaceList

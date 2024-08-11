@@ -49,7 +49,6 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
       },
     });
   };
-
   return (
     <Container>
       <br />
