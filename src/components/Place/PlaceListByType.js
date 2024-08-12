@@ -5,11 +5,15 @@ import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import { useNavigate } from "react-router-dom";
 import PlaceSearchInfo from "./SearchInfo/PlaceSearchInfo";
 import FacilityList from "./FacilityList";
+import { useEffect } from "react";
 
 export default function PlaceListByType({ type }) {
   const { searchInfo, festival, exhibition, popupstore, facility } =
     useSearchContext();
   const history = useNavigate();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Container>
       {searchInfo !== undefined ? (
