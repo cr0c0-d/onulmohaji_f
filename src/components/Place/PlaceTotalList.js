@@ -51,6 +51,7 @@ function PlaceTotalList() {
       )} */}
       {facility !== null
         ? facility.map((facilityCategory, index) =>
+            facilityCategory.type === "etc" ||
             categoryFilter.find((obj) => obj.id === facilityCategory.type)
               .visible ? (
               <Box>
