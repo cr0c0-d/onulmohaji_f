@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import TurnedInTwoToneIcon from "@mui/icons-material/TurnedInTwoTone";
+import TurnedInNotTwoToneIcon from "@mui/icons-material/TurnedInNotTwoTone";
 import { useNavigate } from "react-router-dom";
 import { useAuthAPI } from "../../AuthAPI";
 import { useRoute } from "../../RouteContext";
@@ -81,7 +83,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                   index < showLimit ? (
                     <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                       <Card
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: "pointer", position: "relative" }}
                         onClick={() => history(`/${type}/${place.placeId}`)}
                       >
                         <CardMedia
@@ -90,6 +92,26 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                           image={place.thumbnail}
                           alt={place.placeName}
                         />
+                        {/* 북마크 오버레이 이미지 */}
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            top: 0,
+                            right: 0,
+                            zIndex: 1, // 카드의 다른 요소 위에 표시되도록 z-index 설정
+                          }}
+                        >
+                          <IconButton
+                            size="large"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {place.bookmark ? (
+                              <TurnedInTwoToneIcon />
+                            ) : (
+                              <TurnedInNotTwoToneIcon />
+                            )}
+                          </IconButton>
+                        </Box>
                         <CardContent>
                           <Typography
                             gutterBottom

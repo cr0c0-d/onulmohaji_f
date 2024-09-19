@@ -18,6 +18,8 @@ import {
 import StarIcon from "@mui/icons-material/Star";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
+import TurnedInTwoToneIcon from "@mui/icons-material/TurnedInTwoTone";
+import TurnedInNotTwoToneIcon from "@mui/icons-material/TurnedInNotTwoTone";
 import { useNavigate } from "react-router-dom";
 import { useRoute } from "../../RouteContext";
 import { useAuthAPI } from "../../AuthAPI";
@@ -130,7 +132,7 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
             index < limit ? (
               <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                 <Card
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", position: "relative" }}
                   onClick={() => window.open(facility.placeUrl)}
                 >
                   <CardMedia
@@ -142,6 +144,26 @@ const FacilityList = ({ facilityList, type, typeName, limit = 999 }) => {
                     }
                     alt={facility.placeName}
                   />
+                  {/* 북마크 오버레이 이미지 */}
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 0,
+                      right: 0,
+                      zIndex: 1, // 카드의 다른 요소 위에 표시되도록 z-index 설정
+                    }}
+                  >
+                    <IconButton
+                      size="large"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {facility.bookmark ? (
+                        <TurnedInTwoToneIcon />
+                      ) : (
+                        <TurnedInNotTwoToneIcon />
+                      )}
+                    </IconButton>
+                  </Box>
                   <CardContent>
                     <Typography gutterBottom variant="body1" component="div">
                       <Chip label={facility.placeTypeName} />{" "}
