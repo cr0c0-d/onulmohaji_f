@@ -111,6 +111,25 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                           </Typography>
                         </CardContent>
                         <CardContent>
+                          {searchInfo.criteriaPlace == null ? (
+                            ""
+                          ) : (
+                            <Typography variant="body2" color="text.secondary">
+                              <Chip
+                                label={
+                                  place.distance > 999
+                                    ? (place.distance / 1000)
+                                        .toString()
+                                        .substring(0, 3) + "km"
+                                    : place.distance + "m"
+                                }
+                                size="small"
+                                variant="outlined"
+                              />
+                            </Typography>
+                          )}
+                        </CardContent>
+                        <CardContent>
                           <Chip
                             icon={<PlaylistAddIcon />}
                             label="일정에 추가"
