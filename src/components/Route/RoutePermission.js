@@ -16,7 +16,7 @@ import { useSearchContext } from "../../SearchContext";
 import dayjs from "dayjs";
 
 export default function RoutePermission() {
-  const { userInfo } = useUser();
+  const { userInfo, userInitYn } = useUser();
   const [targetRoute, setTargetRoute] = useState(null);
   const { searchInfo, setSearchInfo } = useSearchContext();
 
@@ -42,6 +42,7 @@ export default function RoutePermission() {
   }, []);
 
   const confirmUserInfo = () => {
+    console.log(userInfo);
     // 로그인상태인지 확인
     if (userInfo === null || userInfo.id === undefined) {
       // 비로그인 -> 로그인 페이지로
@@ -50,10 +51,12 @@ export default function RoutePermission() {
   };
 
   useEffect(() => {
-    if (targetRoute !== null) {
-      confirmUserInfo();
+    if (userInitYn) {
+      if (targetRoute !== null) {
+        confirmUserInfo();
+      }
     }
-  }, [targetRoute]);
+  }, [targetRoute, userInitYn]);
 
   const addRoutePermission = () => {
     AuthAPI({
