@@ -62,6 +62,16 @@ const CustomPlaceView = () => {
     findCustomPlaceList();
   }, []);
 
+  useEffect(() => {
+    if (customPlaceList !== null) {
+      if (
+        selectedCustomPlace === null ||
+        customPlaceList.find((obj) => obj === selectedCustomPlace) === undefined
+      ) {
+        setSelectedCustomPlace(customPlaceList[0]);
+      }
+    }
+  }, [customPlaceList]);
   return (
     <Container>
       <Box
