@@ -140,7 +140,6 @@ export const SearchProvider = ({ children }) => {
 
   // 첫 로딩시 지역코드 목록 조회
   useEffect(() => {
-    console.log(userInitYn);
     if (userInitYn) {
       getLocalcodes();
     }
@@ -265,8 +264,6 @@ export const SearchProvider = ({ children }) => {
     }
   };
   useEffect(() => {
-    console.log("searchInitYn");
-    console.log(searchInitYn);
     if (
       searchInfo.date !== null &&
       searchInfo.localcode !== null &&

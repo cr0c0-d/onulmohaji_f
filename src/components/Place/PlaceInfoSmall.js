@@ -87,9 +87,10 @@ export default function PlaceInfoSmall({
               />
             )}
           </Typography>
-          {openDialog !== undefined ? (
+          {
+            //openDialog !== undefined ? (
             <Box sx={{ display: "inline" }}>
-              <Chip
+              {/* <Chip
                 icon={<PlaylistAddIcon />}
                 label="일정에 추가"
                 variant="outlined"
@@ -100,7 +101,7 @@ export default function PlaceInfoSmall({
 
                   addRouteDetail(placeDetail.placeId, placeDetail.placeType);
                 }}
-              />
+              /> */}
 
               <Chip
                 icon={<LocationSearchingIcon />}
@@ -118,9 +119,10 @@ export default function PlaceInfoSmall({
                 }}
               />
             </Box>
-          ) : (
-            ""
-          )}
+            // ) : (
+            //   ""
+            // )
+          }
         </Stack>
       </CardContent>
       <CardContent
