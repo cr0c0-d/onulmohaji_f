@@ -32,6 +32,20 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
   const { userInfo } = useUser();
   const { searchInfo, setSearchInfo } = useSearchContext();
 
+  const toggleBookmark = (placeType, placeId) => {
+    AuthAPI({
+      url: `/api/bookmark`,
+      method: "POST",
+      data: { placeType: placeType, placeId: placeId },
+      success: (response) => {
+        console.log(response);
+      },
+      fail: () => {
+        console.log("fail");
+      },
+    });
+  };
+
   return (
     <Container>
       <Box
@@ -103,7 +117,10 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                         >
                           <IconButton
                             size="large"
-                            onClick={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleBookmark(place.placeType, place.placeId);
+                            }}
                           >
                             {place.bookmark ? (
                               <TurnedInTwoToneIcon />
