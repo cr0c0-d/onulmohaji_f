@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import LocationSearchingIcon from "@mui/icons-material/LocationSearching";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-import TurnedInTwoToneIcon from "@mui/icons-material/TurnedInTwoTone";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
 import TurnedInNotTwoToneIcon from "@mui/icons-material/TurnedInNotTwoTone";
 import { useNavigate } from "react-router-dom";
 import { useAuthAPI } from "../../AuthAPI";
@@ -38,7 +38,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
       method: "POST",
       data: { placeType: placeType, placeId: placeId },
       success: (response) => {
-        console.log(response);
+        console.log(response.data);
       },
       fail: () => {
         console.log("fail");
@@ -123,7 +123,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                             }}
                           >
                             {place.bookmark ? (
-                              <TurnedInTwoToneIcon />
+                              <BookmarkIcon color="primary" />
                             ) : (
                               <TurnedInNotTwoToneIcon />
                             )}
