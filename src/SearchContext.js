@@ -176,24 +176,23 @@ export const SearchProvider = ({ children }) => {
   };
 
   const getExhibitionList = async () => {
-    const axiosResponse = await axios({
-      url: `${
-        process.env.REACT_APP_API_ROOT
-      }/api/exhibition/list?date=${searchInfo.date.format(
-        "YYYY-MM-DD"
-      )}&latitude=${
-        searchInfo.criteriaPlace !== null
-          ? searchInfo.criteriaPlace.latitude
-          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
-      }
-      &longitude=${
-        searchInfo.criteriaPlace !== null
-          ? searchInfo.criteriaPlace.longitude
-          : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
-      }
+    const url = `/api/exhibition/list?date=${searchInfo.date.format(
+      "YYYY-MM-DD"
+    )}&latitude=${
+      searchInfo.criteriaPlace !== null
+        ? searchInfo.criteriaPlace.latitude
+        : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+    }&longitude=${
+      searchInfo.criteriaPlace !== null
+        ? searchInfo.criteriaPlace.longitude
+        : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
+    }
       ${
         searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }&distance=${searchInfo.distance}`,
+      }&distance=${searchInfo.distance}`;
+
+    const axiosResponse = await axios({
+      url: `${process.env.REACT_APP_API_ROOT}${url}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -207,43 +206,55 @@ export const SearchProvider = ({ children }) => {
   };
 
   const getPopupstoreList = async () => {
-    const axiosResponse = await axios({
-      url: `${
-        process.env.REACT_APP_API_ROOT
-      }/api/popup/list?date=${searchInfo.date.format("YYYY-MM-DD")}&latitude=${
-        searchInfo.criteriaPlace !== null
-          ? searchInfo.criteriaPlace.latitude
-          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+    const url = `/api/popup/list?date=${searchInfo.date.format(
+      "YYYY-MM-DD"
+    )}&latitude=${
+      searchInfo.criteriaPlace !== null
+        ? searchInfo.criteriaPlace.latitude
+        : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+    }&longitude=${
+      searchInfo.criteriaPlace !== null
+        ? searchInfo.criteriaPlace.longitude
+        : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
+    }${
+      searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
+    }&distance=${searchInfo.distance}`;
+
+    if (userInfo !== null) {
+      AuthAPI({
+        url: url,
+        method: "GET",
+        data: null,
+        success: (response) => {
+          setPopupstore(response.data);
+        },
+        fail: () => {
+          console.log("fail");
+        },
+      });
+    } else {
+      const axiosResponse = await axios({
+        url: `${process.env.REACT_APP_API_ROOT}${url}`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).catch((error) => {
+        console.log(error);
+      });
+
+      if (axiosResponse) {
+        setPopupstore(axiosResponse.data);
       }
-      &longitude=${
-        searchInfo.criteriaPlace !== null
-          ? searchInfo.criteriaPlace.longitude
-          : localcodes.find((obj) => obj.id === searchInfo.localcode).longitude
-      }
-      ${
-        searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }&distance=${searchInfo.distance}`,
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).catch((error) => {
-      console.log(error);
-    });
-    if (axiosResponse) {
-      setPopupstore(axiosResponse.data);
     }
   };
 
   const getFacilityList = async () => {
-    const axiosResponse = await axios({
-      url: `${
-        process.env.REACT_APP_API_ROOT
-      }/api/facility/local/list?latitude=${
-        searchInfo.criteriaPlace !== null
-          ? searchInfo.criteriaPlace.latitude
-          : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
-      }
+    const url = `/api/facility/local/list?latitude=${
+      searchInfo.criteriaPlace !== null
+        ? searchInfo.criteriaPlace.latitude
+        : localcodes.find((obj) => obj.id === searchInfo.localcode).latitude
+    }
       &longitude=${
         searchInfo.criteriaPlace !== null
           ? searchInfo.criteriaPlace.longitude
@@ -251,7 +262,10 @@ export const SearchProvider = ({ children }) => {
       }
       ${
         searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
-      }&distance=${searchInfo.distance}`,
+      }&distance=${searchInfo.distance}`;
+
+    const axiosResponse = await axios({
+      url: `${process.env.REACT_APP_API_ROOT}${url}`,
       method: "GET",
       headers: {
         "Content-Type": "application/json",
