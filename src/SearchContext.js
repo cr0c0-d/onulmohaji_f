@@ -70,6 +70,9 @@ export const SearchProvider = ({ children }) => {
   // 로그인회원 검색조건 설정값
   const [memberSearchInfo, setMemberSearchInfo] = useState(null);
 
+  // 로그인회원 북마크 정보
+  const [bookmarkList, setBookmarkList] = useState(null);
+
   const [searchInitYn, setSearchInitYn] = useState(false);
 
   /********************************************* function ***************************************************/
@@ -103,6 +106,20 @@ export const SearchProvider = ({ children }) => {
     });
   };
 
+  const getBookmarkList = () => {
+    AuthAPI({
+      url: `/api/bookmark`,
+      method: "GET",
+      data: null,
+      success: (result) => {
+        setBookmarkList(result.data);
+      },
+      fail: (error) => {
+        console.log(error);
+      },
+    });
+  };
+
   // 지역코드 목록 조회 후
   // 로그인 상태일 경우 => 로그인 회원 검색조건 설정값 조회
   // 비로그인 상태일 경우 => 검색조건 지역 서울시 강남구로 지정
@@ -112,6 +129,7 @@ export const SearchProvider = ({ children }) => {
       if (userInfo && userInfo.id) {
         // 로그인 회원 정보가 있으면
         getMemberSearchInfo();
+        getBookmarkList();
       } else {
         // 로그인정보가 없으면 기본값 서울시 강남구
         setPickedLocal_1(11);
@@ -311,6 +329,8 @@ export const SearchProvider = ({ children }) => {
         facility,
         setMemberSearchInfo,
         searchInitYn,
+        bookmarkList,
+        getBookmarkList,
       }}
     >
       {children}
