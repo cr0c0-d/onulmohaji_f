@@ -30,7 +30,8 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
   const { route, setRoute, routeDate, setRouteDate, getRoute, addRouteDetail } =
     useRoute();
   const { userInfo } = useUser();
-  const { searchInfo, setSearchInfo } = useSearchContext();
+  const { searchInfo, setSearchInfo, bookmarkList, getBookmarkList } =
+    useSearchContext();
 
   const toggleBookmark = (placeType, placeId) => {
     AuthAPI({
@@ -38,7 +39,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
       method: "POST",
       data: { placeType: placeType, placeId: placeId },
       success: (response) => {
-        console.log(response.data);
+        getBookmarkList();
       },
       fail: () => {
         console.log("fail");
@@ -122,7 +123,12 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                               toggleBookmark(place.placeType, place.placeId);
                             }}
                           >
-                            {place.bookmark ? (
+                            {bookmarkList != null &&
+                            bookmarkList.find(
+                              (obj) =>
+                                obj.placeId == place.placeId &&
+                                obj.placeType == place.placeType
+                            ) !== undefined ? (
                               <BookmarkIcon color="primary" />
                             ) : (
                               <TurnedInNotTwoToneIcon />
