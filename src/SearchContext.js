@@ -238,32 +238,18 @@ export const SearchProvider = ({ children }) => {
       searchInfo.keyword !== "" ? "&keyword=" + searchInfo.keyword : ""
     }&distance=${searchInfo.distance}`;
 
-    if (userInfo !== null) {
-      AuthAPI({
-        url: url,
-        method: "GET",
-        data: null,
-        success: (response) => {
-          setPopupstore(response.data);
-        },
-        fail: () => {
-          console.log("fail");
-        },
-      });
-    } else {
-      const axiosResponse = await axios({
-        url: `${process.env.REACT_APP_API_ROOT}${url}`,
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }).catch((error) => {
-        console.log(error);
-      });
+    const axiosResponse = await axios({
+      url: `${process.env.REACT_APP_API_ROOT}${url}`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).catch((error) => {
+      console.log(error);
+    });
 
-      if (axiosResponse) {
-        setPopupstore(axiosResponse.data);
-      }
+    if (axiosResponse) {
+      setPopupstore(axiosResponse.data);
     }
   };
 
