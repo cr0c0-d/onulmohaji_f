@@ -21,6 +21,7 @@ import CustomPlaceView from "./components/CustomPlace/CustomPlaceView";
 import MyRoute from "./components/Route/MyRoute";
 import MyPage from "./components/Member/MyPage";
 import FacilityList from "./components/Place/FacilityList";
+import BookmarkPlaceList from "./components/Bookmark/BookmarkPlaceList";
 
 const theme = createTheme({
   typography: {
@@ -103,6 +104,10 @@ function App() {
                       />
                     </Route>
                     <Route path="/myPage" element={<MyPage />} />
+                    <Route
+                      path="/bookmark/list"
+                      element={<BookmarkPlaceList />}
+                    />
                   </Route>
                 </Routes>
               </BrowserRouter>
