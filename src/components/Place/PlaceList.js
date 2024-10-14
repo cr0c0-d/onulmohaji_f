@@ -64,6 +64,8 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
             ? "전시회 / 공연"
             : type === "popup"
             ? "팝업스토어"
+            : type === "bookmark"
+            ? "즐겨찾기"
             : ""}
         </Typography>
         {placeList.length > 4 && limit !== 999 ? (
@@ -99,7 +101,9 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                     <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
                       <Card
                         style={{ cursor: "pointer", position: "relative" }}
-                        onClick={() => history(`/${type}/${place.placeId}`)}
+                        onClick={() =>
+                          history(`/${place.placeType}/${place.placeId}`)
+                        }
                       >
                         <CardMedia
                           component="img"
@@ -184,7 +188,7 @@ const PlaceList = ({ placeList, type, limit = 999 }) => {
                             onClick={(event) => {
                               event.stopPropagation();
                               if (userInfo.id !== undefined) {
-                                addRouteDetail(place.placeId, type);
+                                addRouteDetail(place.placeId, place.placeType);
                               } else {
                                 history("/login");
                               }
