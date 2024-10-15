@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useUser } from "../../UserContext";
 import { useAuthAPI } from "../../AuthAPI";
+import { useSearchContext } from "../../SearchContext";
 
 export default function BookmarkPlaceList() {
   const { userInfo } = useUser();
   const history = useNavigate();
   const AuthAPI = useAuthAPI();
+  const { bookmarkList } = useSearchContext();
+
   const [bookmarkPlaceList, setBookmarkPlaceList] = useState(null);
 
   const getBookmarkPlaceList = () => {
@@ -29,6 +32,10 @@ export default function BookmarkPlaceList() {
     window.scrollTo(0, 0);
     getBookmarkPlaceList();
   }, []);
+
+  useEffect(() => {
+    getBookmarkPlaceList();
+  }, [bookmarkList]);
 
   return (
     <Container>
