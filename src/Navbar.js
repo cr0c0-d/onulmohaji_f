@@ -72,6 +72,12 @@ export default function Navbar() {
             >
               나만의 장소 관리
             </Button>
+            <Button
+              sx={{ my: 2, color: "white", display: "block" }}
+              onClick={() => history("/bookmark/list")}
+            >
+              즐겨찾기
+            </Button>
           </Box>
 
           <div>
